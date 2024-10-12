@@ -1,0 +1,59 @@
+C51 COMPILER V9.00   ADS7843                                                               10/11/2024 17:50:14 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE ADS7843
+OBJECT MODULE PLACED IN ..\hex\ads7843.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\common\ads7843.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\d
+                    -isplay;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\ads7843.lst) OBJECT(..\hex\ads7843.obj)
+
+line level    source
+
+   1          #include "ads7843.h"
+   2          
+   3          void ADS7843_KEY(void) //扫描按键
+   4          {
+   5   1              if(Uart_LCD.KEY_YES==0xff){
+   6   2                      Uart_LCD.ADS7843_X = Uart_LCD.KEY_XH;
+   7   2                      Uart_LCD.ADS7843_X <<= 8;
+   8   2                      Uart_LCD.ADS7843_X |= Uart_LCD.KEY_XL;
+   9   2                      
+  10   2                      Uart_LCD.ADS7843_Y = Uart_LCD.KEY_YH;
+  11   2                      Uart_LCD.ADS7843_Y <<= 8;
+  12   2                      Uart_LCD.ADS7843_Y |= Uart_LCD.KEY_YL;
+  13   2              } 
+  14   1      }
+  15          // 扫描一个界面所有按键像素返回按键值
+  16          u8 KEY_FANHUI(u8 GS,u16 *ZB_ADD)
+  17          {
+  18   1              u8 key=0x00;
+  19   1              u8 loop;
+  20   1              u16  add;
+  21   1              u16  xl,yl,xh,yh;
+  22   1              for(loop=0x00;loop<GS;loop++){
+  23   2                      add=loop*4;
+  24   2                      xl=ZB_ADD[add];add++;
+  25   2                      xh=ZB_ADD[add];add++;    
+  26   2                      yl=ZB_ADD[add];add++;    
+  27   2                      yh=ZB_ADD[add];
+  28   2                      if(Uart_LCD.ADS7843_X>=xl&&Uart_LCD.ADS7843_X<=xh)
+  29   2                      if(Uart_LCD.ADS7843_Y>=yl&&Uart_LCD.ADS7843_Y<=yh){
+  30   3                              key=loop;
+  31   3                              key++;
+  32   3                              break;
+  33   3                      }
+  34   2              }return key;
+  35   1      }       
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    285    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      11
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

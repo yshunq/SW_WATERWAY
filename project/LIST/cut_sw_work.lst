@@ -1,0 +1,107 @@
+C51 COMPILER V9.00   CUT_SW_WORK                                                           10/11/2024 17:50:15 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE CUT_SW_WORK
+OBJECT MODULE PLACED IN ..\hex\cut_sw_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\cut\cut_sw_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\
+                    -display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\cut_sw_work.lst) OBJECT(..\hex\cut_sw_work.obj)
+
+line level    source
+
+   1          #include "cut_sw_work.h"
+   2          
+   3          
+   4          void cut_sw_work_lock_flag(u8 flag)
+   5          {
+   6   1              u8 pic;
+   7   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+   8   1              if(flag == 0){
+   9   2                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,1052,723,1167,799,1052,723);
+  10   2              }else{
+  11   2                      DIS_DEL_DIS(pic,1052,723,1167,799,1052,723);
+  12   2              }       
+  13   1      }
+  14          
+  15          
+  16          void cut_sw_work_start_stop_flag(u8 flag)
+  17          {
+  18   1              u8 pic;
+  19   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  20   1              if(flag == 0){
+  21   2                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,75,620,430,695,75,620);
+  22   2              }else{
+  23   2                      DIS_DEL_DIS(pic,75,620,430,695,75,620);
+  24   2              }       
+  25   1      }
+  26          
+  27          void cut_sw_work_probe_mode(void)
+  28          {
+  29   1              u8 pic;
+  30   1              pic = Pic_SW_PROBE_START + SW.PROBE_MODE;
+  31   1              switch(SW.PROBE_MODE){
+  32   2                      case PROBE_D8: DIS_DEL_DIS(pic,469,723,620,799,469,723);break;
+  33   2                      case PROBE_D15:DIS_DEL_DIS(pic,469,723,620,799,469,723);break;
+  34   2                      case PROBE_C15:DIS_DEL_DIS(pic,469,723,620,799,469,723);break;
+  35   2                      case PROBE_D20:DIS_DEL_DIS(pic,469,723,620,799,469,723);break;
+  36   2                      case PROBE_D32:DIS_DEL_DIS(pic,469,723,620,799,469,723);break;
+  37   2              }
+  38   1      }
+  39          
+  40          void cut_sw_work_flow_warning(void)
+  41          {
+  42   1              DIS_DEL_DIS(Pic_ERROR1,1,1,500,350,390,225);
+  43   1      }
+  44          
+  45          void cut_sw_work_handle_temp_high(void)
+  46          {
+  47   1              DIS_DEL_DIS(Pic_ERROR1,502,352,1001,701,390,225);
+  48   1      }
+  49          
+  50          void cut_sw_work_handle_temp_short(void)
+  51          {
+  52   1              DIS_DEL_DIS(Pic_ERROR1,502,1,1001,350,390,225);
+  53   1      }
+  54          
+C51 COMPILER V9.00   CUT_SW_WORK                                                           10/11/2024 17:50:15 PAGE 2   
+
+  55          void cut_sw_work_handle_temp_open(void)
+  56          {
+  57   1              DIS_DEL_DIS(Pic_ERROR1,1,352,500,701,390,225);
+  58   1      }
+  59          
+  60          void cut_sw_work_handle_insert_warning(void)
+  61          {
+  62   1              DIS_DEL_DIS(Pic_ERROR2,1,1,500,350,390,225);
+  63   1      }
+  64          
+  65          void cut_sw_work_preset_value_varning(void)
+  66          {
+  67   1              DIS_DEL_DIS(Pic_ERROR2,1,352,500,701,390,225);
+  68   1              //DIS_DEL_DIS(Pic_ERROR2,502,1,1001,350,390,225);
+  69   1      }
+  70          
+  71          void cut_sw_work_internal_power_varning(void)
+  72          {
+  73   1              DIS_DEL_DIS(Pic_ERROR2,502,1,1001,350,390,225);
+  74   1      }
+  75          
+  76          
+  77          
+  78          
+  79          
+  80          
+  81          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    448    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       3
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,286 @@
+C51 COMPILER V9.00   XS_BASIC_SETTINGS                                                     10/11/2024 17:50:14 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_BASIC_SETTINGS
+OBJECT MODULE PLACED IN ..\hex\XS_basic_settings.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_basic_settings.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\u
+                    -ser;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_basic_settings.lst) OBJECT(..\hex\XS_basic_
+                    -settings.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  code MAIN_KEY_BASIC_SET = 11;
+   4          const u16 code MAIN_BASIC_SET[]=
+   5          {
+   6                   30,140, 15, 80,        //1     返回
+   7                  330,525,230,295,        //2 
+   8          
+   9                  255,330,340,410,        //3     报警流量--
+  10                  525,595,340,405,        //4     报警流量++
+  11          
+  12                  255,330,450,520,        //5 流量常数--
+  13                  525,595,450,520,        //6 流量常数++
+  14          
+  15                  330,525,560,633,        //7 手柄插入
+  16          
+  17                  755,960,230,295,        //8 温度报警
+  18          
+  19                  690,760,340,410,        //9 温度--
+  20                  955,1025,340,405,       //10 温度++
+  21          
+  22                  755,960,450,520,        //11 清零
+  23          
+  24          };
+  25          
+  26          void dis_basic_setting_ll_warning_flag(void);
+  27          void dis_basic_setting_ll_warning_value(u8 dis);
+  28          void dis_basic_setting_ll_constant(u8 dis);
+  29          void dis_basic_setting_handle_insert_warning_flag(void);
+  30          void dis_basic_setting_handle_temp_warning_flag(void);
+  31          void dis_basic_setting_handle_temp_warning_value(u8 dis);
+  32          void dis_basic_setting_eeprom_total_time(u8 dis);
+  33          
+  34          void main_xs_basic_settings(void)
+  35          {
+  36   1              u8 key,last_down;
+  37   1              DIS_PICNUM(Pic_BASIC_SETTINGS);
+  38   1              dis_basic_setting_ll_warning_flag();
+  39   1              dis_basic_setting_ll_warning_value(DIS_ALL);
+  40   1              dis_basic_setting_ll_constant(DIS_ALL);
+  41   1              dis_basic_setting_handle_insert_warning_flag();
+  42   1              dis_basic_setting_handle_temp_warning_flag();
+  43   1              dis_basic_setting_handle_temp_warning_value(DIS_ALL);
+  44   1              dis_basic_setting_eeprom_total_time(DIS_ALL);
+  45   1      
+  46   1              last_down = 0;
+  47   1              do{
+  48   2                      if(Uart_LCD.KEY_YES!=0x00){
+  49   3                              ADS7843_KEY(); 
+  50   3                              key=KEY_FANHUI(MAIN_KEY_BASIC_SET,MAIN_BASIC_SET); 
+  51   3                      switch(key){
+  52   4                                      case 1:
+  53   4                                      XIANG1();
+C51 COMPILER V9.00   XS_BASIC_SETTINGS                                                     10/11/2024 17:50:14 PAGE 2   
+
+  54   4                                              INTERFACE = PAGE_WAITING;
+  55   4                                              goto over_main_xs_basic_settings;
+  56   4                                              //break;
+  57   4                                      case 2:
+  58   4                                      XIANG1();
+  59   4                                              if(LL.WARNING_FLAG == 0)LL.WARNING_FLAG = 1;else{LL.WARNING_FLAG = 0;}
+  60   4                                          dis_basic_setting_ll_warning_flag();
+  61   4                                              delay_ms(120);
+  62   4                                              last_down = 2;
+  63   4                                              Uart_LCD.KEY_YES = 0;
+  64   4                                              break;
+  65   4                                      case 3:
+  66   4                                      if(LL.WARNING_VALUE > 1){
+  67   5                                                      XIANG1();
+  68   5                                                      LL.WARNING_VALUE--;
+  69   5                                                      dis_basic_setting_ll_warning_value(DIS_PART);
+  70   5                                                      delay_ms(120);
+  71   5                                                      last_down = 3;
+  72   5                                              }else{Uart_LCD.KEY_YES = 0;}
+  73   4                                              break;
+  74   4                                      case 4:
+  75   4                                      if(LL.WARNING_VALUE < 100){
+  76   5                                                      XIANG1();
+  77   5                                                      LL.WARNING_VALUE++;
+  78   5                                                      dis_basic_setting_ll_warning_value(DIS_PART);
+  79   5                                                      delay_ms(120);
+  80   5                                                      last_down = 3;
+  81   5                                              }else{Uart_LCD.KEY_YES = 0;}
+  82   4                                              break;
+  83   4                                      case 5:
+  84   4                                      if(LL.CONSTANT > 1){
+  85   5                                                      XIANG1();
+  86   5                                                      LL.CONSTANT--;
+  87   5                                                      dis_basic_setting_ll_constant(DIS_PART);
+  88   5                                                      delay_ms(120);
+  89   5                                                      last_down = 5;
+  90   5                                              }else{Uart_LCD.KEY_YES = 0;}
+  91   4                                              break;
+  92   4                                      case 6:
+  93   4                                      if(LL.CONSTANT < 9900){
+  94   5                                                      XIANG1();
+  95   5                                                      LL.CONSTANT++;
+  96   5                                                      dis_basic_setting_ll_constant(DIS_PART);
+  97   5                                                      delay_ms(120);
+  98   5                                                      last_down = 5;
+  99   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 100   4                                              break;
+ 101   4                                      case 7:
+ 102   4                                      XIANG1();
+ 103   4                                              if(HANDLE_INSERT.WARNING_FLAG == 0)HANDLE_INSERT.WARNING_FLAG = 1;else{HANDLE_INSERT.WARNING_FLAG = 0
+             -;}
+ 104   4                                          dis_basic_setting_handle_insert_warning_flag();
+ 105   4                                              delay_ms(120);
+ 106   4                                              last_down = 7;
+ 107   4                                              Uart_LCD.KEY_YES = 0;
+ 108   4                                              break;
+ 109   4                                      case 8:
+ 110   4                                      XIANG1();
+ 111   4                                              if(HANDLE_TMEP.WARNING_FLAG == 0)HANDLE_TMEP.WARNING_FLAG = 1;else{HANDLE_TMEP.WARNING_FLAG = 0;}
+ 112   4                                          dis_basic_setting_handle_temp_warning_flag();
+ 113   4                                              delay_ms(120);
+ 114   4                                              last_down = 8;
+C51 COMPILER V9.00   XS_BASIC_SETTINGS                                                     10/11/2024 17:50:14 PAGE 3   
+
+ 115   4                                              Uart_LCD.KEY_YES = 0;
+ 116   4                                              break;
+ 117   4                                      case 9:
+ 118   4                                      if(HANDLE_TMEP.WARNING_VALUE > 1){
+ 119   5                                                      XIANG1();
+ 120   5                                                      HANDLE_TMEP.WARNING_VALUE--;
+ 121   5                                                      dis_basic_setting_handle_temp_warning_value(DIS_PART);
+ 122   5                                                      delay_ms(120);
+ 123   5                                                      last_down = 9;
+ 124   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 125   4                                              break;
+ 126   4                                      case 10:
+ 127   4                                      if(HANDLE_TMEP.WARNING_VALUE < 999){
+ 128   5                                                      XIANG1();
+ 129   5                                                      HANDLE_TMEP.WARNING_VALUE++;
+ 130   5                                                      dis_basic_setting_handle_temp_warning_value(DIS_PART);
+ 131   5                                                      delay_ms(120);
+ 132   5                                                      last_down = 9;
+ 133   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 134   4                                              break;
+ 135   4                                      case 11:
+ 136   4                                      if(SW.EEPROM_TOTAL_TIME > 0){
+ 137   5                                                      XIANG1();
+ 138   5                                                      SW.EEPROM_TOTAL_TIME = 0;
+ 139   5                                                      dis_basic_setting_eeprom_total_time(DIS_PART);
+ 140   5                                                      write_eeprom_total_time();
+ 141   5                                                      delay_ms(120);
+ 142   5                                              }
+ 143   4                                              Uart_LCD.KEY_YES = 0;
+ 144   4                                              break;
+ 145   4      
+ 146   4      
+ 147   4      
+ 148   4      
+ 149   4      
+ 150   4                      }
+ 151   3                      }else{
+ 152   3                              switch(last_down){
+ 153   4                                      case 2:write_ll_warning_flag();break;
+ 154   4                                      case 3:write_ll_warning_value();break;
+ 155   4                                      case 5:write_ll_constant();break;
+ 156   4                                      case 7:write_handle_insert_warning_flag();break;
+ 157   4                                      case 8:write_handle_warning_flag();break;
+ 158   4                                      case 9:write_handle_warning_value();break;
+ 159   4      
+ 160   4                              }
+ 161   3                              last_down = 0;
+ 162   3                      }
+ 163   2              }while(1);
+ 164   1              over_main_xs_basic_settings:
+ 165   1              LAST_INTERFACE = PAGE_BASIC_SETTINGS;
+ 166   1      }
+ 167          
+ 168          void dis_basic_setting_ll_warning_flag(void)
+ 169          {
+ 170   1              u16 x,y;
+ 171   1              x = 400;
+ 172   1              y = 248;
+ 173   1              DIS_DEL_DIS(Pic_BASIC_SETTINGS,x,y,16*3+x,32+y,x,y);
+ 174   1              if(LL.WARNING_FLAG == 0){
+ 175   2                      DIS_FONT_C(0x00,0x00,2,0x03,x+8,y,"ON");        
+ 176   2              }else{
+C51 COMPILER V9.00   XS_BASIC_SETTINGS                                                     10/11/2024 17:50:14 PAGE 4   
+
+ 177   2                      DIS_FONT_C(0x00,0x00,3,0x03,x,y,"OFF"); 
+ 178   2              }
+ 179   1      }
+ 180          
+ 181          void dis_basic_setting_ll_warning_value(u8 dis)
+ 182          {
+ 183   1              static u16 temp;
+ 184   1              u16 x,y;
+ 185   1              x = 392;
+ 186   1              y = 358;
+ 187   1          DIS_FONT_ONE_POINT_VALUE(Pic_BASIC_SETTINGS,1,0x00,0x00,0x03,3,dis,LL.WARNING_VALUE,temp,x,y);
+ 188   1              temp = LL.WARNING_VALUE;
+ 189   1      }
+ 190          
+ 191          void dis_basic_setting_ll_constant(u8 dis)
+ 192          {
+ 193   1              static u16 temp;
+ 194   1              u16 x,y;
+ 195   1              x = 386;
+ 196   1              y = 470;
+ 197   1          DIS_FONT_ONE_POINT_VALUE(Pic_BASIC_SETTINGS,1,0x00,0x00,0x03,4,dis,LL.CONSTANT,temp,x,y);
+ 198   1              temp = LL.CONSTANT;
+ 199   1      }
+ 200          
+ 201          void dis_basic_setting_handle_insert_warning_flag(void)
+ 202          {
+ 203   1              u16 x,y;
+ 204   1              x = 400;
+ 205   1              y = 580;
+ 206   1              DIS_DEL_DIS(Pic_BASIC_SETTINGS,x,y,16*3+x,32+y,x,y);
+ 207   1              if(HANDLE_INSERT.WARNING_FLAG == 0){
+ 208   2                      DIS_FONT_C(0x00,0x00,2,0x03,x+8,y,"ON");        
+ 209   2              }else{
+ 210   2                      DIS_FONT_C(0x00,0x00,3,0x03,x,y,"OFF"); 
+ 211   2              }
+ 212   1      }
+ 213          
+ 214          void dis_basic_setting_handle_temp_warning_flag(void)
+ 215          {
+ 216   1              u16 x,y;
+ 217   1              x = 831;
+ 218   1              y = 248;
+ 219   1              DIS_DEL_DIS(Pic_BASIC_SETTINGS,x,y,16*3+x,32+y,x,y);
+ 220   1              if(HANDLE_TMEP.WARNING_FLAG == 0){
+ 221   2                      DIS_FONT_C(0x00,0x00,2,0x03,x+8,y,"ON");        
+ 222   2              }else{
+ 223   2                      DIS_FONT_C(0x00,0x00,3,0x03,x,y,"OFF"); 
+ 224   2              }
+ 225   1      }
+ 226          
+ 227          void dis_basic_setting_handle_temp_warning_value(u8 dis)
+ 228          {
+ 229   1              static u16 temp;
+ 230   1              u16 x,y;
+ 231   1              x = 815;
+ 232   1              y = 358;
+ 233   1          //DIS_FONT_ONE_POINT_VALUE(Pic_BASIC_SETTINGS,1,0x00,0x00,0x03,3,dis,HANDLE_TMEP.WARNING_VALUE,temp,x,
+             -y);
+ 234   1              DIS_FONT_WEI_TEMP(Pic_BASIC_SETTINGS,0x00,0x00,0x03,dis,HANDLE_TMEP.WARNING_VALUE,temp,x,y);
+ 235   1              temp = HANDLE_TMEP.WARNING_VALUE;
+ 236   1      }
+ 237          
+C51 COMPILER V9.00   XS_BASIC_SETTINGS                                                     10/11/2024 17:50:14 PAGE 5   
+
+ 238          void dis_basic_setting_eeprom_total_time(u8 dis)
+ 239          {
+ 240   1              static u16 temp;
+ 241   1              u16 x,y;
+ 242   1              x = 799;
+ 243   1              y = 470;
+ 244   1          DIS_FONT_WEI_VALUE(Pic_BASIC_SETTINGS,1,0x00,0x00,0x03,7,dis,SW.EEPROM_TOTAL_TIME,temp,x,y);
+ 245   1              temp = SW.EEPROM_TOTAL_TIME;
+ 246   1      }
+ 247          
+ 248          
+ 249          
+ 250          
+ 251          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1450    ----
+   CONSTANT SIZE    =     96    ----
+   XDATA SIZE       =      8      29
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,316 @@
+C51 COMPILER V9.00   X3D_UART                                                              09/02/2024 14:09:34 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE X3D_UART
+OBJECT MODULE PLACED IN ..\hex\x3d_uart.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\common\x3d_uart.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\disp
+                    -lay) DEBUG OBJECTEXTEND PRINT(.\LIST\x3d_uart.lst) OBJECT(..\hex\x3d_uart.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //
+   4          //
+   5          //void write_x3d_spin_step(u16 temp)
+   6          //{
+   7          //  u8 val[2];
+   8          //      val[0] = temp/256;
+   9          //      val[1] = temp%256;
+  10          //      tx2_out_4(0x52,X3D_DEVICE_TYPE,val[0],val[1]);
+  11          //}
+  12          //
+  13          //
+  14          //
+  15          //
+  16          //
+  17          //
+  18          //
+  19          //
+  20          //
+  21          //
+  22          //void x3d_work_ask_handle_parameter(void)
+  23          //{
+  24          //      tx2_out_3(0x50,X3D_DEVICE_TYPE,0x00);
+  25          //}
+  26          //
+  27          //void x3d_work_ready_led_off(void)
+  28          //{
+  29          //      tx2_out_3(0xA0,X3D_DEVICE_TYPE,0x01);
+  30          //}
+  31          // 
+  32          //void x3d_work_ready_led_on(void)
+  33          //{
+  34          //      tx2_out_3(0xA0,X3D_DEVICE_TYPE,0x00);
+  35          //}
+  36          //
+  37          //void x3d_work_start_led_off(void)
+  38          //{
+  39          //      tx2_out_3(0xA1,X3D_DEVICE_TYPE,0x01);
+  40          //}
+  41          // 
+  42          //void x3d_work_start_led_on(void)
+  43          //{
+  44          //      tx2_out_3(0xA1,X3D_DEVICE_TYPE,0x00);
+  45          //}
+  46          //
+  47          //u8 set_no_probe_motor_self(void)
+  48          //{
+  49          //  HANDLE_MOTOR_RESPONSE_FLAG = 1;
+  50          //      WAITING_CC = 0;
+  51          //  tx2_out_3(0x78,X3D_DEVICE_TYPE,0x00);
+  52          //  while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+  53          //  {
+  54          //              if(WAITING_CC > 5000)
+C51 COMPILER V9.00   X3D_UART                                                              09/02/2024 14:09:34 PAGE 2   
+
+  55          //              {
+  56          //                      WAITING_CC = 0;
+  57          //                      return 1;
+  58          //              }
+  59          //  }
+  60          //  return 0;
+  61          //}
+  62          //
+  63          //u8 set_have_probe_motor_self(void)
+  64          //{
+  65          //  HANDLE_MOTOR_RESPONSE_FLAG = 1;
+  66          //      WAITING_CC = 0;
+  67          //  tx2_out_3(0x79,X3D_DEVICE_TYPE,0x00);
+  68          //  while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+  69          //  {
+  70          //              if(WAITING_CC > 5000)
+  71          //              {
+  72          //                      WAITING_CC = 0;
+  73          //                      return 1;
+  74          //              }
+  75          //  }
+  76          //  return 0;
+  77          //}
+  78          //
+  79          //u8 x3d_work_spin_motor_down(u8 dir,u16 num)//0正常  1链接故障  2旋转电机故障
+  80          //{
+  81          //      HANDLE_ERROR_FLAG = 0;
+  82          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+  83          //      WAITING_CC = 0;
+  84          //      tx2_out_5(0x74,X3D_DEVICE_TYPE,dir,num/256,num%256);
+  85          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+  86          //  {
+  87          //              if(WAITING_CC > 5000)
+  88          //              {
+  89          //                      WAITING_CC = 0;
+  90          //                      return 1;
+  91          //              }
+  92          //  }
+  93          //      if(HANDLE_ERROR_FLAG == 2)
+  94          //      {
+  95          //              HANDLE_ERROR_FLAG = 0;
+  96          //              return 2;
+  97          //      }
+  98          //  return 0;
+  99          //}
+ 100          //
+ 101          //u8 x3d_work_push_motor_down(u8 clear,u8 dir,u16 num)//0正常  1连接故障   2旋转电机故障
+ 102          //{
+ 103          //      HANDLE_ERROR_FLAG = 0;
+ 104          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 105          //      WAITING_CC = 0;
+ 106          //      tx2_out_6(0x70,X3D_DEVICE_TYPE,clear,dir,num/256,num%256);
+ 107          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 108          //  {
+ 109          //              if(WAITING_CC > 5000)
+ 110          //              {
+ 111          //                      WAITING_CC = 0;
+ 112          //                      return 1;
+ 113          //              }
+ 114          //  }
+ 115          //      if(HANDLE_ERROR_FLAG == 2)
+ 116          //      {
+C51 COMPILER V9.00   X3D_UART                                                              09/02/2024 14:09:34 PAGE 3   
+
+ 117          //              HANDLE_ERROR_FLAG = 0;
+ 118          //              return 2;
+ 119          //      }
+ 120          //  return 0;
+ 121          //}
+ 122          //
+ 123          //
+ 124          //
+ 125          //
+ 126          //u8 x3d_work_working_push_motor_down(u8 clear,u8 dir,u16 num)//0正常  1连接故障   2旋转电机故障
+ 127          //{
+ 128          //      HANDLE_ERROR_FLAG = 0;
+ 129          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 130          //      WAITING_CC = 0;
+ 131          //      tx2_out_6(0x70,X3D_DEVICE_TYPE,clear,dir,num/256,num%256);
+ 132          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 133          //  {
+ 134          //              if(WAITING_CC > 1000)
+ 135          //              {
+ 136          //                      WAITING_CC = 0;
+ 137          //                      return 1;
+ 138          //              }
+ 139          //  }
+ 140          //      if(HANDLE_ERROR_FLAG == 2)
+ 141          //      {
+ 142          //              HANDLE_ERROR_FLAG = 0;
+ 143          //              return 2;
+ 144          //      }
+ 145          //  return 0;
+ 146          //}
+ 147          //
+ 148          //
+ 149          //
+ 150          //
+ 151          //
+ 152          //
+ 153          //
+ 154          //
+ 155          //
+ 156          //
+ 157          //
+ 158          //
+ 159          //
+ 160          //
+ 161          //
+ 162          //
+ 163          //u8 x3d_work_push_motor_backoff_opt(void)//0正常  1连接故障   2旋转电机故障
+ 164          //{
+ 165          //      HANDLE_ERROR_FLAG = 0;
+ 166          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 167          //      WAITING_CC = 0;
+ 168          //      tx2_out_3(0x73,X3D_DEVICE_TYPE,0x00);
+ 169          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 170          //  {
+ 171          //              if(WAITING_CC > 5000)
+ 172          //              {
+ 173          //                      WAITING_CC = 0;
+ 174          //                      return 1;
+ 175          //              }
+ 176          //  }
+ 177          //      if(HANDLE_ERROR_FLAG == 2)
+ 178          //      {
+C51 COMPILER V9.00   X3D_UART                                                              09/02/2024 14:09:34 PAGE 4   
+
+ 179          //              HANDLE_ERROR_FLAG = 0;
+ 180          //              return 2;
+ 181          //      }
+ 182          //  return 0;
+ 183          //}
+ 184          //
+ 185          //u8 x3d_work_spin_motor_goto_opt(void)//0正常  1链接故障  2旋转电机故障
+ 186          //{
+ 187          //      HANDLE_ERROR_FLAG = 0;
+ 188          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 189          //      WAITING_CC = 0;
+ 190          //      tx2_out_3(0x76,X3D_DEVICE_TYPE,0x00);
+ 191          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 192          //  {
+ 193          //              if(WAITING_CC > 5000)
+ 194          //              {
+ 195          //                      WAITING_CC = 0;
+ 196          //                      return 1;
+ 197          //              }
+ 198          //  }
+ 199          //      if(HANDLE_ERROR_FLAG == 2)
+ 200          //      {
+ 201          //              HANDLE_ERROR_FLAG = 0;
+ 202          //              return 2;
+ 203          //      }
+ 204          //  return 0;
+ 205          //}
+ 206          //
+ 207          //u8 x3d_work_spin_motor_leave_opt(void)//0正常  1链接故障  2旋转电机故障
+ 208          //{
+ 209          //      HANDLE_ERROR_FLAG = 0;
+ 210          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 211          //      WAITING_CC = 0;
+ 212          //      tx2_out_3(0x77,X3D_DEVICE_TYPE,0x00);
+ 213          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 214          //  {
+ 215          //              if(WAITING_CC > 5000)
+ 216          //              {
+ 217          //                      WAITING_CC = 0;
+ 218          //                      return 1;
+ 219          //              }
+ 220          //  }
+ 221          //      if(HANDLE_ERROR_FLAG == 2)
+ 222          //      {
+ 223          //              HANDLE_ERROR_FLAG = 0;
+ 224          //              return 2;
+ 225          //      }
+ 226          //  return 0;
+ 227          //}
+ 228          //
+ 229          //u8 x3d_work_push_motor_working_move(u16 num,u16 set_value)//0正常  1连接故障   2旋转电机故障
+ 230          //{
+ 231          //      HANDLE_ERROR_FLAG = 0;
+ 232          //      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 233          //      WAITING_CC = 0;
+ 234          //      tx2_out_6(0x70,X3D_DEVICE_TYPE,CLEAR,PUSH_FORWARD,num/256,num%256);
+ 235          //      UL_SET_ON;
+ 236          //      delay_ms(10);
+ 237          //      open_hf_pwm(set_value);
+ 238          //      while(HANDLE_MOTOR_RESPONSE_FLAG == 1)
+ 239          //  {
+ 240          //              if(WAITING_CC > 2000)
+C51 COMPILER V9.00   X3D_UART                                                              09/02/2024 14:09:34 PAGE 5   
+
+ 241          //              {
+ 242          //                      UL_SET_OFF;
+ 243          //                      WAITING_CC = 0;
+ 244          //                      return 1;
+ 245          //              }
+ 246          //  }
+ 247          //      UL_SET_OFF;
+ 248          //      if(HANDLE_ERROR_FLAG == 2)
+ 249          //      {
+ 250          //              HANDLE_ERROR_FLAG = 0;
+ 251          //              return 2;
+ 252          //      }
+ 253          //  return 0;
+ 254          //}
+ 255          //
+ 256          //void set_x3d_motor_pwm_value(void)
+ 257          //{
+ 258          //  if(POINT_LINE_FLAG == 1)//打点
+ 259          //      {
+ 260          //              tx2_out_4(0x7B,X3D_DEVICE_TYPE,X3D_MOTOR_POINT_PWM_VALUE/256,X3D_MOTOR_POINT_PWM_VALUE%256);
+ 261          //      }
+ 262          //      else
+ 263          //      {
+ 264          //              tx2_out_4(0x7B,X3D_DEVICE_TYPE,X3D_MOTOR_LINE_PWM_VALUE/256,X3D_MOTOR_LINE_PWM_VALUE%256);
+ 265          //      }
+ 266          //}
+ 267          //
+ 268          //
+ 269          //
+ 270          //
+ 271          //
+ 272          //
+ 273          //
+ 274          //
+ 275          //
+ 276          //
+ 277          //
+ 278          //
+ 279          //
+ 280          //
+ 281          //
+ 282          //
+ 283          //
+ 284          //
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

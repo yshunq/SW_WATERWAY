@@ -1,0 +1,49 @@
+C51 COMPILER V9.00   XDRF_UART                                                             09/27/2024 15:17:31 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XDRF_UART
+OBJECT MODULE PLACED IN ..\hex\xdrf_uart.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\common\xdrf_uart.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..
+                    -\display;..\common;..\cut) DEBUG OBJECTEXTEND PRINT(.\LIST\xdrf_uart.lst) OBJECT(..\hex\xdrf_uart.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void xdrf_work_ask_handle_parameter(void)
+   4          //{
+   5          //      tx2_out_3(0x50,XDRF_DEVICE_TYPE,0x00);
+   6          //}
+   7          //
+   8          //void ask_version(u8 temp)
+   9          //{
+  10          //      tx2_out_3(0xC0,temp,0x00);
+  11          //}
+  12          // 
+  13          //void xdrf_work_power_led(u8 temp)
+  14          //{
+  15          //      tx2_out_3(0xA0,XDRF_DEVICE_TYPE,temp);
+  16          //}
+  17          // 
+  18          //void xdrf_work_work_led(u8 temp)
+  19          //{
+  20          //      tx2_out_3(0xA1,XDRF_DEVICE_TYPE,temp);
+  21          //}
+  22          // 
+  23          // 
+  24          // 
+  25          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

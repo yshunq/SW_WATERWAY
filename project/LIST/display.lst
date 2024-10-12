@@ -1,0 +1,509 @@
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN ..\hex\display.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\common\display.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\d
+                    -isplay;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\display.lst) OBJECT(..\hex\display.obj)
+
+line level    source
+
+   1          #include "display.h"
+   2          
+   3          void LCD_OUT_OVER(void) //Ö¡½áÊø·û
+   4          {       
+   5   1              UartSend_LCD(0xCC);
+   6   1              UartSend_LCD(0x33);
+   7   1              UartSend_LCD(0xC3);
+   8   1              UartSend_LCD(0x3C);
+   9   1      }
+  10          
+  11          //ÏÔÊ¾±£´æÔÚÖÕ¶ËµÄÈ«ÆÁÍ¼Æ¬
+  12          //picnumÎªÏÔÊ¾Í¼Æ¬µÄË÷ÒýºÅ
+  13          void DIS_PICNUM(u8 picnum)
+  14          {
+  15   1              UartSend_LCD(0xAA);
+  16   1              UartSend_LCD(0x70);
+  17   1              UartSend_LCD(picnum);
+  18   1              LCD_OUT_OVER(); //Ö¡½áÊø·û
+  19   1      }
+  20          
+  21          //½«FlashÖÐµÄË÷ÒýºÅÎªpicnumµÄÍ¼Æ¬·Ö¸îÏÔÊ¾ÔÚx,y
+  22          void DIS_DEL_DIS(u8 picnum,u16 xs,u16 ys,u16 xe,u16 ye,u16 x,u16 y)
+  23          {
+  24   1              UartSend_LCD(0xAA);
+  25   1              UartSend_LCD(0x71);
+  26   1              UartSend_LCD(picnum);
+  27   1              UartSend_LCD(xs>>8);
+  28   1              UartSend_LCD(xs);
+  29   1              UartSend_LCD(ys>>8);
+  30   1              UartSend_LCD(ys);
+  31   1              UartSend_LCD(xe>>8);
+  32   1              UartSend_LCD(xe);
+  33   1              UartSend_LCD(ye>>8);
+  34   1              UartSend_LCD(ye);
+  35   1              UartSend_LCD(x>>8);
+  36   1              UartSend_LCD(x);
+  37   1              UartSend_LCD(y>>8);
+  38   1              UartSend_LCD(y);
+  39   1              LCD_OUT_OVER(); //Ö¡½áÊø·û
+  40   1      }
+  41          
+  42          //----------------------ÏÂÃæÊÇ¿ÉÒÔÑ¡ÔñÑÕÉ«µÄÈ«²¿º¯Êý-------------------------------------//
+  43          //color  ÑÕÉ«  ºìÉ«£ºcolor1=0x08 color2=0x00     °×É«£ºcolor1=0xFF color2=0xFF   ºÚÉ«£ºcolor1=0x00 color2=
+             -0x00
+  44          //gs ·¢ËÍ¸öÊý
+  45          //C_dots ×ÖÌåµÄ´óÐ¡  (0x00 - 6*12) (0x01 - 8*16) (0x02 - 12*24) (0x03 - 16*32) (0x04 - 20*40) (0x05 - 24*4
+             -8) (0x06 - 28*56) (0x07 - 32*64)
+  46          //x  xÖá×ø±ê
+  47          //y  yÖá×ø±ê
+  48          //*buf  ×Ö·û
+  49          void DIS_FONT_C(u8 color1,u8 color2,u8 gs,u8 C_dots,u16 x,u16 y,u8 *buf) //ÏÔÊ¾×Ö·û  ÑÕÉ«  ¸öÊý  ´óÐ¡  xy 
+             -×Ö·û
+  50          {
+  51   1        uint8 loop;
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 2   
+
+  52   1              UartSend_LCD(0xAA);
+  53   1              UartSend_LCD(0x98);
+  54   1              UartSend_LCD(x>>8);
+  55   1              UartSend_LCD(x);
+  56   1              UartSend_LCD(y>>8);
+  57   1              UartSend_LCD(y);
+  58   1              UartSend_LCD(0x00);//×Ö¿â
+  59   1              UartSend_LCD(0x81);
+  60   1              UartSend_LCD(C_dots);//×ÖÌå´óÐ¡
+  61   1              UartSend_LCD(color1);
+  62   1              UartSend_LCD(color2);//ÏÔÊ¾³öÎÄ×ÖÑÕÉ« (F800 ºì FFFF°×)
+  63   1              UartSend_LCD(0x00);
+  64   1              UartSend_LCD(0x00);
+  65   1              for(loop=0x00;loop<gs;loop++)
+  66   1              {
+  67   2                      UartSend_LCD(*buf);
+  68   2                      buf++;
+  69   2              }
+  70   1              LCD_OUT_OVER(); //Ö¡½áÊø·û
+  71   1      }
+  72          
+  73          //color  ÑÕÉ«  ºìÉ«£ºcolor1=0x08 color2=0x00     °×É«£ºcolor1=0xFF color2=0xFF   ºÚÉ«£ºcolor1=0x00 color2=
+             -0x00
+  74          //data ÏÔÊ¾Êý¾Ý
+  75          //C_dots ÏÔÊ¾´óÐ¡
+  76          //x  xÖá×ø±ê
+  77          //y  yÖá×ø±ê
+  78          void DIS_FONT_NUMBER_C(u8 color1,u8 color2,u8 datat,u8 C_dots,u16 x,u16 y)//ÏÔÊ¾Ò»¸öÊý×Ö  ÑÕÉ«  Êý¾Ý  ´óÐ¡
+             -  x  y
+  79          {
+  80   1              switch(datat)
+  81   1              {
+  82   2                case  0:DIS_FONT_C(color1,color2,1,C_dots,x,y,"0");break;//0
+  83   2                      case  1:DIS_FONT_C(color1,color2,1,C_dots,x,y,"1");break;//1
+  84   2                      case  2:DIS_FONT_C(color1,color2,1,C_dots,x,y,"2");break;//2
+  85   2                case  3:DIS_FONT_C(color1,color2,1,C_dots,x,y,"3");break;//3
+  86   2                case  4:DIS_FONT_C(color1,color2,1,C_dots,x,y,"4");break;//4
+  87   2                case  5:DIS_FONT_C(color1,color2,1,C_dots,x,y,"5");break;//5
+  88   2                case  6:DIS_FONT_C(color1,color2,1,C_dots,x,y,"6");break;//6
+  89   2                case  7:DIS_FONT_C(color1,color2,1,C_dots,x,y,"7");break;//7
+  90   2                case  8:DIS_FONT_C(color1,color2,1,C_dots,x,y,"8");break;//8
+  91   2                case  9:DIS_FONT_C(color1,color2,1,C_dots,x,y,"9");break;//9
+  92   2                case 10:DIS_FONT_C(color1,color2,1,C_dots,x,y,".");break;//.
+  93   2                case 11:DIS_FONT_C(color1,color2,1,C_dots,x,y,"V");break;//V
+  94   2                case 12:DIS_FONT_C(color1,color2,1,C_dots,x,y,"A");break;//A
+  95   2                case 13:DIS_FONT_C(color1,color2,1,C_dots,x,y,"B");break;//B
+  96   2                case 14:DIS_FONT_C(color1,color2,1,C_dots,x,y," ");break;//¿Õ¸ñ
+  97   2        }
+  98   1      }
+  99          
+ 100          //color  ÑÕÉ«  ºìÉ«£ºcolor1=0x08 color2=0x00     °×É«£ºcolor1=0xFF color2=0xFF   ºÚÉ«£ºcolor1=0x00 color2=
+             -0x00
+ 101          //C_dots ÏÔÊ¾´óÐ¡
+ 102          //data ±íÊ¾ÏÔÊ¾µÄÊý¾Ý
+ 103          //wei ±íÊ¾ÏÔÊ¾µÄÎ»Êý
+ 104          //x  xÖá×ø±ê
+ 105          //y  yÖá×ø±ê
+ 106          void DIS_FONT_WEI_NUMBER_CM(u8 pic,u8 duiqi,u8 color1,u8 color2,u8 C_dots,u32 datat,u8 wei,u16 x,u16 y)//¼
+             -ôÇÐÍ¼Æ¬ ×ó0ÖÐ1ÓÒ2 ÑÕÉ«1 ÑÕÉ«2 ×ÖÌå´óÐ¡ ÏÔÊ¾ÊýÖµ Î»Êý x×ø±ê y×ø±ê
+ 107          {
+ 108   1        uint8 xian[8];
+ 109   1              uint8 x_add,y_add,i;
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 3   
+
+ 110   1              uint16 xs,ys;
+ 111   1              uint32 temp;
+ 112   1              i = 0;
+ 113   1              xian[0] = (uint8)(datat%10);
+ 114   1              xian[1] = (uint8)((datat/10)%10);
+ 115   1              xian[2] = (uint8)((datat/100)%10);
+ 116   1              xian[3] = (uint8)((datat/1000)%10);
+ 117   1              xian[4] = (uint8)((datat/10000)%10);
+ 118   1              xian[5] = (uint8)((datat/100000)%10);
+ 119   1              xian[6] = (uint8)((datat/1000000)%10);
+ 120   1              xian[7] = (uint8)((datat/10000000)%10);
+ 121   1              switch(C_dots)//ÏÔÊ¾µÄÎ»Êý
+ 122   1              {
+ 123   2                      case  0x00: x_add = 6;y_add = 12;break;
+ 124   2                      case  0x01: x_add = 8;y_add = 16;break;
+ 125   2                      case  0x02: x_add = 12;y_add = 24;break;
+ 126   2                      case  0x03: x_add = 16;y_add = 32;break;
+ 127   2                      case  0x04: x_add = 20;y_add = 40;break;
+ 128   2                      case  0x05: x_add = 24;y_add = 48;break;
+ 129   2                      case  0x06: x_add = 28;y_add = 56;break;
+ 130   2                      case  0x07: x_add = 32;y_add = 64;break;
+ 131   2              }
+ 132   1              if(pic < 255)DIS_DEL_DIS(pic,x,y,x+(wei*x_add),y+y_add,x,y);
+ 133   1              temp = datat;
+ 134   1              do{
+ 135   2                 i++;
+ 136   2                 temp/=10;
+ 137   2              }while(temp>0);
+ 138   1              
+ 139   1              if(i > wei)i = wei;
+ 140   1              if(duiqi == 0)xs = x;//×ó¶ÔÆë
+ 141   1              else if(duiqi == 1)xs = (wei - i)*(x_add/2)+x;//¾ÓÖÐ
+ 142   1              else{xs = (wei - i)*x_add+x;}//ÓÒ¶ÔÆë
+ 143   1              ys = y;
+ 144   1              do{
+ 145   2                      i--;
+ 146   2                      DIS_FONT_NUMBER_C(color1,color2,xian[i],C_dots,xs,ys);//ÏÔÊ¾Ò»¸öÊý×Ö
+ 147   2                      xs = xs + x_add;
+ 148   2                      _nop_();
+ 149   2                      _nop_();
+ 150   2              }while(i>0);
+ 151   1      }
+ 152          
+ 153          
+ 154          //ÏÔÊ¾Ç°ºó¶Ô±ÈÊý¾Ý
+ 155          void DIS_FONT_WEI_VALUE(u8 pic,u8 duiqi,u8 color1,u8 color2,u8 C_dots,u8 wei,u8 flag,u32 value,u32 buff,u1
+             -6 x,u16 y)
+ 156          {
+ 157   1              u8 i,wei1,wei2,pic_buff;
+ 158   1              u16 x_add,y_add,xs,ys;
+ 159   1              u32 temp,buff_temp;
+ 160   1              switch(C_dots){//ÏÔÊ¾µÄÎ»Êý
+ 161   2                      case  0x00: x_add =  6;y_add = 12;break;
+ 162   2                      case  0x01: x_add =  8;y_add = 16;break;
+ 163   2                      case  0x02: x_add = 12;y_add = 24;break;
+ 164   2                      case  0x03: x_add = 16;y_add = 32;break;
+ 165   2                      case  0x04: x_add = 20;y_add = 40;break;
+ 166   2                      case  0x05: x_add = 24;y_add = 48;break;
+ 167   2                      case  0x06: x_add = 28;y_add = 56;break;
+ 168   2                      case  0x07: x_add = 32;y_add = 64;break;
+ 169   2                      case  0x08: x_add = 40;y_add = 80;break;
+ 170   2                      case  0x09: x_add = 48;y_add = 96;break;
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 4   
+
+ 171   2                      case  0x0A: x_add = 56;y_add = 112;break;
+ 172   2              }               
+ 173   1              
+ 174   1              temp = value;
+ 175   1              i = 0;
+ 176   1              do{
+ 177   2                 i++;
+ 178   2                 temp/=10;
+ 179   2              }while(temp>0);
+ 180   1              wei1 = i;
+ 181   1              if(i > wei)wei1 = wei;
+ 182   1      
+ 183   1              temp = buff;
+ 184   1              i = 0;
+ 185   1              do{
+ 186   2                 i++;
+ 187   2                 temp/=10;
+ 188   2              }while(temp>0);
+ 189   1              wei2 = i;
+ 190   1              if(i > wei)wei2 = wei;
+ 191   1              
+ 192   1              if(wei1 != wei2 || flag == DIS_ALL){
+ 193   2                      temp = wei;
+ 194   2                      DIS_DEL_DIS(pic,x,y,temp*x_add+x,y_add+y,x,y);
+ 195   2              }
+ 196   1      
+ 197   1              i = wei1;
+ 198   1      
+ 199   1              if(duiqi == 0)xs = (i - 1)*x_add + x;
+ 200   1              else if(duiqi == 1)xs = (wei - i)*(x_add/2) + x + ((i - 1)*x_add);
+ 201   1              else{xs = (wei - 1)*x_add + x;}
+ 202   1              ys = y;
+ 203   1              
+ 204   1              temp = value;
+ 205   1              buff_temp = buff;
+ 206   1              do{
+ 207   2                      i--;
+ 208   2                      if(wei1 != wei2 || flag == DIS_ALL)pic_buff = 255;
+ 209   2                      else{pic_buff = pic;}
+ 210   2                      if(wei1 != wei2 || flag == DIS_ALL || temp%10 != buff_temp%10){
+ 211   3                              DIS_FONT_WEI_NUMBER_CM(pic_buff,duiqi,color1,color2,C_dots,temp%10,1,xs,ys);    
+ 212   3                      }
+ 213   2                      temp = temp/10;
+ 214   2                      buff_temp = buff_temp/10;
+ 215   2                      xs = xs - x_add;
+ 216   2                      _nop_();
+ 217   2                      _nop_();
+ 218   2              }while(i>0);
+ 219   1      }
+ 220          
+ 221          //ÏÔÊ¾ 00:00:00
+ 222          void DIS_FONT_WEI_CLOCK(u8 pic,u8 color1,u8 color2,u8 C_dots,u8 flag,u8 shi,u8 fen,u8 miao,u8 buff_shi,u8 
+             -buff_fen,u8 buff_miao,u16 x,u16 y)
+ 223          {
+ 224   1              u16 x_add,y_add,xs,ys;
+ 225   1              xs = x;
+ 226   1              ys = y;
+ 227   1              switch(C_dots){//ÏÔÊ¾µÄÎ»Êý
+ 228   2                      case  0x00: x_add =  6;y_add = 12;break;
+ 229   2                      case  0x01: x_add =  8;y_add = 16;break;
+ 230   2                      case  0x02: x_add = 12;y_add = 24;break;
+ 231   2                      case  0x03: x_add = 16;y_add = 32;break;
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 5   
+
+ 232   2                      case  0x04: x_add = 20;y_add = 40;break;
+ 233   2                      case  0x05: x_add = 24;y_add = 48;break;
+ 234   2                      case  0x06: x_add = 28;y_add = 56;break;
+ 235   2                      case  0x07: x_add = 32;y_add = 64;break;
+ 236   2                      case  0x08: x_add = 40;y_add = 80;break;
+ 237   2                      case  0x09: x_add = 48;y_add = 96;break;
+ 238   2                      case  0x0A: x_add = 56;y_add = 112;break;
+ 239   2              }
+ 240   1              if(flag == DIS_ALL || shi/10 != buff_shi/10){
+ 241   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,shi/10,1,xs,ys);      
+ 242   2              }
+ 243   1              xs += x_add;
+ 244   1              if(flag == DIS_ALL || shi%10 != buff_shi%10){
+ 245   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,shi%10,1,xs,ys);      
+ 246   2              }
+ 247   1              xs += x_add;
+ 248   1              if(flag == DIS_ALL){
+ 249   2                      DIS_FONT_C(color1,color2,1,C_dots,xs,ys-3,":");
+ 250   2              }
+ 251   1              xs += x_add;
+ 252   1              if(flag == DIS_ALL || fen/10 != buff_fen/10){
+ 253   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,fen/10,1,xs,ys);      
+ 254   2              }
+ 255   1              xs += x_add;
+ 256   1              if(flag == DIS_ALL || fen%10 != buff_fen%10){
+ 257   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,fen%10,1,xs,ys);      
+ 258   2              }
+ 259   1              xs += x_add;
+ 260   1              if(flag == DIS_ALL){
+ 261   2                      DIS_FONT_C(color1,color2,1,C_dots,xs,ys-3,":");
+ 262   2              }
+ 263   1              xs += x_add;
+ 264   1              if(flag == DIS_ALL || miao/10 != buff_miao/10){
+ 265   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,miao/10,1,xs,ys);     
+ 266   2              }
+ 267   1              xs += x_add;
+ 268   1              if(flag == DIS_ALL || miao%10 != buff_miao%10){
+ 269   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,miao%10,1,xs,ys);     
+ 270   2              }       
+ 271   1      }
+ 272          
+ 273          //ÏÔÊ¾ÎÂ¶È  Ð¡ÊýµãÒ»Î» -25.0 ~ 99.0¡æ
+ 274          void DIS_FONT_WEI_TEMP(u8 pic,u8 color1,u8 color2,u8 C_dots,u8 dis,u16 value,u16 buff,u16 x,u16 y)
+ 275          {
+ 276   1              u8 i,wei[2],sign_flag[2];
+ 277   1              u16 x_add,y_add,xs,ys,temp,dat[2];
+ 278   1              switch(C_dots){//ÏÔÊ¾µÄÎ»Êý
+ 279   2                      case  0x00: x_add =  6;y_add = 12;break;
+ 280   2                      case  0x01: x_add =  8;y_add = 16;break;
+ 281   2                      case  0x02: x_add = 12;y_add = 24;break;
+ 282   2                      case  0x03: x_add = 16;y_add = 32;break;
+ 283   2                      case  0x04: x_add = 20;y_add = 40;break;
+ 284   2                      case  0x05: x_add = 24;y_add = 48;break;
+ 285   2                      case  0x06: x_add = 28;y_add = 56;break;
+ 286   2                      case  0x07: x_add = 32;y_add = 64;break;
+ 287   2                      case  0x08: x_add = 40;y_add = 80;break;
+ 288   2                      case  0x09: x_add = 48;y_add = 96;break;
+ 289   2                      case  0x0A: x_add = 56;y_add = 112;break;
+ 290   2              }
+ 291   1              //ÇóvalueÎ»Êý
+ 292   1              if(value < 250){//Ð¡ÓÚ0¶È
+ 293   2                      sign_flag[0] = 0;
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 6   
+
+ 294   2                      temp = 250 - value;
+ 295   2              }else{//´óÓÚ0¶È
+ 296   2                      sign_flag[0] = 1;
+ 297   2                      temp = value - 250;
+ 298   2              }
+ 299   1              dat[0] = temp;
+ 300   1              i = 0;
+ 301   1              do{
+ 302   2                 i++;
+ 303   2                 temp/=10;
+ 304   2              }while(temp>0);
+ 305   1              wei[0] = i;
+ 306   1              if(i > 3)wei[0] = 3;
+ 307   1      
+ 308   1      
+ 309   1              //ÇóbuffÎ»Êý
+ 310   1              if(buff < 250){//Ð¡ÓÚ0¶È
+ 311   2                      sign_flag[1] = 0;
+ 312   2                      temp = 250 - buff;
+ 313   2              }else{//´óÓÚ0¶È
+ 314   2                      sign_flag[1] = 1;
+ 315   2                      temp = buff - 250;
+ 316   2              }
+ 317   1              dat[1] = temp;
+ 318   1              i = 0;
+ 319   1              do{
+ 320   2                 i++;
+ 321   2                 temp/=10;
+ 322   2              }while(temp>0);
+ 323   1              wei[1] = i;
+ 324   1              if(i > 3)wei[1] = 3;
+ 325   1              
+ 326   1              if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1]){//È«¸²¸Ç
+ 327   2                      DIS_DEL_DIS(pic,x,y,5*x_add+x,y_add+y,x,y);     
+ 328   2              }
+ 329   1              //¼ÆËã³õÊ¼x£¬y×ø±ê
+ 330   1              if(sign_flag[0] == 0){//¸ºÊý
+ 331   2                      if(wei[0] == 3)xs = x;else{xs = x_add/2 + x;}           
+ 332   2              }else{//ÕýÊý
+ 333   2                      if(wei[0] == 3)xs = x_add/2 + x;else{xs = x_add + x;}
+ 334   2              }
+ 335   1              ys = y;
+ 336   1      
+ 337   1              if(sign_flag[0] == 0){//¸ºÊý
+ 338   2                      if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1]){
+ 339   3                              DIS_FONT_C(color1,color2,1,C_dots,xs,ys,"-");   
+ 340   3                      }
+ 341   2                      xs += x_add;
+ 342   2              }
+ 343   1      
+ 344   1              if(wei[0] >= 3){
+ 345   2                      if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1] || dat[0]/100 != dat[1]/100){
+ 346   3                              DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,dat[0]/100,1,xs,ys);                  
+ 347   3                      }
+ 348   2                      xs += x_add;
+ 349   2              }
+ 350   1      
+ 351   1              if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1] || dat[0]%100/10 != dat[1]%100/10){
+ 352   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,dat[0]%100/10,1,xs,ys);                       
+ 353   2              }
+ 354   1              xs += x_add;
+ 355   1      
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 7   
+
+ 356   1              if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1]){
+ 357   2                      DIS_FONT_C(color1,color2,1,C_dots,xs,ys,".");   
+ 358   2              }
+ 359   1              xs += x_add;
+ 360   1              
+ 361   1              if(dis == DIS_ALL || sign_flag[0] != sign_flag[1] || wei[0] != wei[1] || dat[0]%10 != dat[1]%10){
+ 362   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,dat[0]%10,1,xs,ys);                   
+ 363   2              }       
+ 364   1      }
+ 365          
+ 366          //---------------------------------------------------------------------------------------------------//
+ 367          //ÏÔÊ¾ÎÂ¶È  Ð¡ÊýµãÒ»Î» 0.0 ~ 99.9¡æ
+ 368          //pic:Ò³Ãæ
+ 369          //color1,color2:ÑÕÉ«
+ 370          //C_dots:´óÐ¡
+ 371          //wei£ºÎ»Êý 2Î»ÒÔÉÏ
+ 372          //dis£ºÏÔÊ¾²¿·Ö»òÈ«²¿
+ 373          //value£ºÕæÊµÊýÖµ
+ 374          //buff£º¶Ô±ÈÊýÖµ
+ 375          //x,y:×ø±ê
+ 376          void DIS_FONT_ONE_POINT_VALUE(u8 pic,u8 duiqi,u8 color1,u8 color2,u8 C_dots,u8 wei,u8 dis,u16 value,u16 bu
+             -ff,u16 x,u16 y)
+ 377          {
+ 378   1              u8 i,weishu[2],bwei;
+ 379   1              u16 x_add,y_add,xs,ys,temp,multiple;
+ 380   1              switch(C_dots){//ÏÔÊ¾µÄÎ»Êý
+ 381   2                      case  0x00: x_add =  6;y_add = 12;break;
+ 382   2                      case  0x01: x_add =  8;y_add = 16;break;
+ 383   2                      case  0x02: x_add = 12;y_add = 24;break;
+ 384   2                      case  0x03: x_add = 16;y_add = 32;break;
+ 385   2                      case  0x04: x_add = 20;y_add = 40;break;
+ 386   2                      case  0x05: x_add = 24;y_add = 48;break;
+ 387   2                      case  0x06: x_add = 28;y_add = 56;break;
+ 388   2                      case  0x07: x_add = 32;y_add = 64;break;
+ 389   2                      case  0x08: x_add = 40;y_add = 80;break;
+ 390   2                      case  0x09: x_add = 48;y_add = 96;break;
+ 391   2                      case  0x0A: x_add = 56;y_add = 112;break;
+ 392   2              }
+ 393   1              if(wei < 2)wei = 2;
+ 394   1              wei++;
+ 395   1              //ÇóvalueÎ»Êý
+ 396   1              temp = value;
+ 397   1              i = 0;
+ 398   1              do{
+ 399   2                 i++;
+ 400   2                 temp/=10;
+ 401   2              }while(temp>0);
+ 402   1              weishu[0] = i;
+ 403   1              if(weishu[0] > wei)weishu[0] = wei;else if(weishu[0] <= 2)weishu[0] = 2;
+ 404   1              weishu[0]++;
+ 405   1      
+ 406   1              //ÇóbuffÎ»Êý
+ 407   1              temp = buff;
+ 408   1              i = 0;
+ 409   1              do{
+ 410   2                 i++;
+ 411   2                 temp/=10;
+ 412   2              }while(temp>0);
+ 413   1              weishu[1] = i;
+ 414   1              if(weishu[1] > wei)weishu[1] = wei;else if(weishu[1] <= 2)weishu[1] = 2;
+ 415   1              weishu[1]++;
+ 416   1              
+C51 COMPILER V9.00   DISPLAY                                                               10/11/2024 17:50:14 PAGE 8   
+
+ 417   1              if(dis == DIS_ALL || weishu[0] != weishu[1]){//È«¸²¸Ç
+ 418   2                      DIS_DEL_DIS(pic,x,y,wei*x_add+x,y_add+y,x,y);   
+ 419   2              }
+ 420   1              
+ 421   1              //¼ÆËã³õÊ¼×ø±êx,y
+ 422   1              if(duiqi == 0){//×ó¶ÔÆë
+ 423   2                      xs = x;
+ 424   2              }else if(duiqi == 1){//ÖÐ¼ä¶ÔÆë
+ 425   2                      xs = (wei - weishu[0])*(x_add/2)+x;    
+ 426   2              }else{//ÓÒ¶ÔÆë
+ 427   2                      xs = (wei - weishu[0])*x_add+x;
+ 428   2              }
+ 429   1              ys = y;
+ 430   1      
+ 431   1              multiple = 1;
+ 432   1              for(i=(weishu[0]-1);i>1;i--){
+ 433   2                      multiple *= 10; 
+ 434   2              }
+ 435   1      
+ 436   1              bwei = weishu[0];
+ 437   1              while(bwei > 2){
+ 438   2                      if(dis == DIS_ALL || weishu[0] != weishu[1] || value/multiple%10 != buff/multiple%10){
+ 439   3                              DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,value/multiple%10,1,xs,ys);   
+ 440   3                      }
+ 441   2                      multiple /= 10;
+ 442   2                      xs += x_add;
+ 443   2                      bwei--;
+ 444   2              }
+ 445   1              if(dis == DIS_ALL || weishu[0] != weishu[1]){
+ 446   2                      DIS_FONT_C(color1,color2,1,C_dots,xs,ys,".");   
+ 447   2              }
+ 448   1              xs += x_add;
+ 449   1              if(dis == DIS_ALL || weishu[0] != weishu[1] || value%10 != buff%10){
+ 450   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,color1,color2,C_dots,value%10,1,xs,ys);    
+ 451   2              }
+ 452   1      }
+ 453          
+ 454          
+ 455          
+ 456          
+ 457          
+ 458          
+ 459          
+ 460          
+ 461          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   5130    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----     189
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

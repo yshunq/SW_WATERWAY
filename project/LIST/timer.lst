@@ -1,0 +1,112 @@
+C51 COMPILER V9.00   TIMER                                                                 10/11/2024 17:50:11 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN ..\hex\timer.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\user\timer.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\displ
+                    -ay;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\timer.lst) OBJECT(..\hex\timer.obj)
+
+line level    source
+
+   1          #include "timer.h"
+   2          
+   3          xdata unsigned long SYSTEM_CC;
+   4          
+   5          u8 count_time_1ms(u8 clear)//计时  不卡主
+   6          {
+   7   1              static u32 buff = 0;
+   8   1              if(clear == 0)buff = SYSTEM_CC;
+   9   1              
+  10   1              if((SYSTEM_CC - buff) >= 1){
+  11   2                      return 0;
+  12   2              }
+  13   1              return 1;
+  14   1      }
+  15          
+  16          u8 count_time_100ms(u8 clear)//计时  不卡主
+  17          {
+  18   1              static u32 buff = 0;
+  19   1              if(clear == 0)buff = SYSTEM_CC;
+  20   1              
+  21   1              if((SYSTEM_CC - buff) >= 100){
+  22   2                      return 0;
+  23   2              }
+  24   1              return 1;
+  25   1      }
+  26          
+  27          
+  28          
+  29          
+  30          void delay_ms(unsigned long ms)
+  31          {
+  32   1              static u32 temp;
+  33   1              temp = SYSTEM_CC;
+  34   1              while((SYSTEM_CC - temp) < ms);
+  35   1      }
+  36          
+  37          void Timer1_Init(void)
+  38          {
+  39   1              AUXR &= 0x7F;                                                                                                           //定时器时钟12T模式
+  40   1              TMOD &= 0xF0;                                                                                                           //设置定时器模式
+  41   1              TH1=(65536-(FOSC/12/1000))/256;
+  42   1              TL1=(65536-(FOSC/12/1000))%256;
+  43   1              TF1 = 0;                                                                                                                                //清除TF0标志
+  44   1              TR1 = 1;                                //启动定时器
+  45   1              ET1 = 1;                                //使能定时器中断
+  46   1      }
+  47          
+  48          void TM1_Isr() interrupt 3
+  49          {
+  50   1              SYSTEM_CC++;
+  51   1      
+  52   1              if(SOUND_COUNT > 0){//蜂鸣器
+  53   2                      SOUND_COUNT--;
+  54   2                      if(SOUND_COUNT == 0)DD_OFF;
+C51 COMPILER V9.00   TIMER                                                                 10/11/2024 17:50:11 PAGE 2   
+
+  55   2              }
+  56   1      
+  57   1              if(LL.TIME_COUNT >= 1000){//流量传感
+  58   2              LL.TIME_COUNT = 0;
+  59   2                      LL.CYCLE = LL.COUNT;
+  60   2                      LL.COUNT = 0;
+  61   2              }else{
+  62   2                      LL.TIME_COUNT++;
+  63   2              }
+  64   1      
+  65   1              if(SW.TIME_WORK_FLAG == 0){//冲击波工作   副线圈打开5ms  停止17ms  主线圈打开
+  66   2                      SW.CLOCK_COUNT++;//时间计时     
+  67   2                      
+  68   2                      SW.WORK_COUNT++;
+  69   2                      if(SW.WORK_COUNT == 1){//打开副线圈
+  70   3                              DEPUTY_COIL_ON;
+  71   3                      }else if(SW.WORK_COUNT == 6){//关闭副线圈
+  72   3                              DEPUTY_COIL_OFF;
+  73   3                      }else if(SW.WORK_COUNT == 23){//打开主线圈
+  74   3                              MAIN_COIL_ON;   
+  75   3                      }else if(SW.WORK_COUNT == (SW.SET_TIME + 23)){//关闭主线圈
+  76   3                              MAIN_COIL_OFF;
+  77   3                              if(SW.TOTAL_TIME < SW.PRELOAD_TIME)SW.TOTAL_TIME++;
+  78   3                              if(SW.EEPROM_TOTAL_TIME < 2000000)SW.EEPROM_TOTAL_TIME++;
+  79   3                      }else if(SW.WORK_COUNT >= SW.CYCLE_TIME){
+  80   3                              SW.WORK_COUNT = 0;
+  81   3                      }       
+  82   2              }
+  83   1      }
+  84          
+  85          
+  86          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    571    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     16       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

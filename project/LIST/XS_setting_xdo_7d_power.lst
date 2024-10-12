@@ -1,0 +1,464 @@
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_SETTING_XDO_7D_POWER
+OBJECT MODULE PLACED IN ..\hex\XS_setting_xdo_7d_power.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\main\XS_setting_xdo_7d_power.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..
+                    -\user;..\display) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_setting_xdo_7d_power.lst) OBJECT(..\hex\XS_setting_xdo_7d_power.obj
+                    -)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void dis_xdo_hf_set_time(void);
+   4          //void dis_xdo_hf_min_gear_value(void);
+   5          //void dis_xdo_hf_max_gear_value(void);
+   6          //void dis_xdo_hf_p15_percent(void);
+   7          //void dis_xdo_hf_p30_percent(void);
+   8          //void dis_xdo_hf_p45_percent(void);
+   9          //void dis_xdo_motor_point_pwm_value(void);
+  10          //void dis_xdo_motor_line_pwm_value(void);
+  11          //void dis_xdo_long_press_auto_flag(void);
+  12          //void dis_xdo_point_is_line_percent(void);
+  13          //void dis_motor_sele_flag(void);
+  14          //
+  15          //const u8  MAIN_KEY_SETTING_XDO_7D_POWER = 21;
+  16          //const u16 MAIN_SETTING_XDO_7D_POWER[]=
+  17          //{
+  18          //       897,1077,   4, 110,    //1  返回
+  19          //      
+  20          //       100, 167, 391, 461,  //2  输出时间-
+  21          //       302, 377, 391, 461,  //3  输出时间+
+  22          //       401, 472, 391, 461,  //4  输出最低档位-
+  23          //       609, 688, 391, 461,  //5  输出最低档位+
+  24          //       696, 777, 391, 461,  //6  输出最高档位-
+  25          //       910, 987, 391, 461,  //7  输出最高档位+
+  26          //       
+  27          //       100, 167, 505, 583,  //8  P1.5 -
+  28          //       302, 377, 505, 583,  //9  P1.5 +
+  29          //       401, 472, 505, 583,  //10 P3.0 -
+  30          //       609, 688, 505, 583,  //11 P3.0 +
+  31          //       696, 777, 505, 583,  //12 P4.5 -
+  32          //       910, 987, 505, 583,  //13 P4.5 +
+  33          //      
+  34          //       100, 167, 628, 704,  //14 打点速度-
+  35          //       302, 377, 628, 704,  //15 打点速度+
+  36          //       401, 472, 628, 704,  //16 打线速度-
+  37          //       609, 688, 628, 704,  //17 打线速度+
+  38          //       
+  39          //       777, 910, 628, 704,  //18 自动手动
+  40          //       
+  41          //       100, 167, 745, 834,  //19 线是点能量百分比-
+  42          //       302, 377, 745, 834,  //20 线是点能量百分比+
+  43          //       
+  44          //       470,608,755,823,
+  45          //};
+  46          //
+  47          //void main_xs_setting_xdo_7d_power(void)
+  48          //{
+  49          //      u8 key,last_down;
+  50          //      DIS_PICNUM(Pic_SETTING_XDO_7D_POWER);
+  51          //      
+  52          //      dis_xdo_hf_set_time();
+  53          //      dis_xdo_hf_min_gear_value();
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 2   
+
+  54          //      dis_xdo_hf_max_gear_value();
+  55          //      dis_xdo_hf_p15_percent();
+  56          //      dis_xdo_hf_p30_percent();
+  57          //      dis_xdo_hf_p45_percent();
+  58          //      dis_xdo_motor_point_pwm_value();
+  59          //      dis_xdo_motor_line_pwm_value();
+  60          //      dis_xdo_long_press_auto_flag();
+  61          //      dis_xdo_point_is_line_percent();
+  62          //      dis_motor_sele_flag();
+  63          //      last_down = 0;
+  64          //      do{
+  65          //              delay_ms(1);
+  66          //              if(KEY_YES!=0x00)
+  67          //              {
+  68          //                      ADS7843_KEY(); //扫描按键
+  69          //                      key=KEY_FANHUI(MAIN_KEY_SETTING_XDO_7D_POWER,MAIN_SETTING_XDO_7D_POWER); 
+  70          //                      switch(key)
+  71          //                      {
+  72          //                              case 1:
+  73          //                                XIANG1();
+  74          //                                INTERFACE = PAGE_FUN_CHOOSE;
+  75          //                                      goto over_main_xs_setting_power;
+  76          //                                      break;
+  77          //                              case 2:
+  78          //                                      if(XDO_HF_SET_TIME > 1)
+  79          //                                      {
+  80          //                                              XIANG1();
+  81          //                                              XDO_HF_SET_TIME--;
+  82          //                                              dis_xdo_hf_set_time();
+  83          //                                              last_down = 2;
+  84          //                                              delay_ms(50);
+  85          //                                      }else{KEY_YES = 0;}
+  86          //                                      break;
+  87          //                              case 3:
+  88          //                                      if(XDO_HF_SET_TIME < 50)
+  89          //                                      {
+  90          //                                              XIANG1();
+  91          //                                              XDO_HF_SET_TIME++;
+  92          //                                              dis_xdo_hf_set_time();
+  93          //                                              last_down = 2;
+  94          //                                              delay_ms(50);
+  95          //                                      }else{KEY_YES = 0;}
+  96          //                                      break;
+  97          //                              case 4:
+  98          //                                      if(XDO_HF_MIN_GEAR_VALUE > 100)
+  99          //                                      {
+ 100          //                                              XIANG1();
+ 101          //                                              XDO_HF_MIN_GEAR_VALUE = XDO_HF_MIN_GEAR_VALUE - 100;
+ 102          //                                              dis_xdo_hf_min_gear_value();
+ 103          //                                              last_down = 4;
+ 104          //                                              delay_ms(50);
+ 105          //                                      }else{KEY_YES = 0;}
+ 106          //                                      break;
+ 107          //                              case 5:
+ 108          //                                      if(XDO_HF_MIN_GEAR_VALUE < XDO_HF_MAX_GEAR_VALUE)
+ 109          //                                      {
+ 110          //                                              XIANG1();
+ 111          //                                              XDO_HF_MIN_GEAR_VALUE = XDO_HF_MIN_GEAR_VALUE + 100;
+ 112          //                                              dis_xdo_hf_min_gear_value();
+ 113          //                                              last_down = 4;
+ 114          //                                              delay_ms(50);
+ 115          //                                      }else{KEY_YES = 0;}
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 3   
+
+ 116          //                                      break;
+ 117          //                              case 6:
+ 118          //                                      if(XDO_HF_MAX_GEAR_VALUE > XDO_HF_MIN_GEAR_VALUE)
+ 119          //                                      {
+ 120          //                                              XIANG1();
+ 121          //                                              XDO_HF_MAX_GEAR_VALUE = XDO_HF_MAX_GEAR_VALUE - 100;
+ 122          //                                              dis_xdo_hf_max_gear_value();
+ 123          //                                              last_down = 6;
+ 124          //                                              delay_ms(50);
+ 125          //                                      }else{KEY_YES = 0;}
+ 126          //                                      break;
+ 127          //                              case 7:
+ 128          //                                      if(XDO_HF_MAX_GEAR_VALUE < 0x1000)
+ 129          //                                      {
+ 130          //                                              XIANG1();
+ 131          //                                              XDO_HF_MAX_GEAR_VALUE = XDO_HF_MAX_GEAR_VALUE + 100;
+ 132          //                                              dis_xdo_hf_max_gear_value();
+ 133          //                                              last_down = 6;
+ 134          //                                              delay_ms(50);
+ 135          //                                      }else{KEY_YES = 0;}
+ 136          //                                      break;
+ 137          //                              case 8:
+ 138          //                                      if(XDO_HF_P15_PERCENT > 1)
+ 139          //                                      {
+ 140          //                                              XIANG1();
+ 141          //                                              XDO_HF_P15_PERCENT--;
+ 142          //                                              dis_xdo_hf_p15_percent();
+ 143          //                                              last_down = 8;
+ 144          //                                              delay_ms(50);
+ 145          //                                      }else{KEY_YES = 0;}
+ 146          //                                      break;
+ 147          //                              case 9:
+ 148          //                                      if(XDO_HF_P15_PERCENT < 200)
+ 149          //                                      {
+ 150          //                                              XIANG1();
+ 151          //                                              XDO_HF_P15_PERCENT++;
+ 152          //                                              dis_xdo_hf_p15_percent();
+ 153          //                                              last_down = 8;
+ 154          //                                              delay_ms(50);
+ 155          //                                      }else{KEY_YES = 0;}
+ 156          //                                      break;
+ 157          //                              case 10:
+ 158          //                                      if(XDO_HF_P30_PERCENT > 1)
+ 159          //                                      {
+ 160          //                                              XIANG1();
+ 161          //                                              XDO_HF_P30_PERCENT--;
+ 162          //                                              dis_xdo_hf_p30_percent();
+ 163          //                                              last_down = 10;
+ 164          //                                              delay_ms(50);
+ 165          //                                      }else{KEY_YES = 0;}
+ 166          //                                      break;
+ 167          //                              case 11:
+ 168          //                                      if(XDO_HF_P30_PERCENT < 200)
+ 169          //                                      {
+ 170          //                                              XIANG1();
+ 171          //                                              XDO_HF_P30_PERCENT++;
+ 172          //                                              dis_xdo_hf_p30_percent();
+ 173          //                                              last_down = 10;
+ 174          //                                              delay_ms(50);
+ 175          //                                      }else{KEY_YES = 0;}
+ 176          //                                      break;
+ 177          //                              case 12:
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 4   
+
+ 178          //                                      if(XDO_HF_P45_PERCENT > 1)
+ 179          //                                      {
+ 180          //                                              XIANG1();
+ 181          //                                              XDO_HF_P45_PERCENT--;
+ 182          //                                              dis_xdo_hf_p45_percent();
+ 183          //                                              last_down = 12;
+ 184          //                                              delay_ms(50);
+ 185          //                                      }else{KEY_YES = 0;}
+ 186          //                                      break;
+ 187          //                              case 13:
+ 188          //                                      if(XDO_HF_P45_PERCENT < 200)
+ 189          //                                      {
+ 190          //                                              XIANG1();
+ 191          //                                              XDO_HF_P45_PERCENT++;
+ 192          //                                              dis_xdo_hf_p45_percent();
+ 193          //                                              last_down = 12;
+ 194          //                                              delay_ms(50);
+ 195          //                                      }else{KEY_YES = 0;}
+ 196          //                                      break;
+ 197          //                              case 14:
+ 198          //                                      if(XDO_MOTOR_POINT_PWM_VALUE > 20)
+ 199          //                                      {
+ 200          //                                              XIANG1();
+ 201          //                                              XDO_MOTOR_POINT_PWM_VALUE--;
+ 202          //                                              dis_xdo_motor_point_pwm_value();
+ 203          //                                              last_down = 14;
+ 204          //                                              delay_ms(50);
+ 205          //                                      }else{KEY_YES = 0;}
+ 206          //                                      break;
+ 207          //                              case 15:
+ 208          //                                      if(XDO_MOTOR_POINT_PWM_VALUE < 100)
+ 209          //                                      {
+ 210          //                                              XIANG1();
+ 211          //                                              XDO_MOTOR_POINT_PWM_VALUE++;
+ 212          //                                              dis_xdo_motor_point_pwm_value();
+ 213          //                                              last_down = 14;
+ 214          //                                              delay_ms(50);
+ 215          //                                      }else{KEY_YES = 0;}
+ 216          //                                      break;
+ 217          //                              
+ 218          //                              case 16:
+ 219          //                                      if(XDO_MOTOR_LINE_PWM_VALUE > 20)
+ 220          //                                      {
+ 221          //                                              XIANG1();
+ 222          //                                              XDO_MOTOR_LINE_PWM_VALUE--;
+ 223          //                                              dis_xdo_motor_line_pwm_value();
+ 224          //                                              last_down = 16;
+ 225          //                                              delay_ms(50);
+ 226          //                                      }else{KEY_YES = 0;}
+ 227          //                                      break;
+ 228          //                              case 17:
+ 229          //                                      if(XDO_MOTOR_LINE_PWM_VALUE < 100)
+ 230          //                                      {
+ 231          //                                              XIANG1();
+ 232          //                                              XDO_MOTOR_LINE_PWM_VALUE++;
+ 233          //                                              dis_xdo_motor_line_pwm_value();
+ 234          //                                              last_down = 16;
+ 235          //                                              delay_ms(50);
+ 236          //                                      }else{KEY_YES = 0;}
+ 237          //                                      break;
+ 238          //                              case 18://手动自动
+ 239          //                                      XIANG1();
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 5   
+
+ 240          //                                      if(XDO_LONG_PRESS_AUTO_FLAG == 0)
+ 241          //                                      {
+ 242          //                                              XDO_LONG_PRESS_AUTO_FLAG = 1;
+ 243          //                                      }
+ 244          //                                      else
+ 245          //                                      {
+ 246          //                                              XDO_LONG_PRESS_AUTO_FLAG = 0;
+ 247          //                                      }
+ 248          //                                      last_down = 18;
+ 249          //                                      dis_xdo_long_press_auto_flag();
+ 250          //                                      KEY_YES = 0;
+ 251          //                                      break;
+ 252          //                              
+ 253          //                              case 19:
+ 254          //                                      if(XDO_POINT_IS_LINE_PERCENT > 1)
+ 255          //                                      {
+ 256          //                                              XIANG1();
+ 257          //                                              XDO_POINT_IS_LINE_PERCENT--;
+ 258          //                                              dis_xdo_point_is_line_percent();
+ 259          //                                              last_down = 20;
+ 260          //                                              delay_ms(50);
+ 261          //                                      }else{KEY_YES = 0;}
+ 262          //                                      break;
+ 263          //                              case 20:
+ 264          //                                      if(XDO_POINT_IS_LINE_PERCENT < 200)
+ 265          //                                      {
+ 266          //                                              XIANG1();
+ 267          //                                              XDO_POINT_IS_LINE_PERCENT++;
+ 268          //                                              dis_xdo_point_is_line_percent();
+ 269          //                                              last_down = 20;
+ 270          //                                              delay_ms(50);
+ 271          //                                      }else{KEY_YES = 0;}
+ 272          //                                      break;
+ 273          //                              case 21:
+ 274          //                                      XIANG1();
+ 275          //                                      if(MOTOR_SELE_FLAG == 0){
+ 276          //                                              MOTOR_SELE_FLAG = 1;
+ 277          //                                      }else{
+ 278          //                                              MOTOR_SELE_FLAG = 0;
+ 279          //                                      }
+ 280          //                                      dis_motor_sele_flag();
+ 281          //                                      write_motor_sele_flag();
+ 282          //                                      delay_ms(100);
+ 283          //                                      KEY_YES = 0;
+ 284          //                                      break;
+ 285          //                      }
+ 286          //              }
+ 287          //              else
+ 288          //              {
+ 289          //                      switch(last_down)
+ 290          //                      {
+ 291          //                              case 2:
+ 292          //                                      write_xdo_hf_set_time();
+ 293          //                                      last_down = 0;
+ 294          //                                      break;
+ 295          //                              case 4:
+ 296          //                                      write_xdo_hf_min_gear_value();
+ 297          //                                      last_down = 0;
+ 298          //                                      break;
+ 299          //                              case 6:
+ 300          //                                      write_xdo_hf_max_gear_value();
+ 301          //                                      last_down = 0;
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 6   
+
+ 302          //                                      break;
+ 303          //                              case 8:
+ 304          //                                      write_xdo_hf_p15_percent();
+ 305          //                                      last_down = 0;
+ 306          //                                      break;
+ 307          //                              case 10:
+ 308          //                                      write_xdo_hf_p30_percent();
+ 309          //                                      last_down = 0;
+ 310          //                                      break;
+ 311          //                              case 12:
+ 312          //                                      write_xdo_hf_p45_percent();
+ 313          //                                      last_down = 0;
+ 314          //                                      break;
+ 315          //                              case 14:
+ 316          //                                      write_xdo_motor_point_pwm_value();
+ 317          //                                      last_down = 0;
+ 318          //                                      break;
+ 319          //                              case 16:
+ 320          //                                      write_xdo_motor_line_pwm_value();
+ 321          //                                      last_down = 0;
+ 322          //                                      break;
+ 323          //                              case 18:
+ 324          //                                      write_xdo_long_press_auto_flag();
+ 325          //                                      last_down = 0;
+ 326          //                                      break;
+ 327          //                              case 20:
+ 328          //                                      write_xdo_point_is_line_percent();
+ 329          //                                      last_down = 0;
+ 330          //                                      break;
+ 331          //                      }
+ 332          //              }
+ 333          //      }while(1);
+ 334          //      over_main_xs_setting_power:
+ 335          //      _nop_();
+ 336          //}
+ 337          //
+ 338          //
+ 339          //
+ 340          //void dis_xdo_hf_set_time(void)
+ 341          //{
+ 342          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_SET_TIME,2,220,412);
+ 343          //}
+ 344          // 
+ 345          //void dis_xdo_hf_min_gear_value(void)
+ 346          //{
+ 347          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_MIN_GEAR_VALUE,4,506,412);
+ 348          //}
+ 349          // 
+ 350          //void dis_xdo_hf_max_gear_value(void)
+ 351          //{
+ 352          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_MAX_GEAR_VALUE,4,811,412);
+ 353          //}
+ 354          //
+ 355          //void dis_xdo_hf_p15_percent(void)
+ 356          //{
+ 357          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_P15_PERCENT,3,204,530);
+ 358          //      DIS_FONT_C(0x07,0xfe,1,0x03,252,530,"%");
+ 359          //}
+ 360          // 
+ 361          //void dis_xdo_hf_p30_percent(void)
+ 362          //{
+ 363          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_P30_PERCENT,3,506,530);
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 7   
+
+ 364          //      DIS_FONT_C(0x07,0xfe,1,0x03,554,530,"%");
+ 365          //}
+ 366          // 
+ 367          //void dis_xdo_hf_p45_percent(void)
+ 368          //{
+ 369          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_HF_P45_PERCENT,3,811,530);
+ 370          //      DIS_FONT_C(0x07,0xfe,1,0x03,859,530,"%");
+ 371          //}
+ 372          //
+ 373          //void dis_xdo_motor_point_pwm_value(void)
+ 374          //{
+ 375          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_MOTOR_POINT_PWM_VALUE,4,204,652);
+ 376          //}
+ 377          //
+ 378          //void dis_xdo_motor_line_pwm_value(void)
+ 379          //{
+ 380          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_MOTOR_LINE_PWM_VALUE,4,506,652);
+ 381          //}
+ 382          //
+ 383          //void dis_xdo_long_press_auto_flag(void)
+ 384          //{
+ 385          //      DIS_DEL_DIS(Pic_SETTING_XDO_7D_POWER,770,632,918,704,770,632);
+ 386          //      if(XDO_LONG_PRESS_AUTO_FLAG == 0)//一直按才有输出
+ 387          //      {
+ 388          //              DIS_FONT_C(0x07,0xfe,4,0x03,809,652,"LONG");
+ 389          //      }
+ 390          //      else
+ 391          //      {
+ 392          //              DIS_FONT_C(0x07,0xfe,5,0x03,801,652,"CLICK");
+ 393          //      }
+ 394          //}
+ 395          //
+ 396          //void dis_xdo_point_is_line_percent(void)
+ 397          //{
+ 398          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_XDO_7D_POWER,1,0x07,0xfe,0x03,XDO_POINT_IS_LINE_PERCENT,4,204,773);
+ 399          //}
+ 400          //
+ 401          //void dis_motor_sele_flag(void)
+ 402          //{
+ 403          //      DIS_DEL_DIS(Pic_SETTING_XDO_7D_POWER,470,755,608,823,470,755);
+ 404          //      if(MOTOR_SELE_FLAG == 0){
+ 405          //              DIS_FONT_C(0x07,0xfe,4,0x03,506,773,"1:20");
+ 406          //      }else{
+ 407          //              DIS_FONT_C(0x07,0xfe,4,0x03,506,773,"1:30");
+ 408          //      }
+ 409          //}
+ 410          //
+ 411          //
+ 412          //
+ 413          //
+ 414          //
+ 415          //
+ 416          //
+ 417          //
+ 418          //
+ 419          //
+ 420          //
+ 421          //
+ 422          //
+ 423          //
+ 424          //
+ 425          // 
+C51 COMPILER V9.00   XS_SETTING_XDO_7D_POWER                                               09/02/2024 14:01:21 PAGE 8   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

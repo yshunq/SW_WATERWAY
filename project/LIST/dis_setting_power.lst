@@ -1,0 +1,115 @@
+C51 COMPILER V9.00   DIS_SETTING_POWER                                                     09/28/2024 10:57:45 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DIS_SETTING_POWER
+OBJECT MODULE PLACED IN ..\hex\dis_setting_power.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\display\dis_setting_power.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(.
+                    -.\user;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\dis_setting_power.lst) OBJECT(..\hex\dis_se
+                    -tting_power.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //
+   4          //void dis_xdrf_hf_set_time(void)
+   5          //{
+   6          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_SET_TIME,2,185,175);
+   7          //}
+   8          // 
+   9          //void dis_xdrf_hf_min_gear_value(void)
+  10          //{
+  11          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_MIN_GEAR_VALUE,4,367,175);
+  12          //}
+  13          // 
+  14          //void dis_xdrf_hf_max_gear_value(void)
+  15          //{
+  16          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_MAX_GEAR_VALUE,4,565,175);
+  17          //}
+  18          //
+  19          //void dis_xdrf_hf_p15_percent(void)
+  20          //{
+  21          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P15_PERCENT,3,164,253);
+  22          //      DIS_FONT_C(0xff,0xff,1,0x03,215,253,"%");
+  23          //}
+  24          // 
+  25          //void dis_xdrf_hf_p30_percent(void)
+  26          //{
+  27          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P30_PERCENT,3,364,253);
+  28          //      DIS_FONT_C(0xff,0xff,1,0x03,415,253,"%");
+  29          //}
+  30          // 
+  31          //void dis_xdrf_hf_p45_percent(void)
+  32          //{
+  33          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P45_PERCENT,3,561,253);
+  34          //      DIS_FONT_C(0xff,0xff,1,0x03,610,253,"%");
+  35          //}
+  36          //
+  37          //void dis_xdrf_hf_p60_percent(void)
+  38          //{
+  39          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P60_PERCENT,3,164,329);
+  40          //      DIS_FONT_C(0xff,0xff,1,0x03,215,329,"%");
+  41          //}
+  42          //
+  43          //void dis_xdrf_hf_p90_percent(void)
+  44          //{
+  45          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P90_PERCENT,3,364,329);
+  46          //      DIS_FONT_C(0xff,0xff,1,0x03,415,329,"%");
+  47          //}
+  48          //
+  49          //void dis_xdrf_hf_p130_percent(void)
+  50          //{
+  51          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_HF_P130_PERCENT,3,561,329);
+  52          //      DIS_FONT_C(0xff,0xff,1,0x03,610,329,"%");
+  53          //}
+C51 COMPILER V9.00   DIS_SETTING_POWER                                                     09/28/2024 10:57:45 PAGE 2   
+
+  54          //
+  55          //void dis_xdrf_rf_min_gear_value(void)
+  56          //{
+  57          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_RF_MIN_GEAR_VALUE,4,168,403);
+  58          //}
+  59          //
+  60          //void dis_xdrf_rf_max_gear_value(void)
+  61          //{
+  62          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_RF_MAX_GEAR_VALUE,4,365,403);
+  63          //}
+  64          //
+  65          //void dis_xdrf_rf_p153045_percent(void)
+  66          //{
+  67          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_RF_P153045_PERCENT,3,164,480);
+  68          //      DIS_FONT_C(0xff,0xff,1,0x03,215,480,"%");
+  69          //}
+  70          // 
+  71          //void dis_xdrf_rf_p6090130_percent(void)
+  72          //{
+  73          //      DIS_FONT_WEI_NUMBER_CM(Pic_SETTING_POWER,1,0xff,0xff,0x03,XDRF_RF_P6090130_PERCENT,3,364,480);
+  74          //      DIS_FONT_C(0xff,0xff,1,0x03,415,480,"%");
+  75          //}
+  76          //
+  77          //void dis_xdrf_long_press_auto_flag(void)
+  78          //{
+  79          //      DIS_DEL_DIS(Pic_SETTING_POWER,555,400,640,440,555,400);
+  80          //      if(XDRF_LONG_PRESS_AUTO_FLAG == 0)//一直按才有输出
+  81          //      {
+  82          //              DIS_FONT_C(0xff,0xff,4,0x03,565,403,"LONG");
+  83          //      }
+  84          //      else
+  85          //      {
+  86          //              DIS_FONT_C(0xff,0xff,5,0x03,557,403,"CLICK");
+  87          //      }
+  88          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,246 @@
+C51 COMPILER V9.00   DIS_X3D_WORK                                                          09/02/2024 10:24:47 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DIS_X3D_WORK
+OBJECT MODULE PLACED IN ..\hex\dis_x3d_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\display\dis_x3d_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\use
+                    -r) DEBUG OBJECTEXTEND PRINT(.\LIST\dis_x3d_work.lst) OBJECT(..\hex\dis_x3d_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //
+   4          //
+   5          //
+   6          //
+   7          //
+   8          //
+   9          //
+  10          //
+  11          //
+  12          //
+  13          //
+  14          //
+  15          //
+  16          //
+  17          //void dis_3dhifu_set_x_number(void)
+  18          //{
+  19          //      DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,HIFU_SET_X_NUMBER,2,780,180);
+  20          //}
+  21          //
+  22          //void dis_3dhifu_y_value(void)//³¤¶È
+  23          //{
+  24          //  DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,Y_VALUE,2,578,485);
+  25          //}
+  26          //
+  27          //void dis_3dhifu_y_spacing(void)
+  28          //{
+  29          //      u16 x,y;
+  30          //      x = 961;
+  31          //      y = 485;
+  32          //      DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,(Y_SPACING%100/10),1,x,y);
+  33          //  DIS_FONT_C(0xff,0xff,1,0x04,x+20,y,".");
+  34          //  DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,(Y_SPACING%10),1,x+40,y);
+  35          //}
+  36          //
+  37          //void dis_3dhifu_x_spacing(void)
+  38          //{
+  39          //      u16 x,y;
+  40          //      x = 785;
+  41          //      y = 776;
+  42          //      DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,(X_SPACING%100/10),1,x,y);
+  43          //  DIS_FONT_C(0xff,0xff,1,0x04,x+20,y,".");
+  44          //  DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x04,(X_SPACING%10),1,x+40,y);
+  45          //}
+  46          //
+  47          //void dis_x3d_work_hf_power_gear(void)
+  48          //{
+  49          //      dis_one_104x152_white(HF_POWER_GEAR/10,413,1440);
+  50          //      dis_one_104x152_white(HF_POWER_GEAR%10,566,1440);
+  51          //}
+  52          //
+  53          //
+  54          //void dis_one_104x152_white(u8 dat,u16 x,u16 y)
+C51 COMPILER V9.00   DIS_X3D_WORK                                                          09/02/2024 10:24:47 PAGE 2   
+
+  55          //{
+  56          //      switch(dat)
+  57          //      {
+  58          //              case 0:DIS_DEL_DIS(Pic_CUT1,  1,1,105,153,x,y);break;//0
+  59          //              case 1:DIS_DEL_DIS(Pic_CUT1,107,1,211,153,x,y);break;//1
+  60          //              case 2:DIS_DEL_DIS(Pic_CUT1,213,1,317,153,x,y);break;//2
+  61          //              case 3:DIS_DEL_DIS(Pic_CUT1,319,1,423,153,x,y);break;//3
+  62          //              case 4:DIS_DEL_DIS(Pic_CUT1,425,1,529,153,x,y);break;//4
+  63          //              case 5:DIS_DEL_DIS(Pic_CUT1,531,1,635,153,x,y);break;//5
+  64          //              case 6:DIS_DEL_DIS(Pic_CUT1,637,1,741,153,x,y);break;//6
+  65          //              case 7:DIS_DEL_DIS(Pic_CUT1,743,1,847,153,x,y);break;//7
+  66          //              case 8:DIS_DEL_DIS(Pic_CUT1,849,1,953,153,x,y);break;//8
+  67          //              case 9:DIS_DEL_DIS(Pic_CUT1,955,1,1059,153,x,y);break;//9
+  68          //      }
+  69          //}
+  70          //
+  71          //void dis_work_picture(void)
+  72          //{
+  73          //  u16 x_number,y_number,i;//ÁÐÊý  µãÊý
+  74          //      u16 x,y,x_spacing_pixel,y_spacing_pixel;//ÁÐÓëÁÐ  µãÓëµãÖ®¼äµÄ¼ä¸ô
+  75          //      u16 cut_x0,cut_x1,cut_y0,cut_y1;
+  76          //      
+  77          //      x_number = HIFU_SET_X_NUMBER;//ÁÐÊý
+  78          //      y_number = Y_VALUE*10/Y_SPACING + 1;//µãÊý
+  79          //      
+  80          //      DIS_DEL_DIS(Pic_X3D_WORK,X_STARTING_POSITION,Y_STARTING_POSITION,X_END_POSITION,Y_END_POSITION,X_STARTI
+             -NG_POSITION,Y_STARTING_POSITION);
+  81          //      
+  82          //      x_spacing_pixel = X_SPACING;
+  83          //      x_spacing_pixel = (X_END_POSITION - X_STARTING_POSITION - 10)*x_spacing_pixel/MAX_X_DATA/10;//ÁÐÓëÁÐ¼ä¸
+             -ô
+  84          //      x = (X_END_POSITION - X_STARTING_POSITION - 10 - (x_spacing_pixel*(x_number - 1)))/2 + X_STARTING_POSIT
+             -ION;//xÆðµã
+  85          //      
+  86          //      y_spacing_pixel = Y_SPACING;
+  87          //  y_spacing_pixel = (Y_END_POSITION - Y_STARTING_POSITION - 10)*y_spacing_pixel/MAX_Y_DATA/10;//µãÓëµã¼ä
+             -¸ô
+  88          //  y = (Y_END_POSITION - Y_STARTING_POSITION - 10 - (y_spacing_pixel*(y_number - 1)))/2 + Y_STARTING_POSI
+             -TION;//yÆðµã
+  89          //      
+  90          //      switch(Y_SPACING)
+  91          //  {
+  92          //    case 10 : cut_x0 = 679;cut_y0 = 272;cut_x1 = 688;cut_y1 = (y_number - 1)*18 + cut_y0 + 10;if(y_numbe
+             -r >= 25){y = Y_STARTING_POSITION;}break;//1.0??
+  93          //              case 12 : cut_x0 = 699;cut_y0 = 272;cut_x1 = 708;cut_y1 = (y_number - 1)*22 + cut_y0 + 10;if(y_number 
+             -== 21){y = Y_STARTING_POSITION + 5;}break;//1.2??
+  94          //              case 14 : cut_x0 = 719;cut_y0 = 272;cut_x1 = 728;cut_y1 = (y_number - 1)*26 + cut_y0 + 10;if(y_number 
+             -== 18){y = Y_STARTING_POSITION + 4;}break;//1.4??
+  95          //              case 16 : cut_x0 = 739;cut_y0 = 272;cut_x1 = 748;cut_y1 = (y_number - 1)*30 + cut_y0 + 10;if(y_number 
+             -== 16){y = Y_STARTING_POSITION;}break;//1.6??
+  96          //              case 18 : cut_x0 = 759;cut_y0 = 272;cut_x1 = 768;cut_y1 = (y_number - 1)*34 + cut_y0 + 10;if(y_number 
+             -== 14){y = Y_STARTING_POSITION + 3;}break;//1.8??
+  97          //              case 20 : cut_x0 = 779;cut_y0 = 272;cut_x1 = 788;cut_y1 = (y_number - 1)*37 + cut_y0 + 10;if(y_number 
+             -== 13){y = Y_STARTING_POSITION + 2;}break;//2.0??
+  98          //  }
+  99          //      if(POINT_LINE_FLAG == 1)//´òµã
+ 100          //      {
+ 101          //              for(i=0;i<x_number;i++)DIS_DEL_DIS(Pic_X3D_WORK_DOWN,cut_x0,cut_y0,cut_x1,cut_y1,x+(x_spacing_pixel*i)
+             -,y);
+ 102          //      }
+ 103          //      else//´òÖ±ÏßµÄ
+ 104          //      {
+C51 COMPILER V9.00   DIS_X3D_WORK                                                          09/02/2024 10:24:47 PAGE 3   
+
+ 105          //              for(i=0;i<x_number;i++)DIS_DEL_DIS(Pic_X3D_WORK_DOWN,817,cut_y0,826,cut_y1,x+(x_spacing_pixel*i),y);
+ 106          //      }
+ 107          //}
+ 108          //
+ 109          //void dis_3dhifu_work_set_picture(void)
+ 110          //{
+ 111          //      u16 x,y,y1;//x,yÆðÊ¼µÄÎ»ÖÃ
+ 112          //      u16 x_spacing_pixel,y_spacing_pixel;//ÁÐÓëÁÐ  µãÓëµãÖ®¼äµÄ¼ä¸ô
+ 113          //      u16 x_number,y_number;//´òµÄÌõÊý/ÁÐÊý  ´òµãÊýÁ¿
+ 114          //      u16 i,j,k;
+ 115          //      
+ 116          //      u16 y2;
+ 117          //      
+ 118          //      x_number = HIFU_SET_X_NUMBER;//X_VALUE*10/X_SPACING + 1; ´òµÄÌõÊý
+ 119          //  y_number = Y_VALUE*10/Y_SPACING + 1;//´òµÄµãÊý
+ 120          //      
+ 121          //      x_spacing_pixel = X_SPACING;
+ 122          //      x_spacing_pixel = (X_END_POSITION - X_STARTING_POSITION - 10)*x_spacing_pixel/MAX_X_DATA/10;//ÁÐÓëÁÐ¼ä¸
+             -ô
+ 123          //      
+ 124          //      y_spacing_pixel = Y_SPACING;
+ 125          //  y_spacing_pixel = (Y_END_POSITION - Y_STARTING_POSITION - 10)*y_spacing_pixel/MAX_Y_DATA/10;//µãÓëµã¼ä
+             -¸ô
+ 126          //      
+ 127          //      x = (X_END_POSITION - X_STARTING_POSITION - 10 - (x_spacing_pixel*(x_number - 1)))/2 + X_STARTING_POSIT
+             -ION;//XÆðµã×ø±ê
+ 128          //  y = (Y_END_POSITION - Y_STARTING_POSITION - 10 - (y_spacing_pixel*(y_number - 1)))/2 + Y_STARTING_POSI
+             -TION;//YÆðµã×ø±ê
+ 129          //      
+ 130          //      i = CURRENT_SITE/y_number;
+ 131          //  j = CURRENT_SITE%y_number;
+ 132          //      
+ 133          //      switch(Y_SPACING)
+ 134          //  {
+ 135          //              case 10 : k = 18;if(y_number >= 25){y = Y_STARTING_POSITION;}            break;
+ 136          //      case 12 : k = 22;if(y_number == 21){y = Y_STARTING_POSITION + 5;}break;
+ 137          //              case 14 : k = 26;if(y_number == 18){y = Y_STARTING_POSITION + 4;}break;
+ 138          //              case 16 : k = 30;if(y_number == 16){y = Y_STARTING_POSITION;}            break;
+ 139          //              case 18 : k = 34;if(y_number == 14){y = Y_STARTING_POSITION + 3;}break;
+ 140          //              case 20 : k = 37;if(y_number == 13){y = Y_STARTING_POSITION + 2;}break;
+ 141          //  }
+ 142          //      
+ 143          //      y1 = y + (k * y_number);//YÖáÏñËØ
+ 144          //      
+ 145          //      if(POINT_LINE_FLAG == 1)//´òµã
+ 146          //      {
+ 147          //              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,799,272,808,281,x+(x_spacing_pixel*i),y1-(k*(j + 1)));
+ 148          //      }
+ 149          //      else//´òÖ±Ïß
+ 150          //      {
+ 151          //              switch(Y_SPACING)
+ 152          //              {
+ 153          //                      case 10 : k = 18;if(y_number >= 25){y = Y_STARTING_POSITION;}            break;
+ 154          //                      case 12 : k = 22;if(y_number == 21){y = Y_STARTING_POSITION;}break;
+ 155          //                      case 14 : k = 26;if(y_number == 18){y = Y_STARTING_POSITION;}break;
+ 156          //                      case 16 : k = 30;if(y_number == 16){y = Y_STARTING_POSITION;}            break;
+ 157          //                      case 18 : k = 34;if(y_number == 14){y = Y_STARTING_POSITION;}break;
+ 158          //                      case 20 : k = 37;if(y_number == 13){y = Y_STARTING_POSITION;}break;
+ 159          //              }
+ 160          //              
+ 161          //              y2 = (y_number - 1)*k + 272 + 10;
+ 162          //              
+C51 COMPILER V9.00   DIS_X3D_WORK                                                          09/02/2024 10:24:47 PAGE 4   
+
+ 163          //              if(y2 > Y_END_POSITION)y2 = Y_END_POSITION;
+ 164          //              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,833,272,842,y2,x+(x_spacing_pixel*i),y1-(k*y_number));
+ 165          //      }
+ 166          //}
+ 167          //
+ 168          //
+ 169          //
+ 170          // 
+ 171          // 
+ 172          // 
+ 173          // 
+ 174          // 
+ 175          // 
+ 176          // 
+ 177          // 
+ 178          // 
+ 179          // 
+ 180          // 
+ 181          // 
+ 182          // 
+ 183          // 
+ 184          // 
+ 185          // 
+ 186          // 
+ 187          // 
+ 188          // 
+ 189          // 
+ 190          // 
+ 191          // 
+ 192          // 
+ 193          // 
+ 194          // 
+ 195          // 
+ 196          // 
+ 197          // 
+ 198          // 
+ 199          // 
+ 200          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

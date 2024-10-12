@@ -1,0 +1,350 @@
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN ..\hex\UART.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\user\UART.C LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\displa
+                    -y;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\UART.lst) OBJECT(..\hex\UART.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          
+   3          struct Uart_TypeDef Uart_LCD;
+   4          
+   5          void Uart3Init(void)
+   6          {
+   7   1              P0M1 &= ~(1 << 1);      //P01推挽输出
+   8   1              P0M0 |= (1 << 1);
+   9   1              P_SW2 &= ~0x02;            //S3_S0=0 (P0.0/RxD3, P0.1/TxD3)
+  10   1              //P_SW2 |= 0x02;           //S3_S0=1 (P5.0/RxD3_2, P5.1/TxD3_2)
+  11   1              S3CON |= 0x50;
+  12   1              T3L = BRT3;
+  13   1              T3H = BRT3 >> 8;
+  14   1              T4T3M |= 0x0a;
+  15   1              Uart_LCD.UART_BUSY = 0;
+  16   1              Uart_LCD.RX_RAM=10;
+  17   1              IE2 |= 0x08;
+  18   1      }
+  19          
+  20          void UartSend_LCD(u8 dat)
+  21          {
+  22   1              Uart3Send(dat); 
+  23   1      }
+  24          
+  25          void Uart3Send(u8 dat)
+  26          {
+  27   1              while (Uart_LCD.UART_BUSY);
+  28   1              Uart_LCD.UART_BUSY = 1;
+  29   1              S3BUF = dat;
+  30   1      }
+  31          
+  32          void Uart3Isr() interrupt 17
+  33          {
+  34   1              static u8 flag = 0;
+  35   1              u8 dat;
+  36   1              if (S3CON & 0x02){
+  37   2                      S3CON &= ~0x02;
+  38   2                      Uart_LCD.UART_BUSY = 0;
+  39   2              }
+  40   1              if (S3CON & 0x01){
+  41   2                      S3CON &= ~0x01;
+  42   2                      dat = S3BUF;
+  43   2                      switch(Uart_LCD.RX_RAM){
+  44   3                              case 10:if(dat==0xAA)Uart_LCD.RX_RAM--;else{Uart_LCD.RX_RAM=10;flag=0x00;}break;
+  45   3                              case  9:
+  46   3                                      switch(dat){
+  47   4                                              case 0x73:flag=0xff;break; //有按键     
+  48   4                                              case 0x72:flag=0x00;Uart_LCD.KEY_YES=flag;break; //没按键
+  49   4                                      }Uart_LCD.RX_RAM--;break; 
+  50   3                                      case  8:Uart_LCD.KEY_XH=dat; Uart_LCD.RX_RAM--; break;
+  51   3                                      case  7:Uart_LCD.KEY_XL=dat; Uart_LCD.RX_RAM--; break;
+  52   3                                      case  6:Uart_LCD.KEY_YH=dat; Uart_LCD.RX_RAM--; break;
+  53   3                                      case  5:Uart_LCD.KEY_YL=dat; Uart_LCD.RX_RAM--; Uart_LCD.KEY_YES = flag; break;
+  54   3                                      case  4:Uart_LCD.RX_RAM--; break;
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 2   
+
+  55   3                                      case  3:Uart_LCD.RX_RAM--; break;
+  56   3                                      case  2:Uart_LCD.RX_RAM--; break;
+  57   3                                      case  1:Uart_LCD.RX_RAM=10;break;
+  58   3                                      default:Uart_LCD.RX_RAM=10;flag=0x00;break;                                                     
+  59   3                      }
+  60   2              }
+  61   1      }
+  62          
+  63          
+  64          
+  65          
+  66          
+  67          
+  68          
+  69          
+  70          
+  71          
+  72          
+  73          
+  74          
+  75          //
+  76          //
+  77          //bit UART4_BUSY;
+  78          //unsigned char RX4_RAM;
+  79          //unsigned char KEY_YES;
+  80          //unsigned int  ADS7843_X,ADS7843_Y;
+  81          //unsigned char KEY_XH,KEY_XL;
+  82          //unsigned char KEY_YH,KEY_YL; 
+  83          //
+  84          //bit UART2_BUSY;
+  85          //unsigned char RX2_RAM;
+  86          //unsigned char RX2_GS;
+  87          //unsigned char RX2_LENGTH;
+  88          //unsigned char RX2_DATA[20];
+  89          //
+  90          ////----------------------------------------------------------------------------//
+  91          //// 函数名称：uart2Init 
+  92          //// 输入参数：无 
+  93          //// 输出参数：无 
+  94          //// 函数功能：设置好定时器2的工作模式 
+  95          ////----------------------------------------------------------------------------//
+  96          //void Uart2Init(void)
+  97          //{
+  98          //      P_SW2 &= ~0x01;                 //RXD/P1.0, TXD/P1.1
+  99          //      
+ 100          //      S2CON |= 0x50;
+ 101          //      T2L = BRT2;
+ 102          //      T2H = BRT2 >> 8;
+ 103          //      AUXR |= 0x14;
+ 104          //      UART2_BUSY = 0;
+ 105          //      RX2_RAM=100;
+ 106          //      RX2_GS=0x00;
+ 107          //      IE2 |= 0x01;
+ 108          //}
+ 109          //
+ 110          ////----------------------------------------------------------------------------//
+ 111          //// 函数名称：uartSendData 
+ 112          //// 输入参数：ucData: 发送字节 
+ 113          //// 输出参数：无 
+ 114          //// 函数功能：使用串口发送一个字节数据 
+ 115          ////----------------------------------------------------------------------------//
+ 116          ////void Uart2Send(u8 dat)
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 3   
+
+ 117          ////{
+ 118          ////    while (UART2_BUSY);
+ 119          ////    UART2_BUSY = 1;
+ 120          ////    S2BUF = dat;
+ 121          ////}
+ 122          //
+ 123          ////void tx2_out_3(u8 dat1,u8 dat2,u8 dat3)
+ 124          ////{
+ 125          ////    u8 temp;
+ 126          ////    temp = 0xAA + 0xAA +0x05 + dat1 + dat2 + dat3;
+ 127          ////    Uart2Send(0xAA);
+ 128          ////    Uart2Send(0xAA);
+ 129          ////    Uart2Send(0x05);
+ 130          ////    Uart2Send(dat1);
+ 131          ////    Uart2Send(dat2);
+ 132          ////    Uart2Send(dat3);
+ 133          ////    Uart2Send(temp);
+ 134          ////    Uart2Send(0xFE);
+ 135          ////}
+ 136          ////
+ 137          ////void tx2_out_4(u8 dat1,u8 dat2,u8 dat3,u8 dat4)
+ 138          ////{
+ 139          ////    u8 temp;
+ 140          ////    temp = 0xAA + 0xAA +0x06 + dat1 + dat2 + dat3 + dat4;
+ 141          ////    Uart2Send(0xAA);
+ 142          ////    Uart2Send(0xAA);
+ 143          ////    Uart2Send(0x06);
+ 144          ////    Uart2Send(dat1);
+ 145          ////    Uart2Send(dat2);
+ 146          ////    Uart2Send(dat3);
+ 147          ////    Uart2Send(dat4);
+ 148          ////    Uart2Send(temp);
+ 149          ////    Uart2Send(0xFE);
+ 150          ////}
+ 151          //
+ 152          ////void tx2_out_5(u8 dat1,u8 dat2,u8 dat3,u8 dat4,u8 dat5)
+ 153          ////{
+ 154          ////    u8 temp;
+ 155          ////    temp = 0xAA + 0xAA +0x07 + dat1 + dat2 + dat3 + dat4 + dat5;
+ 156          ////    Uart2Send(0xAA);
+ 157          ////    Uart2Send(0xAA);
+ 158          ////    Uart2Send(0x07);
+ 159          ////    Uart2Send(dat1);
+ 160          ////    Uart2Send(dat2);
+ 161          ////    Uart2Send(dat3);
+ 162          ////    Uart2Send(dat4);
+ 163          ////    Uart2Send(dat5);
+ 164          ////    Uart2Send(temp);
+ 165          ////    Uart2Send(0xFE);
+ 166          ////}
+ 167          ////
+ 168          ////void tx2_out_6(u8 dat1,u8 dat2,u8 dat3,u8 dat4,u8 dat5,u8 dat6)
+ 169          ////{
+ 170          ////    u8 temp;
+ 171          ////    temp = 0xAA + 0xAA +0x08 + dat1 + dat2 + dat3 + dat4 + dat5 + dat6;
+ 172          ////    Uart2Send(0xAA);
+ 173          ////    Uart2Send(0xAA);
+ 174          ////    Uart2Send(0x08);
+ 175          ////    Uart2Send(dat1);
+ 176          ////    Uart2Send(dat2);
+ 177          ////    Uart2Send(dat3);
+ 178          ////    Uart2Send(dat4);
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 4   
+
+ 179          ////    Uart2Send(dat5);
+ 180          ////    Uart2Send(dat6);
+ 181          ////    Uart2Send(temp);
+ 182          ////    Uart2Send(0xFE);
+ 183          ////}
+ 184          ////----------------------------------------------------------------------------//
+ 185          //// 函数名称： 
+ 186          //// 输入参数：无 
+ 187          //// 输出参数：无 
+ 188          //// 函数功能：串口0服务函数 
+ 189          ////----------------------------------------------------------------------------//
+ 190          //void Uart2Isr() interrupt 8
+ 191          //{
+ 192          //      u8 dat,db;
+ 193          //      if (S2CON & S2TI)
+ 194          //      {
+ 195          //              S2CON &= ~S2TI; //清除S2TI位
+ 196          //              UART2_BUSY = 0;
+ 197          //      }
+ 198          //      if (S2CON & S2RI)
+ 199          //      {
+ 200          //              S2CON &= ~S2RI;         //清除S2RI位
+ 201          //              dat = S2BUF;
+ 202          //              switch(RX2_RAM)
+ 203          //    {
+ 204          //                      case 100:if(dat==0xAA)RX2_RAM--;else{RX2_RAM=100;RX2_GS=0x00;}break;
+ 205          //                      case  99:if(dat==0xAA)RX2_RAM--;else{RX2_RAM=100;RX2_GS=0x00;}break;
+ 206          //                      case  98:if(dat < 20){RX2_LENGTH=dat;RX2_RAM=dat;RX2_RAM--;}else{RX2_RAM=100;RX2_GS=0x00;}break;        
+ 207          //                      default:
+ 208          //                              if(RX2_RAM==0x00)//接收完成
+ 209          //        {
+ 210          //                                      RX2_DATA[RX2_GS]=dat;
+ 211          //                                      switch(RX2_DATA[0])
+ 212          //                                      {
+ 213          //                                              
+ 214          //                                              case 0xC1://版本
+ 215          //                                                      if(CHOOS_HANDLE == XDRF_DEVICE_TYPE)
+ 216          //                                                      {
+ 217          //                                                              db = 0xAA + 0xAA + RX2_LENGTH + RX2_DATA[0] + RX2_DATA[1] + RX2_DATA[2] + RX2_DATA[3] + RX2_DATA
+             -[4] + RX2_DATA[5];
+ 218          //                                                              if(RX2_DATA[1] == XDRF_DEVICE_TYPE && RX2_DATA[6] == db && RX2_DATA[7] == 0xFE)
+ 219          //                                                              {
+ 220          ////                                                                    XDRF_EDITION[0] = RX2_DATA[2];
+ 221          ////                                                                    XDRF_EDITION[1] = RX2_DATA[3];
+ 222          ////                                                                    XDRF_EDITION[2] = RX2_DATA[4];
+ 223          ////                                                                    XDRF_EDITION[3] = RX2_DATA[5];
+ 224          //                                                              }
+ 225          //                                                      }
+ 226          //                                                      break;
+ 227          //                                              
+ 228          //          }
+ 229          //                                      RX2_RAM=100;
+ 230          //                                      RX2_GS =0x00;
+ 231          //                              }
+ 232          //                              else
+ 233          //                              {
+ 234          //                                      RX2_DATA[RX2_GS]=dat;
+ 235          //                                      RX2_RAM--;
+ 236          //                                      RX2_GS++;
+ 237          //                              }
+ 238          //                              break;                                          
+ 239          //    }
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 5   
+
+ 240          //      }
+ 241          //}
+ 242          //
+ 243          //void Uart4Init(void)
+ 244          //{
+ 245          //      S4CON = 0x50;
+ 246          //  T4L = BRT4;
+ 247          //  T4H = BRT4 >> 8;
+ 248          //  T4T3M = 0xa0;
+ 249          //      UART4_BUSY = 0;
+ 250          //      RX4_RAM=10;
+ 251          //      IE2 |= 0x10;
+ 252          //}
+ 253          //
+ 254          //void Uart4Send(u8 dat)
+ 255          //{
+ 256          //      while (UART4_BUSY);
+ 257          //      UART4_BUSY = 1;
+ 258          //      S4BUF = dat;
+ 259          //}
+ 260          //
+ 261          //void UART4_Isr() interrupt 18
+ 262          //{
+ 263          //      static u8 flag = 0;
+ 264          //      u8 dat;
+ 265          //      if (S4CON & 0x02)
+ 266          //      {
+ 267          //              S4CON &= ~0x02;
+ 268          //              UART4_BUSY = 0;
+ 269          //      }
+ 270          //      if (S4CON & 0x01)
+ 271          //      {
+ 272          //              S4CON &= ~0x01;
+ 273          //              dat = S4BUF;
+ 274          //              switch(RX4_RAM)
+ 275          //    {
+ 276          //                      case 10:if(dat==0xAA)RX4_RAM--;else{RX4_RAM=10;flag=0x00;}break;
+ 277          //                      case  9:
+ 278          //                              switch(dat)
+ 279          //                              {
+ 280          //                                      case 0x73:flag=0xff; //有按键
+ 281          //                                              break;
+ 282          //                                      case 0x72:flag=0x00; //没按键
+ 283          //                                              KEY_YES=flag;
+ 284          //                                              break;
+ 285          //            }
+ 286          //                              RX4_RAM--;
+ 287          //                              break; 
+ 288          //                      case  8:KEY_XH=dat; RX4_RAM--; break;
+ 289          //                      case  7:KEY_XL=dat; RX4_RAM--; break;
+ 290          //                      case  6:KEY_YH=dat; RX4_RAM--; break;
+ 291          //                      case  5:KEY_YL=dat; RX4_RAM--; KEY_YES = flag; break;
+ 292          //                      case  4:RX4_RAM--; break;
+ 293          //                      case  3:RX4_RAM--; break;
+ 294          //                      case  2:RX4_RAM--; break;
+ 295          //                      case  1:RX4_RAM=10;break;
+ 296          //                      default:RX4_RAM=10;flag=0x00;break;                                                     
+ 297          //    }
+ 298          //      }
+ 299          //}
+ 300          //
+ 301          //
+C51 COMPILER V9.00   UART                                                                  10/11/2024 17:50:11 PAGE 6   
+
+ 302          //
+ 303          //
+ 304          //
+ 305          //
+ 306          //
+ 307          //
+ 308          //
+ 309          //
+ 310          //
+ 311          //
+ 312          //
+ 313          //
+ 314          //
+ 315          //
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    284    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     12    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,185 @@
+C51 COMPILER V9.00   XS_GUIDE                                                              10/11/2024 17:50:13 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_GUIDE
+OBJECT MODULE PLACED IN ..\hex\XS_guide.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_guide.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\di
+                    -splay;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_guide.lst) OBJECT(..\hex\XS_guide.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  code MAIN_KEY_GUIDE = 14;
+   4          const u16 code MAIN_GUIDE[]=
+   5          {
+   6                  475,660,140,200,                                //shoulder
+   7                  475,660,250,310,
+   8                  475,660,360,420,
+   9                  475,660,470,530,
+  10                  475,660,570,640,
+  11                                                                          
+  12                  1065,1220,140,200,                                                      //lumbar region
+  13                  1065,1220,250,310,
+  14                  1065,1220,360,420,
+  15                  1065,1220,470,530,
+  16                  1065,1220,570,640,
+  17          
+  18          
+  19                  935,1050,723,799,          //设置
+  20                  1052,1167,723,799,         //锁定
+  21                  1170,1279,723,799,         //主界面
+  22          
+  23                  468,871,0,67,              //BODY_PARTS
+  24          };
+  25          
+  26          void main_xs_guide(void)
+  27          {
+  28   1              bit lock_flag;
+  29   1              u8 key;
+  30   1              lock_flag = 1;
+  31   1              DIS_PICNUM(Pic_SW_GUIDE_START + SW.BODY_PARTS);
+  32   1              do{
+  33   2                      if(Uart_LCD.KEY_YES!=0x00){
+  34   3                              ADS7843_KEY(); 
+  35   3                              key=KEY_FANHUI(MAIN_KEY_GUIDE,MAIN_GUIDE); 
+  36   3                      switch(key){
+  37   4                                      case 1:         //SHOULDER
+  38   4                                              if(SW.BODY_PARTS != PARTS_SHOULDER && lock_flag == 1){
+  39   5                                                      XIANG1();
+  40   5                                                      SW.BODY_PARTS = PARTS_SHOULDER;
+  41   5                                                      goto over_main_xs_guide;
+  42   5                                              }
+  43   4                                              Uart_LCD.KEY_YES = 0;
+  44   4                                              break;
+  45   4                                      case 2:         //ELBOW
+  46   4                                              if(SW.BODY_PARTS != PARTS_ELBOW && lock_flag == 1){
+  47   5                                                      XIANG1();
+  48   5                                                      SW.BODY_PARTS = PARTS_ELBOW;
+  49   5                                                      goto over_main_xs_guide;
+  50   5                                              }
+  51   4                                              Uart_LCD.KEY_YES = 0;
+  52   4                                              break;
+  53   4                                      case 3:         //HIP
+  54   4                                              if(SW.BODY_PARTS != PARTS_HIP && lock_flag == 1){
+C51 COMPILER V9.00   XS_GUIDE                                                              10/11/2024 17:50:13 PAGE 2   
+
+  55   5                                                      XIANG1();
+  56   5                                                      SW.BODY_PARTS = PARTS_HIP;
+  57   5                                                      goto over_main_xs_guide;
+  58   5                                              }
+  59   4                                              Uart_LCD.KEY_YES = 0;
+  60   4                                              break;
+  61   4                                      case 4:         //ED
+  62   4                                              if(SW.BODY_PARTS != PARTS_ED && lock_flag == 1){
+  63   5                                                      XIANG1();
+  64   5                                                      SW.BODY_PARTS = PARTS_ED;
+  65   5                                                      goto over_main_xs_guide;
+  66   5                                              }
+  67   4                                              Uart_LCD.KEY_YES = 0;
+  68   4                                              break;
+  69   4                                      case 5:         //FOOT
+  70   4                                              if(SW.BODY_PARTS != PARTS_FOOT && lock_flag == 1){
+  71   5                                                      XIANG1();
+  72   5                                                      SW.BODY_PARTS = PARTS_FOOT;
+  73   5                                                      goto over_main_xs_guide;
+  74   5                                              }
+  75   4                                              Uart_LCD.KEY_YES = 0;
+  76   4                                              break;
+  77   4                                      case 6:         //LUMBAR
+  78   4                                              if(SW.BODY_PARTS != PARTS_LUMBAR && lock_flag == 1){
+  79   5                                                      XIANG1();
+  80   5                                                      SW.BODY_PARTS = PARTS_LUMBAR;
+  81   5                                                      goto over_main_xs_guide;
+  82   5                                              }
+  83   4                                              Uart_LCD.KEY_YES = 0;
+  84   4                                              break;
+  85   4                                      case 7:         //HAND
+  86   4                                              if(SW.BODY_PARTS != PARTS_HAND && lock_flag == 1){
+  87   5                                                      XIANG1();
+  88   5                                                      SW.BODY_PARTS = PARTS_HAND;
+  89   5                                                      goto over_main_xs_guide;
+  90   5                                              }
+  91   4                                              Uart_LCD.KEY_YES = 0;
+  92   4                                              break;
+  93   4                                      case 8:         //FAT
+  94   4                                              if(SW.BODY_PARTS != PARTS_FAT && lock_flag == 1){
+  95   5                                                      XIANG1();
+  96   5                                                      SW.BODY_PARTS = PARTS_FAT;
+  97   5                                                      goto over_main_xs_guide;
+  98   5                                              }
+  99   4                                              Uart_LCD.KEY_YES = 0;
+ 100   4                                              break;
+ 101   4                                      case 9:         //PUBIC
+ 102   4                                              if(SW.BODY_PARTS != PARTS_PUBIC && lock_flag == 1){
+ 103   5                                                      XIANG1();
+ 104   5                                                      SW.BODY_PARTS = PARTS_PUBIC;
+ 105   5                                                      goto over_main_xs_guide;
+ 106   5                                              }
+ 107   4                                              Uart_LCD.KEY_YES = 0;
+ 108   4                                              break;
+ 109   4                                      case 10:                //KNEE
+ 110   4                                              if(SW.BODY_PARTS != PARTS_KNEE && lock_flag == 1){
+ 111   5                                                      XIANG1();
+ 112   5                                                      SW.BODY_PARTS = PARTS_KNEE;
+ 113   5                                                      goto over_main_xs_guide;
+ 114   5                                              }
+ 115   4                                              Uart_LCD.KEY_YES = 0;
+ 116   4                                              break;
+C51 COMPILER V9.00   XS_GUIDE                                                              10/11/2024 17:50:13 PAGE 3   
+
+ 117   4                                      case 11:        //设置
+ 118   4                                              if(lock_flag == 1){
+ 119   5                                                      XIANG1();
+ 120   5                                                      INTERFACE = PAGE_ADVANCED_SETTINGS;
+ 121   5                                                      goto over_main_xs_guide;
+ 122   5                                              }
+ 123   4                                              Uart_LCD.KEY_YES = 0;
+ 124   4                                              break;
+ 125   4                                       case 12:       //锁屏幕
+ 126   4                                              XIANG1();
+ 127   4                                              if(lock_flag == 1){
+ 128   5                                                      lock_flag = 0;
+ 129   5                                              }else{
+ 130   5                                                      lock_flag = 1;
+ 131   5                                              }
+ 132   4                                              cut_sw_work_lock_flag(lock_flag);
+ 133   4                                              Uart_LCD.KEY_YES = 0;
+ 134   4                                              break;
+ 135   4                                       case 13:       //返回LOGO
+ 136   4                                              if(lock_flag == 1){
+ 137   5                                                      XIANG1();
+ 138   5                                                      INTERFACE = PAGE_WAITING;
+ 139   5                                                      goto over_main_xs_guide;
+ 140   5                                              }
+ 141   4                                              Uart_LCD.KEY_YES = 0;
+ 142   4                                              break;
+ 143   4                                       case 14:       //工作界面
+ 144   4                                              if(lock_flag == 1){
+ 145   5                                                      XIANG1();
+ 146   5                                                      INTERFACE = PAGE_SW_WORK;
+ 147   5                                                      goto over_main_xs_guide;
+ 148   5                                              }
+ 149   4                                              Uart_LCD.KEY_YES = 0;
+ 150   4                                              break;
+ 151   4                      }
+ 152   3                              Uart_LCD.KEY_YES = 0;
+ 153   3                      }
+ 154   2              }while(1);
+ 155   1              over_main_xs_guide:
+ 156   1              LAST_INTERFACE = PAGE_GUIDE;
+ 157   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    442    ----
+   CONSTANT SIZE    =    113    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

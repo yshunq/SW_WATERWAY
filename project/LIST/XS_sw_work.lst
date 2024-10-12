@@ -1,0 +1,594 @@
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_SW_WORK
+OBJECT MODULE PLACED IN ..\hex\XS_sw_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_sw_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\
+                    -display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_sw_work.lst) OBJECT(..\hex\XS_sw_work.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  MAIN_KEY_SW_WORK = 23;
+   4          const u16 MAIN_SW_WORK[]=
+   5          {                
+   6                  30,150,100,210,                 //energy -  
+   7                  380,465,100,210,                //energy +
+   8                  30,150,230,325,                 //frequency -
+   9                  380,465,230,325,                //frequency +
+  10                  30,150,240,430,                 //preload        -
+  11                  380,465,240,430,                //preload        +
+  12          
+  13                  30,150,480,560,                  //清零
+  14          
+  15                  75,430,620,695,                  //开始停止
+  16          
+  17                  486,690,172,245,           //shoulder
+  18                  543,711,275,338,           //elbow
+  19                  610,735,382,440,           //hip
+  20                  645,760,480,545,           //ed
+  21                  565,790,575,641,           //foot/ankle
+  22          
+  23                  940,1194,100,165,          //lumbar region
+  24                  970,1180,211,260,          //hand/wrist
+  25                  995,1255,316,373,          //fat accumulate
+  26                  1013,1275,418,485,         //pubic symphysis
+  27                  1042,1185,523,586,         //knee
+  28          
+  29                  935,1050,723,799,          //设置
+  30                  1052,1167,723,799,         //锁定
+  31                  1170,1279,723,799,         //主界面
+  32          
+  33                  872,1279,0,67,             //GUIDEINE
+  34          
+  35                  469,620,723,799        //model
+  36          };
+  37          
+  38          void main_xs_sw_work(void)
+  39          {
+  40   1              static u8 last_down;
+  41   1              bit start_stop_flag,lock_flag,insertion_flag;
+  42   1              u8 key,pic,beng_warning_count,jtkey,temp;
+  43   1              u16 touch_count,total,handle_temp;
+  44   1              u32 eeprom_times;
+  45   1      
+  46   1              start_stop_flag = 1;
+  47   1              lock_flag = 1;
+  48   1              beng_warning_count = 100;//进入后，10秒后才流量报警
+  49   1              SW.TIME_WORK_FLAG = 1;
+  50   1              SW.TOTAL_TIME = 0;
+  51   1              eeprom_times = SW.EEPROM_TOTAL_TIME;
+  52   1      
+  53   1              read_sw_power(SW.BODY_PARTS);
+  54   1              read_sw_frequency(SW.BODY_PARTS);
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 2   
+
+  55   1              read_sw_preload_time(SW.BODY_PARTS);
+  56   1              if(LAST_INTERFACE != PAGE_PROBE_MODE)read_sw_probe_mode(SW.BODY_PARTS);
+  57   1      
+  58   1              count_sw_work_max_power();
+  59   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  60   1              DIS_PICNUM(pic);
+  61   1              cut_sw_work_probe_mode();
+  62   1              dis_sw_work_power(DIS_ALL);
+  63   1              dis_sw_work_frequency(DIS_ALL);
+  64   1              dis_sw_work_preload_time(DIS_ALL);
+  65   1              dis_sw_work_total_time(DIS_ALL);
+  66   1              dis_sw_work_time(DIS_ALL);
+  67   1      
+  68   1              cut_sw_work_start_stop_flag(start_stop_flag);
+  69   1              cut_sw_work_lock_flag(lock_flag);
+  70   1      
+  71   1              if(SW.RECORD_FLAG == 0)DIS_FONT_C(0xf8,0x00,9,0x01,10,783,"RECORD...");
+  72   1      
+  73   1              count_ll_value();
+  74   1              temp = read_start_jtkey();
+  75   1              handle_temp = get_sw_work_handle_temp();
+  76   1      
+  77   1              insertion_flag = read_start_insertion();
+  78   1              
+  79   1              if(XIAN_FLAG){
+  80   2                      DIS_FONT_C(0xf8,0x00,5,0x01,10,10,"FLOW:");
+  81   2                      dis_sw_work_ll_value(DIS_ALL);
+  82   2      
+  83   2                      DIS_FONT_C(0xf8,0x00,8,0x01,10,10+16,"WARNING:");
+  84   2                      if(LL.WARNING_FLAG == 0)DIS_FONT_C(0xf8,0x00,2,0x01,8*8+10,10+16,"ON");
+  85   2                      else{DIS_FONT_C(0xf8,0x00,3,0x01,8*8+10,10+16,"OFF");}
+  86   2                      
+  87   2                      DIS_FONT_C(0xf8,0x00,6,0x01,10,10+32,"VALUE:");
+  88   2                      //DIS_FONT_WEI_NUMBER_CM(pic,1,0xf8,0x00,0x01,LL.WARNING_VALUE,4,8*6+10,10+32);
+  89   2                      DIS_FONT_ONE_POINT_VALUE(pic,1,0xf8,0x00,0x01,3,DIS_ALL,LL.WARNING_VALUE,0,8*6+10,10+32);
+  90   2      
+  91   2                      DIS_FONT_C(0xf8,0x00,9,0x01,10,10+48,"CONSTANT:");
+  92   2                      DIS_FONT_WEI_NUMBER_CM(pic,1,0xf8,0x00,0x01,LL.CONSTANT,4,8*9+10,10+48);
+  93   2                      //--------------------------------------------------------------------------------//
+  94   2                      DIS_FONT_C(0xf8,0x00,5,0x01,150,10,"TEMP:");
+  95   2                      dis_sw_work_handle_temp(DIS_ALL,handle_temp);
+  96   2      
+  97   2                      DIS_FONT_C(0xf8,0x00,8,0x01,150,10+16,"WARNING:");
+  98   2                      if(HANDLE_TMEP.WARNING_FLAG == 0)DIS_FONT_C(0xf8,0x00,2,0x01,8*8+150,10+16,"ON");
+  99   2                      else{DIS_FONT_C(0xf8,0x00,3,0x01,8*8+150,10+16,"OFF");}
+ 100   2      
+ 101   2                      DIS_FONT_C(0xf8,0x00,6,0x01,150,10+32,"VALUE:");
+ 102   2                      //DIS_FONT_WEI_NUMBER_CM(pic,1,0xf8,0x00,0x01,HANDLE.WARNING_VALUE,4,8*6+150,10+32);
+ 103   2                      DIS_FONT_WEI_TEMP(pic,0xf8,0x00,0x01,DIS_ALL,HANDLE_TMEP.WARNING_VALUE,0,8*6+150,10+32);
+ 104   2                      //--------------------------------------------------------------------------------//
+ 105   2                      DIS_FONT_C(0xf8,0x00,7,0x01,300,10,"INSERT:");
+ 106   2                      if(HANDLE_TMEP.WARNING_FLAG == 0)DIS_FONT_C(0xf8,0x00,2,0x01,7*8+300,10,"ON");
+ 107   2                      else{DIS_FONT_C(0xf8,0x00,3,0x01,7*8+300,10,"OFF");}
+ 108   2                              
+ 109   2              }
+ 110   1              COOL_FS_ON;
+ 111   1              touch_count = 0;
+ 112   1              do{
+ 113   2                      if(Uart_LCD.KEY_YES!=0x00 && touch_count == 0){
+ 114   3                              ADS7843_KEY(); //扫描按键
+ 115   3                              key=KEY_FANHUI(MAIN_KEY_SW_WORK,MAIN_SW_WORK); 
+ 116   3                              switch(key){
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 3   
+
+ 117   4                                      case 1: //能量减减
+ 118   4                                              if(SW.POWER > 1 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 119   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,76,118,138,181,76,118);
+ 120   5                                                      XIANG1();
+ 121   5                                                      SW.POWER--;
+ 122   5                                                      dis_sw_work_power(DIS_PART);
+ 123   5                                                      last_down = 1;
+ 124   5                                                      touch_count = 120;
+ 125   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 126   4                                              break;
+ 127   4                                      case 2: //能量加加
+ 128   4                                              if(SW.POWER < SW.MAX_POWER && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 129   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,386,118,449,181,386,118);
+ 130   5                                                      XIANG1();
+ 131   5                                                      SW.POWER++;
+ 132   5                                                      dis_sw_work_power(DIS_PART);
+ 133   5                                                      last_down = 2;
+ 134   5                                                      touch_count = 120;
+ 135   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 136   4                                              break;
+ 137   4                                      case 3: //频率减减
+ 138   4                                              if(SW.FREQUENCY > 1 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 139   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,76,237,138,299,76,237);
+ 140   5                                                      XIANG1();
+ 141   5                                                      SW.FREQUENCY--;
+ 142   5                                                      dis_sw_work_frequency(DIS_PART);
+ 143   5                                                      last_down = 3;
+ 144   5                                                      touch_count = 120;
+ 145   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 146   4                                              break;
+ 147   4                                      case 4: //频率加加
+ 148   4                                              if(SW.FREQUENCY < 18 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 149   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,386,237,449,299,386,237);
+ 150   5                                                      XIANG1();
+ 151   5                                                      SW.FREQUENCY++;
+ 152   5                                                      dis_sw_work_frequency(DIS_PART);
+ 153   5                                                      last_down = 4;
+ 154   5                                                      touch_count = 120;
+ 155   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 156   4                                              break;
+ 157   4                                      case 5: //预设值减减
+ 158   4                                              if(SW.PRELOAD_TIME > 100 && lock_flag == 1){
+ 159   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,76,353,138,416,76,353);
+ 160   5                                                      XIANG1();
+ 161   5                                                      SW.PRELOAD_TIME -= 100;
+ 162   5                                                      dis_sw_work_preload_time(DIS_PART);
+ 163   5                                                      last_down = 5;
+ 164   5                                                      touch_count = 120;
+ 165   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 166   4                                              break;
+ 167   4                                      case 6: //预设值加加
+ 168   4                                              if(SW.PRELOAD_TIME < 10000 && lock_flag == 1){
+ 169   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,386,353,449,416,386,353);
+ 170   5                                                      XIANG1();
+ 171   5                                                      SW.PRELOAD_TIME += 100;
+ 172   5                                                      dis_sw_work_preload_time(DIS_PART);
+ 173   5                                                      last_down = 6;
+ 174   5                                                      touch_count = 120;
+ 175   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 176   4                                              break;
+ 177   4                                      case 7: //清零
+ 178   4                                              if(SW.TOTAL_TIME > 0 && lock_flag == 1){
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 4   
+
+ 179   5                                                      DIS_DEL_DIS(Pic_SW_WORK_DOWN,70,470,140,550,70,470);
+ 180   5                                                      XIANG1();
+ 181   5                                                      SW.TOTAL_TIME = 0;
+ 182   5                                                      dis_sw_work_total_time(DIS_PART);
+ 183   5                                                      last_down = 7;
+ 184   5                                                      touch_count = 120;
+ 185   5                                              }else{Uart_LCD.KEY_YES = 0;}
+ 186   4                                              break;
+ 187   4                                      case 8: //启动停止
+ 188   4                                              if(lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 189   5                                                      XIANG1();
+ 190   5                                                      if(start_stop_flag == 0){
+ 191   6                                                              start_stop_flag = 1;
+ 192   6                                                              JDQ_SET_POWER_OFF;
+ 193   6                                                      }else{
+ 194   6                                                              start_stop_flag = 0;
+ 195   6                                                              JDQ_SET_POWER_ON;
+ 196   6                                                      }
+ 197   5                                                      cut_sw_work_start_stop_flag(start_stop_flag);
+ 198   5                                              }Uart_LCD.KEY_YES = 0;
+ 199   4                                              break;
+ 200   4                                      case 9:         //SHOULDER
+ 201   4                                              if(SW.BODY_PARTS != PARTS_SHOULDER && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 202   5                                                      XIANG1();
+ 203   5                                                      SW.BODY_PARTS = PARTS_SHOULDER;
+ 204   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 205   5                                                      count_sw_work_max_power();
+ 206   5                                                      SW.TOTAL_TIME = 0;
+ 207   5                                                      dis_sw_work_body_parts();
+ 208   5                                              }
+ 209   4                                              Uart_LCD.KEY_YES = 0;
+ 210   4                                              break;
+ 211   4                                      case 10:        //ELBOW
+ 212   4                                              if(SW.BODY_PARTS != PARTS_ELBOW && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 213   5                                                      XIANG1();
+ 214   5                                                      SW.BODY_PARTS = PARTS_ELBOW;
+ 215   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 216   5                                                      count_sw_work_max_power();
+ 217   5                                                      SW.TOTAL_TIME = 0;
+ 218   5                                                      dis_sw_work_body_parts();
+ 219   5                                              }
+ 220   4                                              Uart_LCD.KEY_YES = 0;
+ 221   4                                              break;
+ 222   4                                       case 11:       //HIP
+ 223   4                                              if(SW.BODY_PARTS != PARTS_HIP && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 224   5                                                      XIANG1();
+ 225   5                                                      SW.BODY_PARTS = PARTS_HIP;
+ 226   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 227   5                                                      count_sw_work_max_power();
+ 228   5                                                      SW.TOTAL_TIME = 0;
+ 229   5                                                      dis_sw_work_body_parts();
+ 230   5                                              }
+ 231   4                                              Uart_LCD.KEY_YES = 0;
+ 232   4                                              break;
+ 233   4                                       case 12:       //ED
+ 234   4                                              if(SW.BODY_PARTS != PARTS_ED && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 235   5                                                      XIANG1();
+ 236   5                                                      SW.BODY_PARTS = PARTS_ED;
+ 237   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 238   5                                                      count_sw_work_max_power();
+ 239   5                                                      SW.TOTAL_TIME = 0;
+ 240   5                                                      dis_sw_work_body_parts();
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 5   
+
+ 241   5                                              }
+ 242   4                                              Uart_LCD.KEY_YES = 0;
+ 243   4                                              break;
+ 244   4                                       case 13:       //FOOT
+ 245   4                                              if(SW.BODY_PARTS != PARTS_FOOT && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 246   5                                                      XIANG1();
+ 247   5                                                      SW.BODY_PARTS = PARTS_FOOT;
+ 248   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 249   5                                                      count_sw_work_max_power();
+ 250   5                                                      SW.TOTAL_TIME = 0;
+ 251   5                                                      dis_sw_work_body_parts();
+ 252   5                                              }
+ 253   4                                              Uart_LCD.KEY_YES = 0;
+ 254   4                                              break;
+ 255   4                                       case 14:       //LUMBAR
+ 256   4                                              if(SW.BODY_PARTS != PARTS_LUMBAR && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 257   5                                                      XIANG1();
+ 258   5                                                      SW.BODY_PARTS = PARTS_LUMBAR;
+ 259   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 260   5                                                      count_sw_work_max_power();
+ 261   5                                                      SW.TOTAL_TIME = 0;
+ 262   5                                                      dis_sw_work_body_parts();
+ 263   5                                              }
+ 264   4                                              Uart_LCD.KEY_YES = 0;
+ 265   4                                              break;
+ 266   4                                       case 15:       //HAND
+ 267   4                                              if(SW.BODY_PARTS != PARTS_HAND && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 268   5                                                      XIANG1();
+ 269   5                                                      SW.BODY_PARTS = PARTS_HAND;
+ 270   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 271   5                                                      count_sw_work_max_power();
+ 272   5                                                      SW.TOTAL_TIME = 0;
+ 273   5                                                      dis_sw_work_body_parts();
+ 274   5                                              }
+ 275   4                                              Uart_LCD.KEY_YES = 0;
+ 276   4                                              break;
+ 277   4                                       case 16:       //FAT
+ 278   4                                              if(SW.BODY_PARTS != PARTS_FAT && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 279   5                                                      XIANG1();
+ 280   5                                                      SW.BODY_PARTS = PARTS_FAT;
+ 281   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 282   5                                                      count_sw_work_max_power();
+ 283   5                                                      SW.TOTAL_TIME = 0;
+ 284   5                                                      dis_sw_work_body_parts();
+ 285   5                                              }
+ 286   4                                              Uart_LCD.KEY_YES = 0;
+ 287   4                                              break;
+ 288   4                                       case 17:       //PUBIC
+ 289   4                                              if(SW.BODY_PARTS != PARTS_PUBIC && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 290   5                                                      XIANG1();
+ 291   5                                                      SW.BODY_PARTS = PARTS_PUBIC;
+ 292   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 293   5                                                      count_sw_work_max_power();
+ 294   5                                                      SW.TOTAL_TIME = 0;
+ 295   5                                                      dis_sw_work_body_parts();
+ 296   5                                              }
+ 297   4                                              Uart_LCD.KEY_YES = 0;
+ 298   4                                              break;
+ 299   4                                       case 18:       //KNEE
+ 300   4                                              if(SW.BODY_PARTS != PARTS_KNEE && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 301   5                                                      XIANG1();
+ 302   5                                                      SW.BODY_PARTS = PARTS_KNEE;
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 6   
+
+ 303   5                                                      read_all_parameter(SW.BODY_PARTS);
+ 304   5                                                      count_sw_work_max_power();
+ 305   5                                                      SW.TOTAL_TIME = 0;
+ 306   5                                                      dis_sw_work_body_parts();
+ 307   5                                              }
+ 308   4                                              Uart_LCD.KEY_YES = 0;
+ 309   4                                              break;
+ 310   4                                       case 19:       //设置
+ 311   4                                              if(start_stop_flag == 1 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 312   5                                                      XIANG1();
+ 313   5                                                      INTERFACE = PAGE_ADVANCED_SETTINGS;
+ 314   5                                                      goto over_main_xs_sw_work;
+ 315   5                                              }
+ 316   4                                              Uart_LCD.KEY_YES = 0;
+ 317   4                                              break;
+ 318   4                                       case 20:       //锁屏幕
+ 319   4                                              XIANG1();
+ 320   4                                              if(lock_flag == 1){
+ 321   5                                                      lock_flag = 0;
+ 322   5                                              }else{
+ 323   5                                                      lock_flag = 1;
+ 324   5                                              }
+ 325   4                                              cut_sw_work_lock_flag(lock_flag);
+ 326   4                                              Uart_LCD.KEY_YES = 0;
+ 327   4                                              break;
+ 328   4                                       case 21:       //返回LOGO
+ 329   4                                              if(start_stop_flag == 1 && lock_flag == 1){
+ 330   5                                                      XIANG1();
+ 331   5                                                      INTERFACE = PAGE_WAITING;
+ 332   5                                                      goto over_main_xs_sw_work;
+ 333   5                                              }
+ 334   4                                              Uart_LCD.KEY_YES = 0;
+ 335   4                                              break;
+ 336   4                                       case 22:       //指引界面
+ 337   4                                              if(start_stop_flag == 1 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 338   5                                                      XIANG1();
+ 339   5                                                      INTERFACE = PAGE_GUIDE;
+ 340   5                                                      goto over_main_xs_sw_work;
+ 341   5                                              }
+ 342   4                                              Uart_LCD.KEY_YES = 0;
+ 343   4                                              break;
+ 344   4                                       case 23:       //探头界面
+ 345   4                                              if(start_stop_flag == 1 && lock_flag == 1 && SW.TIME_WORK_FLAG == 1){
+ 346   5                                                      XIANG1();
+ 347   5                                                      INTERFACE = PAGE_PROBE_MODE;
+ 348   5                                                      goto over_main_xs_sw_work;
+ 349   5                                              }
+ 350   4                                              Uart_LCD.KEY_YES = 0;
+ 351   4                                              break;
+ 352   4                              }
+ 353   3                      }else if(Uart_LCD.KEY_YES == 0 && touch_count == 0){
+ 354   3                              switch(last_down){
+ 355   4                                      case 1:
+ 356   4                                              if(SW.RECORD_FLAG == 0)write_sw_power(SW.BODY_PARTS);
+ 357   4                                              DIS_DEL_DIS(pic,76,118,138,181,76,118);
+ 358   4                                              break;
+ 359   4                                      case 2:
+ 360   4                                              if(SW.RECORD_FLAG == 0)write_sw_power(SW.BODY_PARTS);
+ 361   4                                              DIS_DEL_DIS(pic,386,118,449,181,386,118);
+ 362   4                                              break;
+ 363   4                                      case 3:
+ 364   4                                              if(SW.RECORD_FLAG == 0)write_sw_frequency(SW.BODY_PARTS);
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 7   
+
+ 365   4                                              DIS_DEL_DIS(pic,76,237,138,299,76,237);
+ 366   4                                              break;
+ 367   4                                      case 4:
+ 368   4                                              if(SW.RECORD_FLAG == 0)write_sw_frequency(SW.BODY_PARTS);
+ 369   4                                              DIS_DEL_DIS(pic,386,237,449,299,386,237);
+ 370   4                                              break;
+ 371   4                                      case 5:
+ 372   4                                              if(SW.RECORD_FLAG == 0)write_sw_preload_time(SW.BODY_PARTS);
+ 373   4                                              DIS_DEL_DIS(pic,76,353,138,416,76,353);
+ 374   4                                              break;
+ 375   4                                      case 6:
+ 376   4                                              if(SW.RECORD_FLAG == 0)write_sw_preload_time(SW.BODY_PARTS);
+ 377   4                                              DIS_DEL_DIS(pic,386,353,449,416,386,353);
+ 378   4                                              break;
+ 379   4                                      case 7:DIS_DEL_DIS(pic,70,470,140,550,70,470);break;
+ 380   4                              }
+ 381   3                              last_down = 0;
+ 382   3                      }
+ 383   2      
+ 384   2                      if(count_time_1ms(PASS) == 0){count_time_1ms(CLEAR);if(touch_count > 0)touch_count--;}//1ms 不精准
+ 385   2      
+ 386   2                      
+ 387   2                      if(count_time_100ms(PASS) == 0){//100ms
+ 388   3                              count_time_100ms(CLEAR);
+ 389   3                              if(beng_warning_count > 0)beng_warning_count--;
+ 390   3                              count_ll_value();
+ 391   3                              if(XIAN_FLAG)dis_sw_work_ll_value(DIS_PART);
+ 392   3      
+ 393   3                              insertion_flag = read_start_insertion();//手柄插进入检测
+ 394   3                              if(insertion_flag == 1 && HANDLE_INSERT.WARNING_FLAG == 0){
+ 395   4                                      XIANG1();
+ 396   4                                      SW.TIME_WORK_FLAG = 1;
+ 397   4                                      DEPUTY_COIL_OFF;
+ 398   4                                      MAIN_COIL_OFF;
+ 399   4                                      JDQ_SET_POWER_OFF;
+ 400   4                                      start_stop_flag = 1;
+ 401   4                                      cut_sw_work_start_stop_flag(start_stop_flag);
+ 402   4                                      cut_sw_work_handle_insert_warning();
+ 403   4                                      if(eeprom_times != SW.EEPROM_TOTAL_TIME){
+ 404   5                                              eeprom_times = SW.EEPROM_TOTAL_TIME;
+ 405   5                                              write_eeprom_total_time();
+ 406   5                                      }
+ 407   4                                      while(Uart_LCD.KEY_YES == 0);
+ 408   4                                      XIANG1();
+ 409   4                                      INTERFACE = PAGE_WAITING;
+ 410   4                                      goto over_main_xs_sw_work;      
+ 411   4                              }
+ 412   3      
+ 413   3                              if(LL.VALUE <= LL.WARNING_VALUE && LL.WARNING_FLAG == 0 && beng_warning_count == 0){//检测水流量
+ 414   4                                      XIANG1();
+ 415   4                                      SW.TIME_WORK_FLAG = 1;
+ 416   4                                      DEPUTY_COIL_OFF;
+ 417   4                                      MAIN_COIL_OFF;
+ 418   4                                      JDQ_SET_POWER_OFF;
+ 419   4                                      start_stop_flag = 1;
+ 420   4                                      cut_sw_work_start_stop_flag(start_stop_flag);
+ 421   4                                      cut_sw_work_flow_warning();
+ 422   4                                      if(eeprom_times != SW.EEPROM_TOTAL_TIME){
+ 423   5                                              eeprom_times = SW.EEPROM_TOTAL_TIME;
+ 424   5                                              write_eeprom_total_time();
+ 425   5                                      }
+ 426   4                                      dis_sw_work_ll_value(DIS_ALL);
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 8   
+
+ 427   4                                      while(Uart_LCD.KEY_YES == 0){
+ 428   5                                              temp++;
+ 429   5                                              if(temp > 200){
+ 430   6                                                      count_ll_value();
+ 431   6                                                      dis_sw_work_ll_value(DIS_PART);
+ 432   6                                                      temp = 0;
+ 433   6                                              }
+ 434   5                                              delay_ms(1);
+ 435   5                                      }
+ 436   4                                      XIANG1();
+ 437   4                                      INTERFACE = PAGE_WAITING;
+ 438   4                                      goto over_main_xs_sw_work; 
+ 439   4                              }
+ 440   3      
+ 441   3                              handle_temp = get_sw_work_handle_temp();
+ 442   3                              if(XIAN_FLAG)dis_sw_work_handle_temp(DIS_PART,handle_temp);
+ 443   3                              if(handle_temp >= HANDLE_TMEP.WARNING_VALUE && HANDLE_TMEP.WARNING_FLAG == 0){//检测手柄温度
+ 444   4                                      XIANG1();
+ 445   4                                      SW.TIME_WORK_FLAG = 1;
+ 446   4                                      DEPUTY_COIL_OFF;
+ 447   4                                      MAIN_COIL_OFF;
+ 448   4                                      JDQ_SET_POWER_OFF;
+ 449   4                                      start_stop_flag = 1;
+ 450   4                                      cut_sw_work_start_stop_flag(start_stop_flag);
+ 451   4                                      if(handle_temp == 1249){//开路
+ 452   5                                              cut_sw_work_handle_temp_open();
+ 453   5                                      }else if(handle_temp == 1248){//短路
+ 454   5                                              cut_sw_work_handle_temp_short();
+ 455   5                                      }else{//温度过高
+ 456   5                                              cut_sw_work_handle_temp_high();
+ 457   5                                      }
+ 458   4                                      if(eeprom_times != SW.EEPROM_TOTAL_TIME){
+ 459   5                                              eeprom_times = SW.EEPROM_TOTAL_TIME;
+ 460   5                                              write_eeprom_total_time();
+ 461   5                                      }
+ 462   4                                      dis_sw_work_handle_temp(DIS_ALL,handle_temp);
+ 463   4                                      while(Uart_LCD.KEY_YES == 0){
+ 464   5                                              temp++;
+ 465   5                                              if(temp > 200){
+ 466   6                                                      handle_temp = get_sw_work_handle_temp();
+ 467   6                                                      dis_sw_work_handle_temp(DIS_PART,handle_temp);
+ 468   6                                                      temp = 0;
+ 469   6                                              }
+ 470   5                                              delay_ms(1);
+ 471   5                                      }
+ 472   4                                      XIANG1();
+ 473   4                                      INTERFACE = PAGE_WAITING;
+ 474   4                                      goto over_main_xs_sw_work; 
+ 475   4                              }
+ 476   3                      }
+ 477   2      
+ 478   2                      temp = read_start_jtkey(); //脚踏检测
+ 479   2                      if(jtkey != temp){
+ 480   3                              jtkey = temp;
+ 481   3                              if(jtkey == 0){
+ 482   4                                      if(start_stop_flag == 0){
+ 483   5                                              total = SW.TOTAL_TIME;
+ 484   5                                              SW.WORK_COUNT = 0;      
+ 485   5                                              SW.CYCLE_TIME = 1000/SW.FREQUENCY;
+ 486   5                                              if(SW.BODY_PARTS == PARTS_ED)SW.SET_TIME = SW.POWER_SET_ED_VALUE[SW.POWER];
+ 487   5                                              else{SW.SET_TIME = SW.POWER_SET_BODY_VALUE[SW.POWER];}
+ 488   5                                              SW.TIME_WORK_FLAG = 0;
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 9   
+
+ 489   5                                              XIANG1();
+ 490   5                                      }       
+ 491   4                              }else{
+ 492   4                                      SW.TIME_WORK_FLAG = 1;
+ 493   4                                      DEPUTY_COIL_OFF;
+ 494   4                                      MAIN_COIL_OFF;
+ 495   4                                      if(eeprom_times != SW.EEPROM_TOTAL_TIME){
+ 496   5                                              eeprom_times = SW.EEPROM_TOTAL_TIME;
+ 497   5                                              write_eeprom_total_time();
+ 498   5                                      }
+ 499   4                              }
+ 500   3                      }
+ 501   2      
+ 502   2                      if(SW.TIME_WORK_FLAG == 0){     //工作后进入
+ 503   3                              dis_sw_work_time(DIS_PART);
+ 504   3                              if(total != SW.TOTAL_TIME){
+ 505   4                                      total = SW.TOTAL_TIME;
+ 506   4                                      dis_sw_work_total_time(DIS_PART);
+ 507   4                                      if(SW.TOTAL_TIME >= SW.PRELOAD_TIME){
+ 508   5                                              XIANG1();
+ 509   5                                              SW.TIME_WORK_FLAG = 1;
+ 510   5                                              DEPUTY_COIL_OFF;
+ 511   5                                              MAIN_COIL_OFF;
+ 512   5                                              JDQ_SET_POWER_OFF;
+ 513   5                                              start_stop_flag = 1;
+ 514   5                                              cut_sw_work_start_stop_flag(start_stop_flag);
+ 515   5                                              cut_sw_work_preset_value_varning();
+ 516   5                                              if(eeprom_times != SW.EEPROM_TOTAL_TIME){
+ 517   6                                                      eeprom_times = SW.EEPROM_TOTAL_TIME;
+ 518   6                                                      write_eeprom_total_time();
+ 519   6                                              }
+ 520   5                                              while(Uart_LCD.KEY_YES == 0);
+ 521   5                                              XIANG1();
+ 522   5                                              //INTERFACE = PAGE_WAITING;
+ 523   5                                              goto over_main_xs_sw_work;      
+ 524   5                                      }
+ 525   4                              }
+ 526   3                      }
+ 527   2      
+ 528   2      
+ 529   2      
+ 530   2      
+ 531   2      
+ 532   2              }while(1);
+ 533   1              over_main_xs_sw_work:
+ 534   1              LAST_INTERFACE = PAGE_SW_WORK;
+ 535   1              COOL_FS_OFF;
+ 536   1              _nop_();
+ 537   1      }
+ 538          
+ 539          
+ 540          
+ 541          
+ 542          
+ 543          
+ 544          
+ 545          
+ 546          
+ 547          
+ 548          
+ 549          
+ 550          
+C51 COMPILER V9.00   XS_SW_WORK                                                            10/11/2024 17:50:13 PAGE 10  
+
+ 551           
+ 552           
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3189    ----
+   CONSTANT SIZE    =     63    ----
+   XDATA SIZE       =    186      14
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       3
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

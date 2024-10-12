@@ -1,0 +1,687 @@
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_XDO_WORK
+OBJECT MODULE PLACED IN ..\hex\XS_xdo_work.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\main\XS_xdo_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\dis
+                    -play) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_xdo_work.lst) OBJECT(..\hex\XS_xdo_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //const u8  MAIN_KEY_XDO_WORK = 13;
+   4          //const u16 MAIN_XDO_WORK[]=
+   5          //{
+   6          //       912,1036,   0, 108, //1 设置
+   7          //       611, 703, 459, 536, //2 减减间距
+   8          //       970,1065, 459, 536, //3 加加间距
+   9          //       805, 928,1085,1154, //4 清零
+  10          //        83, 238,1351,1451, //5 点模式
+  11          //        83, 238,1493,1598, //6 线模式
+  12          //       844,1011,1351,1451, //7 单点模式
+  13          //       844,1011,1493,1598, //8 统计
+  14          //       303, 391,1473,1558, //9 能量减减
+  15          //       609, 778,1473,1558, //10能量加加
+  16          //        70, 284,1737,1874, //11 返回
+  17          //       344, 674,1737,1874, //12 停止
+  18          //       696,1026,1737,1874, //13 启动
+  19          //};
+  20          // 
+  21          //void main_xs_xdo_work(void)
+  22          //{
+  23          //      static u8 last_down;
+  24          //      u8 key,error_flag,probe_buff,key_flag,i;
+  25          //      u16 remain_buff,set_value,temp,time;
+  26          //      
+  27          //      RX_HANDLE_PICK_UP_FLAG = 0;
+  28          //      RX_PROBE_ID = 0;
+  29          //      RX_PROBE_MODE = 0;
+  30          //      RX_PROBE_TOTAL = 0;
+  31          //      RX_PROBE_REMAIN = 0;
+  32          //      
+  33          //      error_flag = 0;
+  34          //      choose_handle_uatr(HANDLE_UART_XDO);
+  35          //      delay_ms(5);
+  36          //      xdo_work_ask_handle_parameter();
+  37          //      if(wait_handle_answer(1000) == 1)error_flag = 1;//等待1秒
+  38          //      
+  39          //      START_STOP_FLAG = 1;
+  40          //      ONE_CURRENT_TIMES = 0;
+  41          //      SINGLE_AUTO_FLAG = 1;
+  42          //      HF_POWER_GEAR = 1;
+  43          //      XDO_SPACING = 10;
+  44          //      POINT_LINE_FLAG = 1;
+  45          //      
+  46          //      DIS_PICNUM(Pic_XDO_WORK);
+  47          //      
+  48          //      dis_xdo_work_spacing(); //显示间距
+  49          //      dis_work_current_times();       //显示治疗次数
+  50          //      dis_xdo_work_hf_power_gear();
+  51          //      cut_work_single_auto_flag();
+  52          //      cut_xdo_work_point_line_flag();
+  53          //      cut_work_start_stop_flag();
+  54          //      
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 2   
+
+  55          //      if(error_flag == 1)//超时没有回复  就是没有手柄
+  56          //      {
+  57          //              RX_PROBE_TOTAL = 0;
+  58          //              RX_PROBE_REMAIN = 0;
+  59          //              cut_communication_error();
+  60          //      }
+  61          //      else//有回复  有手柄
+  62          //      {
+  63          //              if(RX_PROBE_MODE > 3)//探头错误
+  64          //              {
+  65          //                      cut_probe_error();
+  66          //              }
+  67          //              else
+  68          //              {
+  69          //                      if(RX_PROBE_MODE > 0)count_records_probe_mode(RX_PROBE_MODE);
+  70          //              }
+  71          //      }
+  72          //      dis_work_probe_total();
+  73          //      dis_work_probe_remain();
+  74          //      cut_xdo_work_probe_pic();
+  75          //      cut_xdo_work_probe_mode();
+  76          //      
+  77          //      error_flag = 0;
+  78          //      probe_buff = RX_PROBE_MODE;
+  79          //      
+  80          //      READY_KED_DOWN_FLAG = 1;//准备按键
+  81          //      START_KED_DOWN_FLAG = 1;//按键松开
+  82          //      KED_EVER_DOWN_FLAG = 1;
+  83          //      CURRENT_SITE = 0;
+  84          //      //X3D_STOP_FLAG = 1;//暂停标志位  3D才用
+  85          //      key_flag = 1;
+  86          //      close_hf_pwm();
+  87          //      //x3d_work_ready_led_off();
+  88          //  //x3d_work_start_led_off();
+  89          //      FS2_ON;
+  90          //      
+  91          //      //set_x3d_motor_pwm_value();
+  92          //      
+  93          //      JDQ1_ON;
+  94          //      JDQ2_OFF;
+  95          //      JDQ3_OFF;
+  96          //      
+  97          //      if(XIAN_TRUE_PAR_FLAG == 0)
+  98          //      {
+  99          //              DIS_FONT_C(0xff,0xff,10,0x01,0,0,"HF TIME:  ");
+ 100          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_HF_SET_TIME,3,80,0);
+ 101          //              
+ 102          //              DIS_FONT_C(0xff,0xff,10,0x01,0,18,"HF MIN:   ");
+ 103          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_HF_MIN_GEAR_VALUE,4,80,18);
+ 104          //              
+ 105          //              DIS_FONT_C(0xff,0xff,10,0x01,0,36,"HF MAX:   ");
+ 106          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_HF_MAX_GEAR_VALUE,4,80,36);
+ 107          //              
+ 108          //              DIS_FONT_C(0xff,0xff,10,0x01,0,54,"PROBE ID: ");
+ 109          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,RX_PROBE_ID,4,80,54);
+ 110          //              
+ 111          //              DIS_FONT_C(0xff,0xff,10,0x01,0,72,"MAC ID:   ");
+ 112          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,MACHINE_ID,4,80,72);
+ 113          //              
+ 114          //              
+ 115          //              
+ 116          //              DIS_FONT_C(0xff,0xff,10,0x01,150,0,"POINT SP: ");
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 3   
+
+ 117          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_MOTOR_POINT_PWM_VALUE,4,230,0);
+ 118          //              
+ 119          //              DIS_FONT_C(0xff,0xff,10,0x01,150,18,"LINE SP:   ");
+ 120          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_MOTOR_LINE_PWM_VALUE,4,230,18);
+ 121          //              
+ 122          //              DIS_FONT_C(0xff,0xff,10,0x01,150,36,"LP PERC:  ");
+ 123          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDO_WORK,0,0xff,0xff,0x01,XDO_POINT_IS_LINE_PERCENT,4,230,36);
+ 124          //              
+ 125          //              if(MOTOR_SELE_FLAG == 0){
+ 126          //                      DIS_FONT_C(0xff,0xff,10,0x01,150,54,"MOTOR:1:20");
+ 127          //              }else{
+ 128          //                      DIS_FONT_C(0xff,0xff,10,0x01,150,54,"MOTOR:1:30");
+ 129          //              }
+ 130          //
+ 131          //
+ 132          //
+ 133          //      }
+ 134          //      
+ 135          //      
+ 136          //      
+ 137          //      
+ 138          //      
+ 139          //      
+ 140          //      
+ 141          //      do{
+ 142          //              delay_ms(1);
+ 143          //              if(KEY_YES!=0x00)
+ 144          //              {
+ 145          //                      ADS7843_KEY(); //扫描按键
+ 146          //                      key=KEY_FANHUI(MAIN_KEY_XDO_WORK,MAIN_XDO_WORK); 
+ 147          //                      switch(key)
+ 148          //                      {
+ 149          //                              case 1:  //设置
+ 150          //                                      /*if(START_STOP_FLAG == 1)
+ 151          //                                      {
+ 152          //                                              XIANG1();
+ 153          //                                              INTERFACE = PAGE_ADVANCED_SETTINGS;
+ 154          //                                              goto over_main_xs_xdo_work;
+ 155          //                                      }else{KEY_YES = 0;}*/
+ 156          //                                      KEY_YES = 0;
+ 157          //                                      break;
+ 158          //                              case 2: //间距减减
+ 159          //                                      if(XDO_SPACING > 10)
+ 160          //                                      {
+ 161          //                                              DIS_DEL_DIS(Pic_XDO_WORK_DOWN,611,459,703,536,611,459);
+ 162          //                                              last_down = 2;
+ 163          //                                              XIANG1();
+ 164          //                                              XDO_SPACING--;XDO_SPACING--;
+ 165          //                                              dis_xdo_work_spacing();
+ 166          //                                              delay_ms(50);
+ 167          //                                      }else{KEY_YES = 0;}
+ 168          //                                      break;
+ 169          //                              case 3: //间距加加
+ 170          //                                      if(XDO_SPACING < 30)
+ 171          //                                      {
+ 172          //                                              DIS_DEL_DIS(Pic_XDO_WORK_DOWN,970,459,1065,536,970,459);
+ 173          //                                              last_down = 3;
+ 174          //                                              XIANG1();
+ 175          //                                              XDO_SPACING++;XDO_SPACING++;
+ 176          //                                              dis_xdo_work_spacing();
+ 177          //                                              delay_ms(50);
+ 178          //                                      }else{KEY_YES = 0;}
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 4   
+
+ 179          //                                      break;
+ 180          //                              case 4: //清零
+ 181          //                                      if(ONE_CURRENT_TIMES > 0)
+ 182          //                                      {
+ 183          //                                              ONE_CURRENT_TIMES = 0;
+ 184          //                                              dis_work_current_times();       //显示治疗次数
+ 185          //                                              XIANG1();
+ 186          //                                      }else{KEY_YES = 0;}
+ 187          //                                      break;
+ 188          //                              case 5: //打点
+ 189          //                                      if(POINT_LINE_FLAG == 0)
+ 190          //                                      {
+ 191          //                                              POINT_LINE_FLAG = 1;
+ 192          //                                              cut_xdo_work_point_line_flag();
+ 193          //                                              XIANG1();
+ 194          //                                      }else{KEY_YES = 0;}
+ 195          //                                      break;
+ 196          //                              case 6: //直线
+ 197          //                                      if(POINT_LINE_FLAG == 1 && XDO_LINE_FUNCTION_FLAG == 0)
+ 198          //                                      {
+ 199          //                                              POINT_LINE_FLAG = 0;
+ 200          //                                              cut_xdo_work_point_line_flag();
+ 201          //                                              XIANG1();
+ 202          //                                      }else{KEY_YES = 0;}
+ 203          //                                      break;
+ 204          //                              case 7: //单点自动
+ 205          //                                      if(SINGLE_AUTO_FLAG != 1)
+ 206          //                                      {
+ 207          //                                              SINGLE_AUTO_FLAG = 1;//单点
+ 208          //                                      }
+ 209          //                                      else
+ 210          //                                      {
+ 211          //                                              SINGLE_AUTO_FLAG = 0;//自动
+ 212          //                                      }
+ 213          //                                      cut_work_single_auto_flag();
+ 214          //                                      XIANG1();
+ 215          //                                      KEY_YES = 0;
+ 216          //                                      break;
+ 217          //                              case 8:  //统计
+ 218          //                                      if(START_STOP_FLAG == 1)
+ 219          //                                      {
+ 220          //                                              XIANG1();
+ 221          //                                              INTERFACE = PAGE_RECORD_PROBE_TIMES;
+ 222          //                                              goto over_main_xs_xdo_work;
+ 223          //                                      }else{KEY_YES = 0;}
+ 224          //                                      break;
+ 225          //                              case 9: //能量减减
+ 226          //                                      if(HF_POWER_GEAR > 1)
+ 227          //                                      {
+ 228          //                                              DIS_DEL_DIS(Pic_XDO_WORK_DOWN,303,1473,390,1558,303,1473);
+ 229          //                                              last_down = 9;
+ 230          //                                              XIANG1();
+ 231          //                                              HF_POWER_GEAR--;
+ 232          //                                              dis_xdo_work_hf_power_gear();
+ 233          //                                              delay_ms(50);
+ 234          //                                      }else{KEY_YES = 0;}
+ 235          //                                      break;
+ 236          //                              case 10:        //能量加加
+ 237          //                                      if(HF_POWER_GEAR < 20)
+ 238          //                                      {
+ 239          //                                              DIS_DEL_DIS(Pic_XDO_WORK_DOWN,690,1473,778,1558,690,1473);
+ 240          //                                              last_down = 10;
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 5   
+
+ 241          //                                              XIANG1();
+ 242          //                                              HF_POWER_GEAR++;
+ 243          //                                              dis_xdo_work_hf_power_gear();
+ 244          //                                              delay_ms(50);
+ 245          //                                      }else{KEY_YES = 0;}
+ 246          //                                      break;
+ 247          //                              case 11:  //返回
+ 248          //                                      if(START_STOP_FLAG == 1)
+ 249          //                                      {
+ 250          //                                              XIANG1();
+ 251          //                                              INTERFACE = PAGE_FUN_CHOOSE;
+ 252          //                                              goto over_main_xs_xdo_work;
+ 253          //                                      }else{KEY_YES = 0;}
+ 254          //                                      break;
+ 255          //                              case 12:  //停止
+ 256          //                                      if(START_STOP_FLAG == 0)
+ 257          //                                      {
+ 258          //                                              READY_KED_DOWN_FLAG = 0;
+ 259          //                                      }else{KEY_YES = 0;}
+ 260          //                                      break;
+ 261          //                              case 13:  //开始
+ 262          //                                      if(START_STOP_FLAG == 1 && RX_PROBE_MODE > 0x00 && RX_PROBE_MODE < 0x04)//没有按下  并且探头合格
+ 263          //                                      {
+ 264          //                                              if(MACHINE_ID == RX_PROBE_ID || MACHINE_ID == 200 || RX_PROBE_ID == 200)
+ 265          //                                              {
+ 266          //                                                      if(RX_PROBE_REMAIN == 0)//探头等于0时 报警提示
+ 267          //                                                      {
+ 268          //                                                              XIANG1();
+ 269          //                                                              cut_times_is_zero_error();
+ 270          //                                                      }
+ 271          //                                                      else//准备完成
+ 272          //                                                      {
+ 273          //                                                              READY_KED_DOWN_FLAG = 0;
+ 274          //                                                      }
+ 275          //                                              }
+ 276          //                                              else
+ 277          //                                              {
+ 278          //                                                      XIANG1();
+ 279          //                                                      cut_probe_id_error();
+ 280          //                                              }
+ 281          //                                      }
+ 282          //                                      else if(RX_PROBE_MODE == 0)//没有探头
+ 283          //                                      {
+ 284          //                                              XIANG1();
+ 285          //                                              cut_xdo_work_probe_pic();
+ 286          //                                              cut_xdo_work_probe_mode();
+ 287          //                                      }
+ 288          //                                      KEY_YES = 0;
+ 289          //                                      break;
+ 290          //                      }
+ 291          //              }
+ 292          //              else
+ 293          //              {
+ 294          //                      switch(last_down)
+ 295          //                      {
+ 296          //                              case 2:
+ 297          //                                      DIS_DEL_DIS(Pic_XDO_WORK,611,459,703,536,611,459);
+ 298          //                                      last_down = 0;
+ 299          //                                      break;
+ 300          //                        case 3:
+ 301          //                                      DIS_DEL_DIS(Pic_XDO_WORK,970,459,1065,536,970,459);
+ 302          //                                      last_down = 0;
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 6   
+
+ 303          //                                      break;
+ 304          //                              case 9:
+ 305          //                                      DIS_DEL_DIS(Pic_XDO_WORK,303,1473,390,1558,303,1473);
+ 306          //                                      last_down = 0;
+ 307          //                                      break;
+ 308          //                              case 10:
+ 309          //                                      DIS_DEL_DIS(Pic_XDO_WORK,690,1473,778,1558,690,1473);
+ 310          //                                      last_down = 0;
+ 311          //                                      break;
+ 312          //                      }
+ 313          //              }
+ 314          //              
+ 315          //              //--------------------检测探头变化--------------------//
+ 316          //              if(probe_buff != RX_PROBE_MODE)
+ 317          //              {
+ 318          //                      XIANG1();
+ 319          //                      probe_buff = RX_PROBE_MODE;
+ 320          //                      if(probe_buff > 0x03)//探头错误
+ 321          //                      {
+ 322          //                              cut_probe_error();
+ 323          //                              RX_PROBE_REMAIN = 0;
+ 324          //                              RX_PROBE_TOTAL = 0;
+ 325          //                      }
+ 326          //                      else if(probe_buff == 0)//没有探头
+ 327          //                      {
+ 328          //                              RX_PROBE_REMAIN = 0;
+ 329          //                              RX_PROBE_TOTAL = 0;
+ 330          //                              cut_cover_error();
+ 331          //                      }
+ 332          //                      else//有探头
+ 333          //                      {
+ 334          //                              cut_cover_error();
+ 335          //                              HF_POWER_GEAR = 1;
+ 336          //                              dis_xdo_work_hf_power_gear();
+ 337          //                              count_records_probe_mode(RX_PROBE_MODE);
+ 338          //                      }
+ 339          //                      dis_work_probe_remain();        //显示剩余次数
+ 340          //                      dis_work_probe_total(); //显示总数
+ 341          //                      cut_xdo_work_probe_pic();
+ 342          //                      cut_xdo_work_probe_mode();
+ 343          //                      START_STOP_FLAG = 1;
+ 344          //                      cut_work_start_stop_flag();
+ 345          //                      key_flag = 1;
+ 346          //                      close_hf_pwm();
+ 347          //                      START_KED_DOWN_FLAG = 1;
+ 348          //                      KED_EVER_DOWN_FLAG = 1;
+ 349          //                      READY_KED_DOWN_FLAG = 1;
+ 350          //              }
+ 351          //              //--------------------有准备按键按下--------------------//
+ 352          //              if(READY_KED_DOWN_FLAG == 0)
+ 353          //              {
+ 354          //                      XIANG1();
+ 355          //                      if(START_STOP_FLAG == 0)
+ 356          //                      {
+ 357          //                              START_STOP_FLAG = 1;
+ 358          //                              cut_xdo_work_probe_pic();
+ 359          //                              xdo_work_power_led(CLOSE);
+ 360          //                      }
+ 361          //                      else
+ 362          //                      {
+ 363          //                              START_STOP_FLAG = 0;
+ 364          //                              cut_xdo_start_pic();
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 7   
+
+ 365          //                              xdo_work_power_led(OPEN);
+ 366          //                      }
+ 367          //                      cut_work_start_stop_flag();
+ 368          //                      key_flag = 1;
+ 369          //                      close_hf_pwm();
+ 370          //                      START_KED_DOWN_FLAG = 1;
+ 371          //                      KED_EVER_DOWN_FLAG = 1;
+ 372          //                      READY_KED_DOWN_FLAG = 1;
+ 373          //              }
+ 374          //              
+ 375          //              //--------------------开始工作--------------------//
+ 376          //              if(START_STOP_FLAG == 0)
+ 377          //              {
+ 378          //                      if(XDO_LONG_PRESS_AUTO_FLAG == 0)//长按一直工作
+ 379          //                      {
+ 380          //                              key_flag = START_KED_DOWN_FLAG;
+ 381          //                      }
+ 382          //                      else//按一下就开始工作  按一下停止
+ 383          //                      {
+ 384          //                              if(KED_EVER_DOWN_FLAG == 0)
+ 385          //                              {
+ 386          //                                      if(key_flag == 0)key_flag = 1;
+ 387          //                                      else{key_flag = 0;}
+ 388          //                                      KED_EVER_DOWN_FLAG = 1;
+ 389          //                              }
+ 390          //                      }
+ 391          //                      
+ 392          //                      if(key_flag == 0)//有按键按下
+ 393          //                      {
+ 394          //                              set_value = count_xdo_hifu_work_set_value();
+ 395          //                              if(POINT_LINE_FLAG == 1)open_hf_pwm(set_value);//打点时，要先打开电源
+ 396          //                              else{open_hf_pwm(1500);}
+ 397          //                              set_xdo_motor_pwm_value();
+ 398          //                              
+ 399          //                              work_start_this:
+ 400          //                              
+ 401          //                              //----------检测非法探头----------//
+ 402          //                              if(RX_PROBE_MODE == 0 || RX_PROBE_MODE > 0x03)
+ 403          //                              {
+ 404          //                                      error_flag = 1;
+ 405          //                                      cut_probe_error();
+ 406          //                                      goto end_early;
+ 407          //                              }
+ 408          //                              //----------探头等于0----------//
+ 409          //                              if(RX_PROBE_REMAIN == 0)
+ 410          //                              {
+ 411          //                                      error_flag = 1;
+ 412          //                                      cut_times_is_zero_error();
+ 413          //                                      goto end_early;
+ 414          //                              }
+ 415          //                              
+ 416          //                              remain_buff = RX_PROBE_REMAIN;
+ 417          //                              set_handle_minus(XDO_DEVICE_TYPE,1);//减一
+ 418          //                              if(wait_handle_answer(2000) == 0)       //扣费有返回
+ 419          //                              {
+ 420          //                                      if(MINUS_FLAG == 1)//扣费成功
+ 421          //                                      {
+ 422          //                                              remain_buff = remain_buff - 1;
+ 423          //                                              if(remain_buff != RX_PROBE_REMAIN)//减减后数据不对
+ 424          //                                              {
+ 425          //                                                      error_flag = 1;
+ 426          //                                                      cut_probe_error();
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 8   
+
+ 427          //                                                      goto end_early;
+ 428          //                                              }
+ 429          //                                              else//扣费是正确的，就启动输出
+ 430          //                                              {
+ 431          //                                                      dis_work_probe_remain();        //显示剩余次数
+ 432          //                                                      ONE_CURRENT_TIMES++;
+ 433          //                                                      dis_work_current_times();       //显示治疗次数
+ 434          //                                                      temp = RX_PROBE_MODE - 1;
+ 435          //                                                      if(temp < 3)XDO_PROBE_TIMES[(u8)temp]++;
+ 436          //                                              }
+ 437          //                                      }
+ 438          //                                      else//扣费失败
+ 439          //                                      {
+ 440          //                                              error_flag = 1;
+ 441          //                                              cut_probe_error();
+ 442          //                                              goto end_early;
+ 443          //                                      }
+ 444          //                              }
+ 445          //                              else
+ 446          //                              {
+ 447          //                                      error_flag = 1;
+ 448          //                                      cut_communication_error();
+ 449          //                                      goto end_early;
+ 450          //                              }
+ 451          //                              
+ 452          //                              if(POINT_LINE_FLAG == 1)//打点
+ 453          //                              {
+ 454          //                                      temp = XDO_SPACING;
+ 455          //                                      if(MOTOR_SELE_FLAG == 0){
+ 456          //                                              temp = 410*temp/380;
+ 457          //                                      }else{
+ 458          //                                              temp = 570*temp/380;
+ 459          //                                      }
+ 460          //                                      time = XDO_SPACING;
+ 461          //                                      time = 380/time;
+ 462          //                                      for(i=0;i<time;i++)
+ 463          //                                      {
+ 464          //                                              cut_xdo_working_point_pic(time,i);
+ 465          //                                              HANDLE_MOTOR_RESPONSE_FLAG = 1;
+ 466          //                                              WAITING_CC = 0;
+ 467          //                                              xdo_work_move_motor_steps(temp);
+ 468          //                                              while(WAITING_CC < 2000)//2s
+ 469          //                                              {
+ 470          //                                                      if(HANDLE_MOTOR_RESPONSE_FLAG == 0)goto jixu_work1;
+ 471          //                                              }
+ 472          //                                              error_flag = 1;
+ 473          //                                              cut_probe_error();
+ 474          //                                              cut_xdo_cover_working_point_pic();
+ 475          //                                              goto end_early;
+ 476          //                                              jixu_work1:
+ 477          //                                              xdo_work_work_led(OPEN);
+ 478          //                                              UL_SET_ON;
+ 479          //                                              delay_ms(XDO_HF_SET_TIME);
+ 480          //                                              UL_SET_OFF;
+ 481          //                                              xdo_work_work_led(CLOSE);
+ 482          //                                      }
+ 483          //                                      cut_xdo_cover_working_point_pic();
+ 484          //                              }
+ 485          //                              else//打线
+ 486          //                              {
+ 487          //                                      cut_xdo_working_line_pic();
+ 488          //                                      HANDLE_MOTOR_RESPONSE_FLAG = 1;
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 9   
+
+ 489          //                                      WAITING_CC = 0;
+ 490          //                                      xdo_work_work_led(OPEN);
+ 491          //                                      if(MOTOR_SELE_FLAG == 0){
+ 492          //                                              xdo_work_move_motor_steps(440);
+ 493          //                                      }else{
+ 494          //                                              xdo_work_move_motor_steps(600);
+ 495          //                                      }
+ 496          //                                      delay_ms(5);
+ 497          //                                      UL_SET_ON;
+ 498          //                                      delay_ms(40);
+ 499          //                                      open_hf_pwm(set_value);
+ 500          //                                      while(WAITING_CC < 2000)//2s
+ 501          //                                      {
+ 502          //                                              if(HANDLE_MOTOR_RESPONSE_FLAG == 0)goto jixu_work2;
+ 503          //                                      }
+ 504          //                                      UL_SET_OFF;
+ 505          //                                      error_flag = 1;
+ 506          //                                      cut_probe_error();
+ 507          //                                      cut_xdo_cover_working_point_pic();
+ 508          //                                      xdo_work_work_led(CLOSE);
+ 509          //                                      goto end_early;
+ 510          //                                      jixu_work2:
+ 511          //                                      UL_SET_OFF;
+ 512          //                                      cut_xdo_cover_working_point_pic();
+ 513          //                                      xdo_work_work_led(CLOSE);
+ 514          //                              }
+ 515          //                              
+ 516          //                              //----------检测是否要暂停----------//
+ 517          //                              if(XDO_LONG_PRESS_AUTO_FLAG == 0)//长按一直工作
+ 518          //                              {
+ 519          //                                      key_flag = START_KED_DOWN_FLAG;
+ 520          //                              }
+ 521          //                              else//按一下就开始工作  按一下停止
+ 522          //                              {
+ 523          //                                      if(KED_EVER_DOWN_FLAG == 0)
+ 524          //                                      {
+ 525          //                                              if(key_flag == 0)key_flag = 1;
+ 526          //                                              else{key_flag = 0;}
+ 527          //                                              KED_EVER_DOWN_FLAG = 1;
+ 528          //                                      }
+ 529          //                              }
+ 530          //                              
+ 531          //                              if(SINGLE_AUTO_FLAG == 1)//单发
+ 532          //                              {
+ 533          //                                      key_flag = 1;
+ 534          //                                      goto end_early;
+ 535          //                              }
+ 536          //                              else//自动模式
+ 537          //                              {
+ 538          //                                      if(key_flag == 0)
+ 539          //                                      {
+ 540          //                                              delay_ms(500);
+ 541          //                                              goto work_start_this;
+ 542          //                                      }
+ 543          //                              }
+ 544          //                              
+ 545          //                              end_early:
+ 546          //                              _nop_();
+ 547          //                              if(error_flag == 1)
+ 548          //                              {
+ 549          //                                      READY_KED_DOWN_FLAG = 1;//准备按键
+ 550          //                                      START_KED_DOWN_FLAG = 1;//按键松开
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 10  
+
+ 551          //                                      KED_EVER_DOWN_FLAG = 1;
+ 552          //                                      START_STOP_FLAG = 1;
+ 553          //                                      CURRENT_SITE = 0;
+ 554          //                                      //X3D_STOP_FLAG = 1;
+ 555          //                                      key_flag = 1;
+ 556          //                                      close_hf_pwm();
+ 557          //                                      cut_work_start_stop_flag();
+ 558          //                                      cut_xdo_work_probe_pic();
+ 559          //                                      error_flag = 0;
+ 560          //                                      xdo_work_power_led(CLOSE);
+ 561          //                              }
+ 562          //                              else
+ 563          //                              {
+ 564          //                                      READY_KED_DOWN_FLAG = 1;//准备按键
+ 565          //                                      START_KED_DOWN_FLAG = 1;//按键松开
+ 566          //                                      KED_EVER_DOWN_FLAG = 1;
+ 567          //                                      key_flag = 1;
+ 568          //                                      close_hf_pwm();
+ 569          //                              }
+ 570          //                              //if(RX_PROBE_MODE > 0)write_x3d_probe_times(RX_PROBE_MODE);
+ 571          //                      }
+ 572          //              }
+ 573          //              
+ 574          //              
+ 575          //              
+ 576          //              /*
+ 577          //              //--------------------开始工作--------------------//
+ 578          //              if(XDO_START_STOP_FLAG == 0)
+ 579          //              {
+ 580          //                      
+ 581          //                      if(key_flag == 0)//按键按下
+ 582          //                      {
+ 583          //                              start_work:
+ 584          //                              _nop_();
+ 585          //                              
+ 586          //                              
+ 587          //                              
+ 588          //                              temp = (2700 - 1500)/20*XDO_POWER_GEAR + 1500;
+ 589          //                              XDO_SET_POWER_VALUE[0] = temp;
+ 590          //                              open_hf_pwm(1500);//启动电压
+ 591          //                              
+ 592          //                              if(set_xdo_power() == 1)//输出函数  错误时
+ 593          //                              {
+ 594          //                                      XDO_START_STOP_FLAG = 1;
+ 595          //                                      cut_xdo_work_start_stop_flag();
+ 596          //                                      cut_communication_error();
+ 597          //                                      goto end_early;
+ 598          //                              }
+ 599          //                              close_hf_pwm();
+ 600          //                              
+ 601          //                              if(XDO_SINGLE_AUTO_FLAG == 1)//单次
+ 602          //                              {
+ 603          //                                      goto end_early;
+ 604          //                              }
+ 605          //                              else//连打
+ 606          //                              {
+ 607          //                                      if(XDO_LONG_PRESS_AUTO_FLAG == 0)//长按一直工作
+ 608          //                                      {
+ 609          //                                              key_flag = XDO_KED_DOWN_FLAG;
+ 610          //                                      }
+ 611          //                                      else//按一下连续工作  按一下停止
+ 612          //                                      {
+C51 COMPILER V9.00   XS_XDO_WORK                                                           09/02/2024 14:01:21 PAGE 11  
+
+ 613          //                                              if(XDO_KED_EVER_DOWN_FLAG == 0)
+ 614          //                                              {
+ 615          //                                                      if(key_flag == 0)key_flag = 1;
+ 616          //                                                      else{key_flag = 0;}
+ 617          //                                                      XDO_KED_EVER_DOWN_FLAG = 1;
+ 618          //                                              }
+ 619          //                                      }
+ 620          //                                      delay_ms(500);
+ 621          //                                      if(key_flag == 0)goto start_work;
+ 622          //                              }
+ 623          //                              end_early:
+ 624          //                              _nop_();
+ 625          //                              key_flag = 1;
+ 626          //                              XDO_KED_DOWN_FLAG = 1;
+ 627          //                              XDO_KED_EVER_DOWN_FLAG = 1;
+ 628          //                              cut_xdo_work_probe_pic();
+ 629          //                      }
+ 630          //              }*/
+ 631          //      }while(1);
+ 632          //      over_main_xs_xdo_work:
+ 633          //      _nop_();
+ 634          //      FS2_OFF;
+ 635          //      xdo_work_power_led(CLOSE);
+ 636          //}
+ 637          //
+ 638          //
+ 639          //
+ 640          //
+ 641          // 
+ 642          // 
+ 643          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

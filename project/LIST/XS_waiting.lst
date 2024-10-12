@@ -1,0 +1,105 @@
+C51 COMPILER V9.00   XS_WAITING                                                            10/11/2024 17:50:12 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_WAITING
+OBJECT MODULE PLACED IN ..\hex\XS_waiting.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_waiting.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\
+                    -display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_waiting.lst) OBJECT(..\hex\XS_waiting.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  code MAIN_KEY_WAITING = 1;
+   4          const u16 code MAIN_WAITING[]=
+   5          {
+   6                  0,1279,0,799,
+   7          };
+   8          
+   9          void main_xs_waiting(void)
+  10          {
+  11   1              static u8 flag = 0;
+  12   1              u8 key,i;
+  13   1              u32 stop_beng_count;
+  14   1              float temp;
+  15   1              DIS_PICNUM(Pic_LOGO);
+  16   1              
+  17   1              if(flag == 0){
+  18   2                      u16 x,y,buff,j;
+  19   2                      x = 10;
+  20   2                      y = 785;
+  21   2                      i = 0;
+  22   2                      j = 0;
+  23   2                      DIS_FONT_C(0x00,0x00,8,0x01,x,y,"LOADING ");
+  24   2                      temp = get_adc_val(ADC0);//充电中。。。
+  25   2                      buff = (u16)temp;
+  26   2                      //DIS_FONT_ONE_POINT_VALUE(Pic_LOGO,1,0x00,0x00,0x01,3,DIS_ALL,(u16)(10*temp),0,10,10);
+  27   2                      while(temp < 2.5){//大约40V时  跳出
+  28   3                              delay_ms(250);
+  29   3                              temp = get_adc_val(ADC0);
+  30   3                              if(j == 80)DIS_FONT_ONE_POINT_VALUE(Pic_LOGO,1,0x00,0x00,0x01,3,DIS_ALL,(u16)(10*temp),buff,10,10);
+  31   3                              else if(j > 80 && j < 240)DIS_FONT_ONE_POINT_VALUE(Pic_LOGO,1,0x00,0x00,0x01,3,DIS_PART,(u16)(10*temp),
+             -buff,10,10);
+  32   3                              else if(j == 240){
+  33   4                                      cut_sw_work_internal_power_varning();
+  34   4                                      BENG_OFF;
+  35   4                                      while(1){
+  36   5                                              XIANG1();
+  37   5                                              delay_ms(500);
+  38   5                                      }
+  39   4                              }
+  40   3                              buff = (u16)temp;
+  41   3                              i++;if(j < 240)j++;//20秒都没充满就显示数值
+  42   3                              if(i == 1)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y,".      ");
+  43   3                              else if(i == 2)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y," .    ");
+  44   3                              else if(i == 3)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y,"  .   ");
+  45   3                              else if(i == 4)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y,"   .  ");
+  46   3                              else if(i == 5)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y,"    . ");
+  47   3                              else if(i == 6)DIS_FONT_C(0x00,0x00,6,0x01,x + 8*8,y,"     .");
+  48   3                              else if(i == 7){
+  49   4                                      DIS_DEL_DIS(Pic_LOGO,x + 8*8,y,x + 8*14,y + 16,x + 8*8,y);
+  50   4                                      i = 0;
+  51   4                              }
+  52   3                      }
+  53   2                      DIS_PICNUM(Pic_LOGO);
+C51 COMPILER V9.00   XS_WAITING                                                            10/11/2024 17:50:12 PAGE 2   
+
+  54   2                      XIANG1();
+  55   2                      flag = 1;
+  56   2              }
+  57   1          
+  58   1              stop_beng_count = 0;
+  59   1              do{
+  60   2                      delay_ms(1);
+  61   2                      if(Uart_LCD.KEY_YES!=0x00){
+  62   3                              ADS7843_KEY(); 
+  63   3                              key=KEY_FANHUI(MAIN_KEY_WAITING,MAIN_WAITING); 
+  64   3                      switch(key){
+  65   4                                      case 1:
+  66   4                                      XIANG1();
+  67   4                                              INTERFACE = PAGE_SW_WORK;
+  68   4                                              goto over_main_xs_waiting;
+  69   4                                              //break;
+  70   4                      }
+  71   3                              Uart_LCD.KEY_YES = 0;
+  72   3                      }
+  73   2                      if(stop_beng_count < 60000)stop_beng_count++;else{BENG_OFF;}
+  74   2              }while(1);
+  75   1              over_main_xs_waiting:
+  76   1              LAST_INTERFACE = PAGE_ADVANCED_SETTINGS;
+  77   1              BENG_ON;
+  78   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    784    ----
+   CONSTANT SIZE    =     61    ----
+   XDATA SIZE       =      1      17
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

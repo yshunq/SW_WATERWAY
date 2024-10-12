@@ -1,0 +1,173 @@
+C51 COMPILER V9.00   XS_PROBE_MODE                                                         10/11/2024 17:50:13 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_PROBE_MODE
+OBJECT MODULE PLACED IN ..\hex\XS_probe_mode.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_probe_mode.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;
+                    -..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_probe_mode.lst) OBJECT(..\hex\XS_probe_mode.obj
+                    -)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  code MAIN_KEY_PROBE_DODE = 8;
+   4          const u16 code MAIN_PROBE_DODE[]=
+   5          {
+   6                  695,782,255,341,           //D8
+   7                  829,918,255,341,           //D15
+   8                  964,1053,255,341,          //C15
+   9          
+  10                  695,782,400,489,           //D20
+  11                  829,918,400,489,           //D32
+  12          
+  13          
+  14                  935,1050,723,799,          //设置
+  15                  1052,1167,723,799,         //锁定
+  16                  1170,1279,723,799,         //主界面
+  17          };
+  18          void cut_probe_mode(void);
+  19          
+  20          void main_xs_probe_mode(void)
+  21          {
+  22   1              bit lock_flag;
+  23   1              u8 key;
+  24   1              lock_flag = 1;
+  25   1              DIS_PICNUM(Pic_SW_PROBE_START + SW.PROBE_MODE);
+  26   1              do{
+  27   2                      if(Uart_LCD.KEY_YES!=0x00){
+  28   3                              ADS7843_KEY(); 
+  29   3                              key=KEY_FANHUI(MAIN_KEY_PROBE_DODE,MAIN_PROBE_DODE); 
+  30   3                      switch(key){
+  31   4                                      case 1:         //D8
+  32   4                                              if(lock_flag == 1){
+  33   5                                                      XIANG1();
+  34   5                                                      if(SW.PROBE_MODE != PROBE_D8){
+  35   6                                                              SW.PROBE_MODE = PROBE_D8;
+  36   6                                                              cut_probe_mode();
+  37   6                                                      }else{
+  38   6                                                              INTERFACE = PAGE_SW_WORK;
+  39   6                                                              if(SW.RECORD_FLAG == 0)write_sw_probe_mode(SW.BODY_PARTS);
+  40   6                                                              goto over_main_xs_probe_mode;
+  41   6                                                      }
+  42   5                                              }
+  43   4                                              Uart_LCD.KEY_YES = 0;
+  44   4                                              break;
+  45   4                                      case 2:         //D15
+  46   4                                              if(lock_flag == 1){
+  47   5                                                      XIANG1();
+  48   5                                                      if(SW.PROBE_MODE != PROBE_D15){
+  49   6                                                              SW.PROBE_MODE = PROBE_D15;
+  50   6                                                              cut_probe_mode();
+  51   6                                                      }else{
+  52   6                                                              INTERFACE = PAGE_SW_WORK;
+  53   6                                                              if(SW.RECORD_FLAG == 0)write_sw_probe_mode(SW.BODY_PARTS);
+C51 COMPILER V9.00   XS_PROBE_MODE                                                         10/11/2024 17:50:13 PAGE 2   
+
+  54   6                                                              goto over_main_xs_probe_mode;
+  55   6                                                      }
+  56   5                                              }
+  57   4                                              Uart_LCD.KEY_YES = 0;
+  58   4                                              break;
+  59   4                                      case 3:         //C15
+  60   4                                              if(lock_flag == 1){
+  61   5                                                      XIANG1();
+  62   5                                                      if(SW.PROBE_MODE != PROBE_C15){
+  63   6                                                              SW.PROBE_MODE = PROBE_C15;
+  64   6                                                              cut_probe_mode();
+  65   6                                                      }else{
+  66   6                                                              INTERFACE = PAGE_SW_WORK;
+  67   6                                                              if(SW.RECORD_FLAG == 0)write_sw_probe_mode(SW.BODY_PARTS);
+  68   6                                                              goto over_main_xs_probe_mode;
+  69   6                                                      }
+  70   5                                              }
+  71   4                                              Uart_LCD.KEY_YES = 0;
+  72   4                                              break;
+  73   4                                      case 4:         //D20
+  74   4                                              if(lock_flag == 1){
+  75   5                                                      XIANG1();
+  76   5                                                      if(SW.PROBE_MODE != PROBE_D20){
+  77   6                                                              SW.PROBE_MODE = PROBE_D20;
+  78   6                                                              cut_probe_mode();
+  79   6                                                      }else{
+  80   6                                                              INTERFACE = PAGE_SW_WORK;
+  81   6                                                              if(SW.RECORD_FLAG == 0)write_sw_probe_mode(SW.BODY_PARTS);
+  82   6                                                              goto over_main_xs_probe_mode;
+  83   6                                                      }
+  84   5                                              }
+  85   4                                              Uart_LCD.KEY_YES = 0;
+  86   4                                              break;
+  87   4                                      case 5:         //D32
+  88   4                                              if(lock_flag == 1){
+  89   5                                                      XIANG1();
+  90   5                                                      if(SW.PROBE_MODE != PROBE_D32){
+  91   6                                                              SW.PROBE_MODE = PROBE_D32;
+  92   6                                                              cut_probe_mode();
+  93   6                                                      }else{
+  94   6                                                              INTERFACE = PAGE_SW_WORK;
+  95   6                                                              if(SW.RECORD_FLAG == 0)write_sw_probe_mode(SW.BODY_PARTS);
+  96   6                                                              goto over_main_xs_probe_mode;
+  97   6                                                      }
+  98   5                                              }
+  99   4                                              Uart_LCD.KEY_YES = 0;
+ 100   4                                              break;
+ 101   4                                      case 6: //设置
+ 102   4                                              if(lock_flag == 1){
+ 103   5                                                      XIANG1();
+ 104   5                                                      INTERFACE = PAGE_ADVANCED_SETTINGS;
+ 105   5                                                      goto over_main_xs_probe_mode;
+ 106   5                                              }
+ 107   4                                              Uart_LCD.KEY_YES = 0;
+ 108   4                                              break;
+ 109   4                                       case 7:        //锁屏幕
+ 110   4                                              XIANG1();
+ 111   4                                              if(lock_flag == 1){
+ 112   5                                                      lock_flag = 0;
+ 113   5                                              }else{
+ 114   5                                                      lock_flag = 1;
+ 115   5                                              }
+C51 COMPILER V9.00   XS_PROBE_MODE                                                         10/11/2024 17:50:13 PAGE 3   
+
+ 116   4                                              cut_sw_work_lock_flag(lock_flag);
+ 117   4                                              Uart_LCD.KEY_YES = 0;
+ 118   4                                              break;
+ 119   4                                       case 8:        //返回LOGO
+ 120   4                                              if(lock_flag == 1){
+ 121   5                                                      XIANG1();
+ 122   5                                                      INTERFACE = PAGE_WAITING;
+ 123   5                                                      goto over_main_xs_probe_mode;
+ 124   5                                              }
+ 125   4                                              Uart_LCD.KEY_YES = 0;
+ 126   4                                              break;
+ 127   4                      }
+ 128   3                              Uart_LCD.KEY_YES = 0;
+ 129   3                      }
+ 130   2              }while(1);
+ 131   1              over_main_xs_probe_mode:
+ 132   1              LAST_INTERFACE = PAGE_PROBE_MODE;
+ 133   1      }
+ 134          
+ 135          void cut_probe_mode(void)
+ 136          {
+ 137   1              DIS_DEL_DIS(Pic_SW_PROBE_START + SW.PROBE_MODE,0,0,1279,722,0,0);
+ 138   1              cut_sw_work_probe_mode();
+ 139   1      }
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    384    ----
+   CONSTANT SIZE    =     65    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

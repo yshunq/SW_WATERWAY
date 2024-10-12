@@ -1,0 +1,438 @@
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE CUT_X3D_WORK
+OBJECT MODULE PLACED IN ..\hex\cut_x3d_work.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\cut\cut_x3d_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\dis
+                    -play) DEBUG OBJECTEXTEND PRINT(.\LIST\cut_x3d_work.lst) OBJECT(..\hex\cut_x3d_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void cut_rotating_motor_error(void)
+   4          //{
+   5          //  DIS_DEL_DIS(Pic_CUT1,457,461,911,561,51,129);
+   6          //}
+   7          //
+   8          //void cut_propulsion_motor_error(void)
+   9          //{
+  10          //  DIS_DEL_DIS(Pic_CUT1,457,563,911,663,51,129);
+  11          //}
+  12          //
+  13          //void cut_x3d_work_probe_pic(void)
+  14          //{
+  15          //  switch(RX_PROBE_MODE)
+  16          //      {
+  17          //              case 0x00:
+  18          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,610,500,1217,33,229);
+  19          //                      break;
+  20          //              case 0x01:
+  21          //                      DIS_DEL_DIS(Pic_X3D_CUT1,1,1,500,608,33,229);
+  22          //                      break;
+  23          //              case 0x02:
+  24          //                      DIS_DEL_DIS(Pic_X3D_CUT1,502,1,1001,608,33,229);
+  25          //                      break;
+  26          //              case 0x03:
+  27          //                      DIS_DEL_DIS(Pic_X3D_CUT1,1,610,500,1217,33,229);
+  28          //                      break;
+  29          //              case 0x04:
+  30          //                      DIS_DEL_DIS(Pic_X3D_CUT1,502,610,1001,1217,33,229);
+  31          //                      break;
+  32          //              case 0x05:
+  33          //                      DIS_DEL_DIS(Pic_X3D_CUT1,1,1219,500,1826,33,229);
+  34          //                      break;
+  35          //              case 0x06:
+  36          //                      DIS_DEL_DIS(Pic_X3D_CUT1,502,1219,1001,1826,33,229);
+  37          //                      break;
+  38          //              case 0x07:
+  39          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1,500,608,33,229);
+  40          //                      break;
+  41          //              case 0x08:
+  42          //                      DIS_DEL_DIS(Pic_X3D_CUT2,502,1,1001,608,33,229);
+  43          //                      break;
+  44          //      }
+  45          //}
+  46          //
+  47          //void cut_x3d_work_probe_mode(void)
+  48          //{
+  49          //  switch(RX_PROBE_MODE)
+  50          //      {
+  51          //              case 0x00:
+  52          //                      DIS_DEL_DIS(Pic_X3D_WORK,161,960,398,1007,161,960);
+  53          //                      break;
+  54          //              case 0x01:
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 2   
+
+  55          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1219,370,1268,161,960);
+  56          //                      break;
+  57          //              case 0x02:
+  58          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1270,370,1319,161,960);
+  59          //                      break;
+  60          //              case 0x03:
+  61          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1321,370,1370,161,960);
+  62          //                      break;
+  63          //              case 0x04:
+  64          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1372,370,1421,161,960);
+  65          //                      break;
+  66          //              case 0x05:
+  67          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1423,370,1472,161,960);
+  68          //                      break;
+  69          //              case 0x06:
+  70          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1474,370,1523,161,960);
+  71          //                      break;
+  72          //              case 0x07:
+  73          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1525,370,1574,161,960);
+  74          //                      break;
+  75          //              case 0x08:
+  76          //                      DIS_DEL_DIS(Pic_X3D_CUT2,134,1576,370,1625,161,960);
+  77          //                      break;
+  78          //      }
+  79          //} 
+  80          //
+  81          //void cut_x3d_work_point_line_flag(void)
+  82          //{
+  83          //  if(POINT_LINE_FLAG == 1)//打点
+  84          //      {
+  85          //        DIS_DEL_DIS(Pic_X3D_WORK,80,1347,236,1595,80,1347);
+  86          //      }
+  87          //      else//直线
+  88          //      {
+  89          //              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,80,1347,236,1595,80,1347);
+  90          //      }
+  91          //}
+  92          //
+  93          //void cut_work_single_auto_flag(void)
+  94          //{
+  95          //  if(SINGLE_AUTO_FLAG == 1)//单点
+  96          //      {
+  97          //        DIS_DEL_DIS(Pic_X3D_WORK,844,1351,1011,1451,844,1351);
+  98          //      }
+  99          //      else//自动
+ 100          //      {
+ 101          //              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,844,1351,1011,1451,844,1351);
+ 102          //      }
+ 103          //}
+ 104          //
+ 105          //void cut_x3d_working_pic(void)
+ 106          //{
+ 107          //      DIS_DEL_DIS(Pic_X3D_WORK_DOWN,32,229,536,847,32,229);
+ 108          //      switch(RX_PROBE_MODE)
+ 109          //      {
+ 110          //              case 0x01:
+ 111          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1219,132,1264,212,395);
+ 112          //                      break;
+ 113          //              case 0x02:
+ 114          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1266,132,1311,212,395);
+ 115          //                      break;
+ 116          //              case 0x03:
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 3   
+
+ 117          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1313,132,1358,212,395);
+ 118          //                      break;
+ 119          //              case 0x04:
+ 120          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1360,132,1405,212,395);
+ 121          //                      break;
+ 122          //              case 0x05:
+ 123          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1407,132,1452,212,395);
+ 124          //                      break;
+ 125          //              case 0x06:
+ 126          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1454,132,1499,212,395);
+ 127          //                      break;
+ 128          //              case 0x07:
+ 129          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1501,132,1546,212,395);
+ 130          //                      break;
+ 131          //              case 0x08:
+ 132          //                      DIS_DEL_DIS(Pic_X3D_CUT2,1,1548,132,1593,212,395);
+ 133          //                      break;
+ 134          //      }
+ 135          //}
+ 136          //
+ 137          //void cut_x3d_working_point(u8 temp)
+ 138          //{
+ 139          //      u16 y_number,x,y,k;
+ 140          //      u16 x1,x2,y1,y2;
+ 141          //      if(POINT_LINE_FLAG == 1)//打点
+ 142          //      {
+ 143          //              y_number = Y_VALUE*10/Y_SPACING + 1;//打的点数
+ 144          //              k = (410 - 135)*Y_VALUE/25;//总长的像素
+ 145          //              
+ 146          //              x = ((410 - 135) - k)/2 + 135 + k*temp/y_number;
+ 147          //              
+ 148          //              y = 547;
+ 149          //              DIS_DEL_DIS(Pic_X3D_CUT2,1003,599,1012,608,x,y);
+ 150          //      }
+ 151          //      else//直线
+ 152          //      {
+ 153          //              x = ((419 - 135) - ((419 - 135)*Y_VALUE/25))/2 + 135;
+ 154          //              y = 547;
+ 155          //              x1 = ((786 - 502) - ((786 - 502)*Y_VALUE/25))/2 + 502;
+ 156          //              y1 = 610;
+ 157          //              x2 = 786 - ((786 - 502) - ((786 - 502)*Y_VALUE/25))/2;
+ 158          //              y2 = 618;
+ 159          //              DIS_DEL_DIS(Pic_X3D_CUT2,x1,y1,x2,y2,x,y);
+ 160          //      }
+ 161          //}
+ 162          //
+ 163          //
+ 164          //
+ 165          //
+ 166          //
+ 167          //
+ 168          //
+ 169          //
+ 170          //
+ 171          //
+ 172          //
+ 173          //
+ 174          ///*
+ 175          ////--------------------公用报警--------------------//
+ 176          //void cut_communication_error(void)
+ 177          //{
+ 178          //  DIS_DEL_DIS(Pic_CUT1,1,257,455,357,51,129);
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 4   
+
+ 179          //}
+ 180          //
+ 181          //void cut_cover_error(void)
+ 182          //{
+ 183          //  DIS_DEL_DIS(Pic_CUT1,1,155,455,255,51,129);
+ 184          //}
+ 185          //
+ 186          //void cut_times_is_zero_error(void)
+ 187          //{
+ 188          //  DIS_DEL_DIS(Pic_CUT1,1,359,455,459,51,129);
+ 189          //}
+ 190          //
+ 191          //void cut_probe_error(void)
+ 192          //{
+ 193          //  DIS_DEL_DIS(Pic_CUT1,1,461,455,561,51,129);
+ 194          //}
+ 195          //
+ 196          //void cut_probe_id_error(void)
+ 197          //{
+ 198          //  DIS_DEL_DIS(Pic_CUT1,1,563,455,663,51,129);
+ 199          //}
+ 200          ////------------------------------------------------//
+ 201          //void cut_xdrf_work_single_auto_flag(void)
+ 202          //{
+ 203          //  if(SINGLE_AUTO_FLAG == 1)//单点
+ 204          //      {
+ 205          //        DIS_DEL_DIS(Pic_XDRF_WORK,228,1264,402,1381,228,1264);
+ 206          //      }
+ 207          //      else//自动
+ 208          //      {
+ 209          //              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,228,1264,402,1381,228,1264);
+ 210          //      }
+ 211          //}
+ 212          //
+ 213          //void cut_xdrf_work_start_stop_flag(void)
+ 214          //{
+ 215          //  if(START_STOP_FLAG == 1)//停止
+ 216          //      {
+ 217          //        DIS_DEL_DIS(Pic_XDRF_WORK,354,1741,1019,1874,354,1741);
+ 218          //      }
+ 219          //      else//开始
+ 220          //      {
+ 221          //              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,354,1741,1019,1874,354,1741);
+ 222          //      }
+ 223          //} 
+ 224          //
+ 225          // 
+ 226          //
+ 227          //
+ 228          //
+ 229          //void cut_xdrf_working_pic(u8 temp)
+ 230          //{
+ 231          //  u8 pic;
+ 232          //      u16 x1,y1,x2,y2,x3,y3;
+ 233          //      if(RX_PROBE_MODE < 4)
+ 234          //      {
+ 235          //              pic = Pic_XDRF_CUT2;
+ 236          //      }
+ 237          //      else
+ 238          //      {
+ 239          //              pic = Pic_XDRF_CUT4;
+ 240          //      }
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 5   
+
+ 241          //      
+ 242          //      switch(RX_PROBE_MODE)
+ 243          //      {
+ 244          //              case 1:x1 =   1;y1 = 1219;x2 =  72;y2 = 1300;break;
+ 245          //              case 2:x1 =  74;y1 = 1219;x2 = 145;y2 = 1300;break;
+ 246          //              case 3:x1 = 147;y1 = 1219;x2 = 218;y2 = 1300;break;
+ 247          //              case 4:x1 =   1;y1 = 1219;x2 = 115;y2 = 1286;break;
+ 248          //              case 5:x1 = 117;y1 = 1219;x2 = 231;y2 = 1286;break;
+ 249          //              case 6:x1 = 233;y1 = 1219;x2 = 347;y2 = 1286;break;
+ 250          //      }
+ 251          //      
+ 252          //      switch(temp)
+ 253          //      {
+ 254          //              case 0:
+ 255          //                      DIS_DEL_DIS(pic,1,1,500,608,32,229);
+ 256          //                      if(RX_PROBE_MODE < 4)
+ 257          //                      {
+ 258          //                              x3 = 151;
+ 259          //                              y3 = 387;
+ 260          //                      }
+ 261          //                      else
+ 262          //                      {
+ 263          //                              x3 = 129;
+ 264          //                              y3 = 398;
+ 265          //                      }
+ 266          //                      break;
+ 267          //              case 1:
+ 268          //                      DIS_DEL_DIS(pic,502,1,1001,608,32,229);
+ 269          //                      if(RX_PROBE_MODE < 4)
+ 270          //                      {
+ 271          //                              x3 = 171;
+ 272          //                              y3 = 387;
+ 273          //                      }
+ 274          //                      else
+ 275          //                      {
+ 276          //                              x3 = 149;
+ 277          //                              y3 = 398;
+ 278          //                      }
+ 279          //                      break;
+ 280          //              case 2:
+ 281          //                      DIS_DEL_DIS(pic,1,610,500,1217,32,229);
+ 282          //                      if(RX_PROBE_MODE < 4)
+ 283          //                      {
+ 284          //                              x3 = 190;
+ 285          //                              y3 = 387;
+ 286          //                      }
+ 287          //                      else
+ 288          //                      {
+ 289          //                              x3 = 169;
+ 290          //                              y3 = 398;
+ 291          //                      }
+ 292          //                      break;
+ 293          //              case 3:
+ 294          //                      DIS_DEL_DIS(pic,502,610,1001,1217,32,229);
+ 295          //                      if(RX_PROBE_MODE < 4)
+ 296          //                      {
+ 297          //                              x3 = 210;
+ 298          //                              y3 = 387;
+ 299          //                      }
+ 300          //                      else
+ 301          //                      {
+ 302          //                              x3 = 189;
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 6   
+
+ 303          //                              y3 = 398;
+ 304          //                      }
+ 305          //                      break;
+ 306          //              case 4:
+ 307          //                      DIS_DEL_DIS(pic,1,1219,500,1826,32,229);
+ 308          //                      if(RX_PROBE_MODE < 4)
+ 309          //                      {
+ 310          //                              x3 = 230;
+ 311          //                              y3 = 387;
+ 312          //                      }
+ 313          //                      else
+ 314          //                      {
+ 315          //                              x3 = 209;
+ 316          //                              y3 = 398;
+ 317          //                      }
+ 318          //                      break;
+ 319          //              case 5:
+ 320          //                      DIS_DEL_DIS(pic,502,1219,1001,1826,32,229);
+ 321          //                      if(RX_PROBE_MODE < 4)
+ 322          //                      {
+ 323          //                              x3 = 250;
+ 324          //                              y3 = 387;
+ 325          //                      }
+ 326          //                      else
+ 327          //                      {
+ 328          //                              x3 = 229;
+ 329          //                              y3 = 398;
+ 330          //                      }
+ 331          //                      break;
+ 332          //              case 6:
+ 333          //                      DIS_DEL_DIS(pic+1,1,1,500,608,32,229);
+ 334          //                      if(RX_PROBE_MODE < 4)
+ 335          //                      {
+ 336          //                              x3 = 269;
+ 337          //                              y3 = 387;
+ 338          //                      }
+ 339          //                      else
+ 340          //                      {
+ 341          //                              x3 = 249;
+ 342          //                              y3 = 398;
+ 343          //                      }
+ 344          //                      break;
+ 345          //              case 7:
+ 346          //                      DIS_DEL_DIS(pic+1,502,1,1001,608,32,229);
+ 347          //                      if(RX_PROBE_MODE < 4)
+ 348          //                      {
+ 349          //                              x3 = 289;
+ 350          //                              y3 = 387;
+ 351          //                      }
+ 352          //                      else
+ 353          //                      {
+ 354          //                              x3 = 269;
+ 355          //                              y3 = 398;
+ 356          //                      }
+ 357          //                      break;
+ 358          //              case 8:
+ 359          //                      DIS_DEL_DIS(pic+1,1,610,500,1217,32,229);
+ 360          //                      if(RX_PROBE_MODE < 4)
+ 361          //                      {
+ 362          //                              x3 = 309;
+ 363          //                              y3 = 387;
+ 364          //                      }
+C51 COMPILER V9.00   CUT_X3D_WORK                                                          09/02/2024 14:04:53 PAGE 7   
+
+ 365          //                      else
+ 366          //                      {
+ 367          //                              x3 = 289;
+ 368          //                              y3 = 398;
+ 369          //                      }
+ 370          //                      break;
+ 371          //              case 9:
+ 372          //                      DIS_DEL_DIS(pic+1,502,610,1001,1217,32,229);
+ 373          //                      if(RX_PROBE_MODE < 4)
+ 374          //                      {
+ 375          //                              x3 = 328;
+ 376          //                              y3 = 387;
+ 377          //                      }
+ 378          //                      else
+ 379          //                      {
+ 380          //                              x3 = 309;
+ 381          //                              y3 = 398;
+ 382          //                      }
+ 383          //                      break;
+ 384          //      }
+ 385          //      DIS_DEL_DIS(pic+1,x1,y1,x2,y2,x3,y3);
+ 386          //}
+ 387          // */
+ 388          // 
+ 389          // 
+ 390          // 
+ 391          // 
+ 392          // 
+ 393          // 
+ 394          // 
+ 395          // 
+ 396          // 
+ 397          // 
+ 398          // 
+ 399          // 
+ 400          // 
+ 401          // 
+ 402          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

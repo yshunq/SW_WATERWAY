@@ -1,0 +1,204 @@
+C51 COMPILER V9.00   XS_ADVANCED_SETTINGS                                                  10/11/2024 17:50:12 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_ADVANCED_SETTINGS
+OBJECT MODULE PLACED IN ..\hex\XS_advanced_settings.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_advanced_settings.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(.
+                    -.\user;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_advanced_settings.lst) OBJECT(..\hex\XS_
+                    -advanced_settings.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const unsigned char MAIN_KEY_ADIN1 = 14;
+   4          const unsigned int      MAIN_ADIN1[]=
+   5          {
+   6                  438,516,344,425,
+   7                  518,596,344,425,
+   8                  598,675,344,425,
+   9                  677,754,344,425,
+  10                  756,842,344,425, 
+  11                  438,516,434,510,
+  12                  518,596,434,510,
+  13                  598,675,434,510,
+  14                  677,754,434,510,
+  15                  756,842,434,510,
+  16          
+  17                  500,779,254,328, //11 清零
+  18                  518,620,519,586, //12 返回
+  19                    0,  1,  0,  1, //13 删除
+  20                  657,764,519,586, //14 确认
+  21          };
+  22          
+  23          void dis_adv_password(u8 wei);
+  24          u8 comparison_password(u8 wei,u8 *buf);
+  25          
+  26          void main_xs_advanced_settings(void)
+  27          {
+  28   1              u8 key,wei,adv_psw[6];
+  29   1              DIS_PICNUM(Pic_ADVANCED_SETTINGS);
+  30   1              adv_psw[0] = 0;
+  31   1              adv_psw[1] = 0;
+  32   1              adv_psw[2] = 0;
+  33   1              adv_psw[3] = 0;
+  34   1              adv_psw[4] = 0;
+  35   1              adv_psw[5] = 0;
+  36   1              wei = 0;
+  37   1              
+  38   1              DIS_FONT_C(0x00,0x00,4,0x01,10,783,"V1.0");
+  39   1              
+  40   1              do{
+  41   2                      if(Uart_LCD.KEY_YES!=0x00){
+  42   3                              ADS7843_KEY();
+  43   3                              key=KEY_FANHUI(MAIN_KEY_ADIN1,MAIN_ADIN1); 
+  44   3                              switch(key){
+  45   4                                      case  1:if(wei < 6){XIANG1();adv_psw[wei] = 1;wei++;dis_adv_password(wei);}break;
+  46   4                              case  2:if(wei < 6){XIANG1();adv_psw[wei] = 2;wei++;dis_adv_password(wei);}break;
+  47   4                              case  3:if(wei < 6){XIANG1();adv_psw[wei] = 3;wei++;dis_adv_password(wei);}break;
+  48   4                                      case  4:if(wei < 6){XIANG1();adv_psw[wei] = 4;wei++;dis_adv_password(wei);}break;
+  49   4                                      case  5:if(wei < 6){XIANG1();adv_psw[wei] = 5;wei++;dis_adv_password(wei);}break;
+  50   4                                      case  6:if(wei < 6){XIANG1();adv_psw[wei] = 6;wei++;dis_adv_password(wei);}break;
+  51   4                                      case  7:if(wei < 6){XIANG1();adv_psw[wei] = 7;wei++;dis_adv_password(wei);}break;
+  52   4                                      case  8:if(wei < 6){XIANG1();adv_psw[wei] = 8;wei++;dis_adv_password(wei);}break;
+  53   4                                      case  9:if(wei < 6){XIANG1();adv_psw[wei] = 9;wei++;dis_adv_password(wei);}break;
+C51 COMPILER V9.00   XS_ADVANCED_SETTINGS                                                  10/11/2024 17:50:12 PAGE 2   
+
+  54   4                                      case 10:if(wei < 6){XIANG1();adv_psw[wei] = 0;wei++;dis_adv_password(wei);}break;
+  55   4                                      case 11:
+  56   4                                              XIANG1();
+  57   4                                              adv_psw[0] = 0;
+  58   4                                              adv_psw[1] = 0;
+  59   4                                              adv_psw[2] = 0;
+  60   4                                              adv_psw[3] = 0;
+  61   4                                              adv_psw[4] = 0;
+  62   4                                              adv_psw[5] = 0;
+  63   4                                              wei = 0;
+  64   4                                              dis_adv_password(wei);
+  65   4                                              break;
+  66   4                                      case 12:
+  67   4                                              XIANG1();
+  68   4                                              INTERFACE = LAST_INTERFACE;
+  69   4                                              goto over_main_xs_advanced_settings;
+  70   4                                      case 13:
+  71   4                                              XIANG1();
+  72   4                                              adv_psw[wei] = 0;
+  73   4                                              if(wei > 0)wei--;
+  74   4                                              dis_adv_password(wei);
+  75   4                                              break;
+  76   4                                      case 14:
+  77   4                                              XIANG1();
+  78   4                                              comparison_password(wei,adv_psw);
+  79   4                                              goto over_main_xs_advanced_settings;
+  80   4                              }
+  81   3                              Uart_LCD.KEY_YES = 0;
+  82   3                      }
+  83   2              }while(1);
+  84   1              over_main_xs_advanced_settings:
+  85   1              LAST_INTERFACE = PAGE_ADVANCED_SETTINGS;
+  86   1      }
+  87          
+  88          void dis_adv_password(u8 wei)
+  89          {
+  90   1              u16 x,y;
+  91   1              u8 add,i;
+  92   1              x = 660;
+  93   1              y = 273;
+  94   1              add = 20;
+  95   1              DIS_DEL_DIS(Pic_ADVANCED_SETTINGS,500,254,779,328,500,254);
+  96   1              
+  97   1              if(wei > 0 && wei <= 6){
+  98   2                      for(i=0;i<wei;i++){
+  99   3                              DIS_FONT_C(0xff,0xff,1,0x04,x,y,"*");
+ 100   3                              x -= add;
+ 101   3                      }
+ 102   2              }
+ 103   1      }
+ 104          
+ 105          
+ 106          u8 comparison_password(u8 wei,u8 *buf)
+ 107          {
+ 108   1              if(wei == 6){
+ 109   2                      if(buf[0] == 1 && buf[1] == 7 && buf[2] == 1 && buf[3] == 2 && buf[4] == 1 && buf[5] == 2){
+ 110   3                              if(SW.RECORD_FLAG == 1)SW.RECORD_FLAG = 0;else{SW.RECORD_FLAG = 1;}//进入后记录参数
+ 111   3                              INTERFACE = PAGE_WAITING;
+ 112   3                              return 0; 
+ 113   3                      }
+ 114   2                      if(buf[0] == 1 && buf[1] == 5 && buf[2] == 0 && buf[3] == 8 && buf[4] == 2 && buf[5] == 4){
+ 115   3                              INTERFACE = PAGE_SETTING_POWER;
+C51 COMPILER V9.00   XS_ADVANCED_SETTINGS                                                  10/11/2024 17:50:12 PAGE 3   
+
+ 116   3                              return 0; 
+ 117   3                      }
+ 118   2                      if(buf[0] == 1 && buf[1] == 2 && buf[2] == 3 && buf[3] == 3 && buf[4] == 2 && buf[5] == 1){
+ 119   3                              if(XIAN_FLAG == 1)XIAN_FLAG = 0;else{XIAN_FLAG = 1;}
+ 120   3                              INTERFACE = PAGE_WAITING;
+ 121   3                              return 0; 
+ 122   3                      }
+ 123   2                      if(buf[0] == 1 && buf[1] == 5 && buf[2] == 0 && buf[3] == 2 && buf[4] == 2 && buf[5] == 4){
+ 124   3                              INTERFACE = PAGE_BASIC_SETTINGS;
+ 125   3                              return 0; 
+ 126   3                      }
+ 127   2      
+ 128   2                      
+ 129   2      
+ 130   2      
+ 131   2                      buf[0] = 0;
+ 132   2                      buf[1] = 0;
+ 133   2                      buf[2] = 0;
+ 134   2                      buf[3] = 0;
+ 135   2                      buf[4] = 0;
+ 136   2                      buf[5] = 0;
+ 137   2                      wei = 0;
+ 138   2                      dis_adv_password(wei);
+ 139   2              }else{
+ 140   2                      buf[0] = 0;
+ 141   2                      buf[1] = 0;
+ 142   2                      buf[2] = 0;
+ 143   2                      buf[3] = 0;
+ 144   2                      buf[4] = 0;
+ 145   2                      buf[5] = 0;
+ 146   2                      wei = 0;
+ 147   2                      dis_adv_password(wei);
+ 148   2              }
+ 149   1              return 1; 
+ 150   1      }
+ 151          
+ 152          
+ 153          
+ 154          
+ 155          
+ 156          
+ 157          
+ 158           
+ 159           
+ 160           
+ 161           
+ 162           
+ 163           
+ 164           
+ 165           
+ 166           
+ 167           
+ 168           
+ 169           
+ 170           
+ 171           
+ 172           
+ 173          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    964    ----
+C51 COMPILER V9.00   XS_ADVANCED_SETTINGS                                                  10/11/2024 17:50:12 PAGE 4   
+
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =    113      18
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

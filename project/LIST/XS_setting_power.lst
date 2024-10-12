@@ -1,0 +1,229 @@
+C51 COMPILER V9.00   XS_SETTING_POWER                                                      10/11/2024 17:50:13 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_SETTING_POWER
+OBJECT MODULE PLACED IN ..\hex\XS_setting_power.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_setting_power.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\us
+                    -er;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_setting_power.lst) OBJECT(..\hex\XS_setting_
+                    -power.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          
+   3          const u8  MAIN_KEY_SETTING_POWER = 33;
+   4          const u16 MAIN_SETTING_POWER[]=
+   5          {
+   6                  95,175,180,250,                 //50-
+   7                  365,435,185,250,                //50+
+   8                  95,175,265,335,                 //60-
+   9                  365,435,265,335,           //60+
+  10                  95,175,355,420,                 //70-
+  11                  365,435,355,420,           //70+
+  12                  95,175,435,505,    //80-
+  13                  365,435,435,505,           //80+
+  14                  95,175,520,585,    //90-
+  15                  365,435,520,585,           //90+
+  16          
+  17                  470,575,180,250,           //100-
+  18                  740,810,185,250,           //100+
+  19                  470,575,265,335,           //130-
+  20                  740,810,265,335,           //130+
+  21                  470,575,355,420,           //150-
+  22                  740,810,355,420,           //150+
+  23                  470,575,435,505,           //180-
+  24                  740,810,435,505,           //180+
+  25                  470,575,520,585,           //200-
+  26                  740,810,520,585,           //200+
+  27          
+  28                  845,915,180,250,           //5-
+  29                  1110,1180,185,250,         //5+
+  30                  845,915,265,335,           //10-
+  31                  1110,1180,265,335,         //10+
+  32                  845,915,355,420,           //15-
+  33                  1110,1180,355,420,         //15+
+  34                  845,915,435,505,           //20-
+  35                  1110,1180,435,505,         //20+
+  36                  845,915,520,585,           //25-
+  37                  1110,1180,520,585,         //25+
+  38                  845,915,605,665,                //30-
+  39                  1110,1180,605,665,              //30+
+  40                  
+  41                  30,140,15,80,      //·µ»Ø       
+  42          };
+  43          
+  44          void dis_setting_power_body_value(u8 num,u8 dis);
+  45          void dis_setting_power_ed_value(u8 num,u8 dis);
+  46          
+  47          void main_xs_setting_power(void)
+  48          {
+  49   1              u8 key,i,num;
+  50   1              DIS_PICNUM(Pic_SETTING_POWER);
+  51   1              for(i=0;i<10;i++)dis_setting_power_body_value(i,DIS_ALL);
+  52   1              for(i=0;i<6;i++)dis_setting_power_ed_value(i,DIS_ALL);
+  53   1              do{
+C51 COMPILER V9.00   XS_SETTING_POWER                                                      10/11/2024 17:50:13 PAGE 2   
+
+  54   2                      if(Uart_LCD.KEY_YES!=0x00){
+  55   3                              ADS7843_KEY(); //É¨Ãè°´¼ü
+  56   3                              key=KEY_FANHUI(MAIN_KEY_SETTING_POWER,MAIN_SETTING_POWER); 
+  57   3                              if(key > 0 && key <= 20){
+  58   4                                      num = (key-1)/2;
+  59   4                                      if(key%2 == 1){//--
+  60   5                                              if(num == 0){
+  61   6                                                      if(SW.POWER_SET_BODY_VALUE[num] > 1){
+  62   7                                                              XIANG1();
+  63   7                                                              SW.POWER_SET_BODY_VALUE[num]--;
+  64   7                                                              dis_setting_power_body_value(num,DIS_PART);
+  65   7                                                              write_power_set_body_value(num);        
+  66   7                                                              delay_ms(120);
+  67   7                                                      }
+  68   6                                              }else{
+  69   6                                                      if(SW.POWER_SET_BODY_VALUE[num] > SW.POWER_SET_BODY_VALUE[num-1]){
+  70   7                                                              XIANG1();
+  71   7                                                              SW.POWER_SET_BODY_VALUE[num]--;
+  72   7                                                              dis_setting_power_body_value(num,DIS_PART);
+  73   7                                                              write_power_set_body_value(num);
+  74   7                                                              delay_ms(120);
+  75   7                                                      }
+  76   6                                              }
+  77   5                                      }else{//++
+  78   5                                              if(num == 9){
+  79   6                                                      if(SW.POWER_SET_BODY_VALUE[num] < 25){
+  80   7                                                              XIANG1();
+  81   7                                                              SW.POWER_SET_BODY_VALUE[num]++;
+  82   7                                                              dis_setting_power_body_value(num,DIS_PART);
+  83   7                                                              write_power_set_body_value(num);
+  84   7                                                              delay_ms(120);
+  85   7                                                      }
+  86   6                                              }else{
+  87   6                                                      if(SW.POWER_SET_BODY_VALUE[num] < SW.POWER_SET_BODY_VALUE[num+1]){
+  88   7                                                              XIANG1();
+  89   7                                                              SW.POWER_SET_BODY_VALUE[num]++;
+  90   7                                                              dis_setting_power_body_value(num,DIS_PART);
+  91   7                                                              write_power_set_body_value(num);
+  92   7                                                              delay_ms(120);
+  93   7                                                      }
+  94   6                                              }
+  95   5                                      }
+  96   4                                      //Uart_LCD.KEY_YES = 0x00;
+  97   4                              }else if(key > 20 && key <= 32){
+  98   4                                      num = (key-21)/2;
+  99   4                                      if(key%2 == 1){//--
+ 100   5                                              if(num == 0){
+ 101   6                                                      if(SW.POWER_SET_ED_VALUE[num] > 1){
+ 102   7                                                              XIANG1();
+ 103   7                                                              SW.POWER_SET_ED_VALUE[num]--;
+ 104   7                                                              dis_setting_power_ed_value(num,DIS_PART);
+ 105   7                                                              write_power_set_ed_value(num);  
+ 106   7                                                              delay_ms(120);
+ 107   7                                                      }
+ 108   6                                              }else{
+ 109   6                                                      if(SW.POWER_SET_ED_VALUE[num] > SW.POWER_SET_ED_VALUE[num-1]){
+ 110   7                                                              XIANG1();
+ 111   7                                                              SW.POWER_SET_ED_VALUE[num]--;
+ 112   7                                                              dis_setting_power_ed_value(num,DIS_PART);
+ 113   7                                                              write_power_set_ed_value(num);
+ 114   7                                                              delay_ms(120);
+ 115   7                                                      }
+C51 COMPILER V9.00   XS_SETTING_POWER                                                      10/11/2024 17:50:13 PAGE 3   
+
+ 116   6                                              }               
+ 117   5                                      }else{//++
+ 118   5                                              if(num == 5){
+ 119   6                                                      if(SW.POWER_SET_ED_VALUE[num] < 25){
+ 120   7                                                              XIANG1();
+ 121   7                                                              SW.POWER_SET_ED_VALUE[num]++;
+ 122   7                                                              dis_setting_power_ed_value(num,DIS_PART);
+ 123   7                                                              write_power_set_ed_value(num);
+ 124   7                                                              delay_ms(120);
+ 125   7                                                      }
+ 126   6                                              }else{
+ 127   6                                                      if(SW.POWER_SET_ED_VALUE[num] < SW.POWER_SET_ED_VALUE[num+1]){
+ 128   7                                                              XIANG1();
+ 129   7                                                              SW.POWER_SET_ED_VALUE[num]++;
+ 130   7                                                              dis_setting_power_ed_value(num,DIS_PART);
+ 131   7                                                              write_power_set_ed_value(num);
+ 132   7                                                              delay_ms(120);
+ 133   7                                                      }
+ 134   6                                              }
+ 135   5                                      }
+ 136   4                                      //Uart_LCD.KEY_YES = 0x00;
+ 137   4                              }else if(key == 33){//·µ»Ø
+ 138   4                                      XIANG1();
+ 139   4                                      INTERFACE = PAGE_WAITING;
+ 140   4                                      goto over_main_xs_setting_power;
+ 141   4                              } 
+ 142   3                      }
+ 143   2              }while(1);
+ 144   1              over_main_xs_setting_power:
+ 145   1              LAST_INTERFACE = PAGE_SETTING_POWER;
+ 146   1      }
+ 147          
+ 148          void dis_setting_power_body_value(u8 num,u8 dis)
+ 149          {
+ 150   1              static u8 buff[10];
+ 151   1              u16 x,y;
+ 152   1              switch(num){
+ 153   2                      case 0:x = 280;y = 202;break;
+ 154   2                      case 1:x = 280;y = 286;break;
+ 155   2                      case 2:x = 280;y = 370;break;
+ 156   2                      case 3:x = 280;y = 454;break;
+ 157   2                      case 4:x = 280;y = 538;break;
+ 158   2                      case 5:x = 658;y = 202;break;
+ 159   2                      case 6:x = 658;y = 286;break;
+ 160   2                      case 7:x = 658;y = 370;break;
+ 161   2                      case 8:x = 658;y = 454;break;
+ 162   2                      case 9:x = 658;y = 538;break;
+ 163   2              }
+ 164   1              DIS_FONT_WEI_VALUE(Pic_SETTING_POWER,1,0x00,0x00,0x03,3,dis,SW.POWER_SET_BODY_VALUE[num],buff[num],x,y);
+ 165   1              buff[num] = SW.POWER_SET_BODY_VALUE[num];
+ 166   1      }
+ 167          
+ 168          void dis_setting_power_ed_value(u8 num,u8 dis)
+ 169          {
+ 170   1              static u8 buff[6];
+ 171   1              u16 x,y;
+ 172   1              switch(num){
+ 173   2                      case 0:x = 1018;y = 202;break;
+ 174   2                      case 1:x = 1018;y = 286;break;
+ 175   2                      case 2:x = 1018;y = 370;break;
+ 176   2                      case 3:x = 1018;y = 454;break;
+ 177   2                      case 4:x = 1018;y = 538;break;
+C51 COMPILER V9.00   XS_SETTING_POWER                                                      10/11/2024 17:50:13 PAGE 4   
+
+ 178   2                      case 5:x = 1018;y = 622;break;
+ 179   2              }
+ 180   1              DIS_FONT_WEI_VALUE(Pic_SETTING_POWER,1,0x00,0x00,0x03,3,dis,SW.POWER_SET_ED_VALUE[num],buff[num],x,y);
+ 181   1              buff[num] = SW.POWER_SET_ED_VALUE[num];
+ 182   1      }
+ 183          
+ 184          
+ 185          
+ 186          
+ 187          
+ 188          
+ 189          
+ 190          
+ 191          
+ 192          
+ 193          
+ 194          
+ 195          
+ 196          
+ 197          
+ 198          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    999    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    281      13
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

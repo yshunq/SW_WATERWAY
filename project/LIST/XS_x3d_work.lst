@@ -1,0 +1,1131 @@
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_X3D_WORK
+OBJECT MODULE PLACED IN ..\hex\XS_x3d_work.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\main\XS_x3d_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\dis
+                    -play) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_x3d_work.lst) OBJECT(..\hex\XS_x3d_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //const u8  MAIN_KEY_X3D_WORK = 19;
+   4          //const u16 MAIN_X3D_WORK[]=
+   5          //{
+   6          //       912,1036,   0, 108, //1 ÉèÖÃ
+   7          //       576, 665, 158, 238, //2 ÌõÊý¼õ¼õ
+   8          //       936,1041, 158, 238, //3 ÌõÊý¼Ó¼Ó
+   9          //       560, 647, 325, 412, //4 ³¤¶È¼Ó¼Ó
+  10          //       560, 647, 584, 673, //5 ³¤¶È¼õ¼õ
+  11          //       951,1041, 325, 412, //6 µãÓÚµã¼ä¾à¼Ó¼Ó
+  12          //       951,1041, 584, 673, //7 µãÓÚµã¼ä¾à¼õ¼õ
+  13          //       576, 665, 760, 841, //8 ÏßÓÚÏß¼ä¾à¼õ¼õ
+  14          //       936,1041, 760, 841, //9 ÏßÓÚÏß¼ä¾à¼Ó¼Ó
+  15          //       803, 938,1078,1153, //10 ÇåÁã
+  16          //        77, 240,1345,1451, //11 µã
+  17          //       840,1021,1345,1451, //12 µ¥´Î/×Ô¶¯
+  18          //        77, 240,1489,1606, //13 Ïß
+  19          //       840,1021,1489,1606, //14 Í³¼Æ
+  20          //       296, 390,1460,1566, //15 ÄÜÁ¿¼õ¼õ
+  21          //       690, 788,1460,1566, //16 ÄÜÁ¿¼Ó¼Ó
+  22          //        77, 279,1749,1875, //17 ·µ»Ø
+  23          //       348, 677,1749,1875, //18 Í£Ö¹
+  24          //       697,1020,1749,1875, //19 ¿ªÊ¼
+  25          //};
+  26          //
+  27          //void main_xs_x3d_work(void)
+  28          //{
+  29          //      static u8 last_down;
+  30          //      u8 key,error_flag,probe_buff,key_flag,i,j,tt_repeat;
+  31          //      u16 remain_buff,set_value,temp;
+  32          //      
+  33          //      RX_HANDLE_PICK_UP_FLAG = 0;
+  34          //      RX_PROBE_ID = 0;
+  35          //      RX_PROBE_MODE = 0;
+  36          //      RX_PROBE_TOTAL = 0;
+  37          //      RX_PROBE_REMAIN = 0;
+  38          //      X3D_SPIN_STEPS = 0;
+  39          //      
+  40          //      error_flag = 0;
+  41          //      choose_handle_uatr(HANDLE_UART_3D);
+  42          //      delay_ms(5);
+  43          //      x3d_work_ask_handle_parameter();
+  44          //      if(wait_handle_answer(1000) == 1)error_flag = 1;//µÈ´ý1Ãë
+  45          //      
+  46          //      START_STOP_FLAG = 1;
+  47          //      ONE_CURRENT_TIMES = 0;
+  48          //      SINGLE_AUTO_FLAG = 1;
+  49          //      
+  50          //      HF_POWER_GEAR = 1;
+  51          //      HIFU_SET_X_NUMBER = 10;
+  52          //      X_SPACING = 12;
+  53          //      Y_VALUE = 25;
+  54          //      Y_SPACING = 12;
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 2   
+
+  55          //      POINT_LINE_FLAG = 1;
+  56          //      
+  57          //      
+  58          //      DIS_PICNUM(Pic_X3D_WORK);
+  59          //      
+  60          //      dis_3dhifu_set_x_number();
+  61          //      dis_3dhifu_y_value();
+  62          //      dis_3dhifu_y_spacing();
+  63          //      dis_3dhifu_x_spacing();
+  64          //      
+  65          //      dis_work_current_times();       //ÏÔÊ¾ÖÎÁÆ´ÎÊý
+  66          //      dis_x3d_work_hf_power_gear();                   //ÏÔÊ¾µµÎ»
+  67          //      cut_x3d_work_point_line_flag();
+  68          //      cut_work_single_auto_flag();
+  69          //      cut_work_start_stop_flag();
+  70          //      
+  71          //      if(error_flag == 1)//³¬Ê±Ã»ÓÐ»Ø¸´  ¾ÍÊÇÃ»ÓÐÊÖ±ú
+  72          //      {
+  73          //              RX_PROBE_TOTAL = 0;
+  74          //              RX_PROBE_REMAIN = 0;
+  75          //              cut_communication_error();
+  76          //      }
+  77          //      else//ÓÐ»Ø¸´  ÓÐÊÖ±ú
+  78          //      {
+  79          //              if(RX_PROBE_MODE > 8)//Ì½Í·´íÎó
+  80          //              {
+  81          //                      cut_probe_error();
+  82          //              }
+  83          //              else
+  84          //              {
+  85          //                      if(RX_PROBE_MODE > 0)count_records_probe_mode(RX_PROBE_MODE);
+  86          //              }
+  87          //      }
+  88          //      dis_work_probe_total();
+  89          //      dis_work_probe_remain();
+  90          //      cut_x3d_work_probe_pic();
+  91          //      cut_x3d_work_probe_mode();
+  92          //      dis_work_picture();
+  93          //      
+  94          //      error_flag = 0;
+  95          //      probe_buff = RX_PROBE_MODE;
+  96          //      
+  97          //      
+  98          //      
+  99          //      
+ 100          //      READY_KED_DOWN_FLAG = 1;//×¼±¸°´¼ü
+ 101          //      START_KED_DOWN_FLAG = 1;//°´¼üËÉ¿ª
+ 102          //      KED_EVER_DOWN_FLAG = 1;
+ 103          //      CURRENT_SITE = 0;
+ 104          //      X3D_STOP_FLAG = 1;
+ 105          //      key_flag = 1;
+ 106          //      close_hf_pwm();
+ 107          //      x3d_work_ready_led_off();
+ 108          //  x3d_work_start_led_off();
+ 109          //      FS2_ON;
+ 110          //      count_max_hifu_set_x_number_gear();
+ 111          //      
+ 112          //      set_x3d_motor_pwm_value();
+ 113          //      
+ 114          //      JDQ1_OFF;
+ 115          //      JDQ2_OFF;
+ 116          //      JDQ3_OFF;
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 3   
+
+ 117          //      
+ 118          //      
+ 119          //      if(XIAN_TRUE_PAR_FLAG == 0)
+ 120          //      {
+ 121          //              DIS_FONT_C(0xff,0xff,10,0x01,0,0,"HF TIME:  ");
+ 122          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_HF_SET_TIME,3,80,0);
+ 123          //              
+ 124          //              DIS_FONT_C(0xff,0xff,10,0x01,0,18,"HF MIN:   ");
+ 125          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_HF_MIN_GEAR_VALUE,4,80,18);
+ 126          //              
+ 127          //              DIS_FONT_C(0xff,0xff,10,0x01,0,36,"HF MAX:   ");
+ 128          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_HF_MAX_GEAR_VALUE,4,80,36);
+ 129          //              
+ 130          //              DIS_FONT_C(0xff,0xff,10,0x01,0,54,"PROBE ID: ");
+ 131          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,RX_PROBE_ID,4,80,54);
+ 132          //              
+ 133          //              DIS_FONT_C(0xff,0xff,10,0x01,0,72,"MAC ID:   ");
+ 134          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,MACHINE_ID,4,80,72);
+ 135          //              
+ 136          //              
+ 137          //              
+ 138          //              DIS_FONT_C(0xff,0xff,10,0x01,150,0,"POINT SP: ");
+ 139          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_MOTOR_POINT_PWM_VALUE,4,230,0);
+ 140          //              
+ 141          //              DIS_FONT_C(0xff,0xff,10,0x01,150,18,"LINE SP:   ");
+ 142          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_MOTOR_LINE_PWM_VALUE,4,230,18);
+ 143          //              
+ 144          //              DIS_FONT_C(0xff,0xff,10,0x01,150,36,"LP PERC:  ");
+ 145          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_POINT_IS_LINE_PERCENT,4,230,36);
+ 146          //              
+ 147          //              DIS_FONT_C(0xff,0xff,10,0x01,150,54,"SPIN_STEP:");
+ 148          //              DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,0,0xff,0xff,0x01,X3D_SPIN_STEPS,4,230,54);
+ 149          //              
+ 150          //      }
+ 151          //      
+ 152          //      
+ 153          //      do{
+ 154          //              delay_ms(1);
+ 155          //              if(KEY_YES!=0x00)
+ 156          //              {
+ 157          //                      ADS7843_KEY(); //É¨Ãè°´¼ü
+ 158          //                      key=KEY_FANHUI(MAIN_KEY_X3D_WORK,MAIN_X3D_WORK); 
+ 159          //                      switch(key)
+ 160          //                      {
+ 161          //                              case 1:  //ÉèÖÃ
+ 162          //                                      /*if(START_STOP_FLAG == 1)
+ 163          //                                      {
+ 164          //                                              XIANG1();
+ 165          //                                              INTERFACE = PAGE_ADVANCED_SETTINGS;
+ 166          //                                              goto over_main_xs_x3d_work;
+ 167          //                                      }else{KEY_YES = 0;}*/
+ 168          //                                      KEY_YES = 0;
+ 169          //                                      break;
+ 170          //                              case 2: //ÌõÊý¼õ¼õ
+ 171          //                                      if(HIFU_SET_X_NUMBER > 1 && X3D_STOP_FLAG == 1)
+ 172          //                                      {
+ 173          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,576,158,665,238,576,158);
+ 174          //                                              last_down = 2;
+ 175          //                                              XIANG1();
+ 176          //                                              HIFU_SET_X_NUMBER--;
+ 177          //                                              dis_3dhifu_set_x_number();
+ 178          //                                              dis_work_picture();
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 4   
+
+ 179          //                                              delay_ms(80);
+ 180          //                                      }else{KEY_YES = 0;}
+ 181          //                                      break;
+ 182          //                              case 3: //ÌõÊý¼Ó¼Ó
+ 183          //                                      if(X3D_STOP_FLAG == 1)
+ 184          //                                      {
+ 185          //                                              if(RX_PROBE_MODE == DS060 || RX_PROBE_MODE == DS160)//6.0  16.0 ×î¶àÖ»ÄÜ10Ìõ
+ 186          //                                              {
+ 187          //                                                      if(HIFU_SET_X_NUMBER < 10 && HIFU_SET_X_NUMBER < MAX_HIFU_SET_X_NUMBER_GEAR)
+ 188          //                                                      {
+ 189          //                                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,936,158,1041,238,936,158);
+ 190          //                                                              last_down = 3;
+ 191          //                                                              XIANG1();
+ 192          //                                                              HIFU_SET_X_NUMBER++;
+ 193          //                                                              dis_3dhifu_set_x_number();
+ 194          //                                                              dis_work_picture();
+ 195          //                                                              delay_ms(80);
+ 196          //                                                      }else{KEY_YES = 0;}
+ 197          //                                              }
+ 198          //                                              else//ÆäËûÌ½Í·  ×î¶àÊÇ12Ìõ
+ 199          //                                              {
+ 200          //                                                      if(HIFU_SET_X_NUMBER < (10*MAX_X_DATA/X_SPACING + 1) && HIFU_SET_X_NUMBER < MAX_HIFU_SET_X_NUMBER
+             -_GEAR)
+ 201          //                                                      {
+ 202          //                                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,936,158,1041,238,936,158);
+ 203          //                                                              last_down = 3;
+ 204          //                                                              XIANG1();
+ 205          //                                                              HIFU_SET_X_NUMBER++;
+ 206          //                                                              dis_3dhifu_set_x_number();
+ 207          //                                                              dis_work_picture();
+ 208          //                                                              delay_ms(80);
+ 209          //                                                      }else{KEY_YES = 0;}
+ 210          //                                              }
+ 211          //                                      }
+ 212          //                                      break;
+ 213          //                              case 4:  //³¤¶È¼Ó¼Ó
+ 214          //                                      if(Y_VALUE < MAX_Y_DATA)
+ 215          //                                      {
+ 216          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,560,325,647,412,560,325);
+ 217          //                                              last_down = 4;
+ 218          //                                              XIANG1();
+ 219          //                                              Y_VALUE++;
+ 220          //                                              dis_3dhifu_y_value();
+ 221          //                                              dis_work_picture();
+ 222          //                                              delay_ms(80);
+ 223          //                                      }else{KEY_YES = 0;}
+ 224          //                                      break;
+ 225          //                              case 5:  //³¤¶È¼õ¼õ
+ 226          //                                      if(Y_VALUE > 5 && X3D_STOP_FLAG == 1)
+ 227          //                                      {
+ 228          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,560,584,647,673,560,584);
+ 229          //                                              last_down = 5;
+ 230          //                                              XIANG1();
+ 231          //                                              Y_VALUE--;
+ 232          //                                              dis_3dhifu_y_value();
+ 233          //                                              dis_work_picture();
+ 234          //                                              delay_ms(80);
+ 235          //                                      }else{KEY_YES = 0;}
+ 236          //                                      break;
+ 237          //                              case 6:  //µãÓëµãÖ®¼äµÄ¼ä¾à
+ 238          //                                      if(Y_SPACING < 20 && X3D_STOP_FLAG == 1)
+ 239          //                                      {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 5   
+
+ 240          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,951,325,1041,412,951,325);
+ 241          //                                              last_down = 6;
+ 242          //                                              XIANG1();
+ 243          //                                              Y_SPACING = Y_SPACING + 2;
+ 244          //                                              dis_3dhifu_y_spacing();
+ 245          //                                              dis_work_picture();
+ 246          //                                              delay_ms(80);
+ 247          //                                      }else{KEY_YES = 0;}
+ 248          //                                      break;
+ 249          //                              case 7:  //µãÓëµãÖ®¼äµÄ¼ä¾à
+ 250          //                                      if(Y_SPACING > MIN_XY_SPACING && X3D_STOP_FLAG == 1)
+ 251          //                                      {
+ 252          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,951,584,1041,673,951,584);
+ 253          //                                              last_down = 7;
+ 254          //                                              XIANG1();
+ 255          //                                              Y_SPACING = Y_SPACING - 2;
+ 256          //                                              dis_3dhifu_y_spacing();
+ 257          //                                              dis_work_picture();
+ 258          //                                              delay_ms(80);
+ 259          //                                      }else{KEY_YES = 0;}
+ 260          //                                      break;
+ 261          //                              case 8:  //ÁÐÓëÁÐÖ®¼äµÄ¼ä¾à
+ 262          //                                      if(X_SPACING > MIN_XY_SPACING && X3D_STOP_FLAG == 1)
+ 263          //                                      {
+ 264          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,576,760,665,841,576,760);
+ 265          //                                              last_down = 8;
+ 266          //                                              XIANG1();
+ 267          //                                              X_SPACING = X_SPACING - 2;
+ 268          //                                              
+ 269          //                                              temp = 10*MAX_X_DATA/X_SPACING + 1;
+ 270          //                                              MAX_HIFU_SET_X_NUMBER_GEAR = temp;
+ 271          //                                              
+ 272          //                                              dis_3dhifu_x_spacing();
+ 273          //                                              dis_work_picture();
+ 274          //                                              delay_ms(80);
+ 275          //                                      }else{KEY_YES = 0;}
+ 276          //                                      break;
+ 277          //                              case 9:  //ÁÐÓëÁÐÖ®¼äµÄ¼ä¾à
+ 278          //                                      if(X_SPACING < 30 && X3D_STOP_FLAG == 1)
+ 279          //                                      {
+ 280          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,936,760,1041,841,936,760);
+ 281          //                                              last_down = 9;
+ 282          //                                              XIANG1();
+ 283          //                                              X_SPACING = X_SPACING + 2;
+ 284          //                                              dis_3dhifu_x_spacing();
+ 285          //                                              
+ 286          //                                              temp = 110/X_SPACING + 1;
+ 287          //                                              if(HIFU_SET_X_NUMBER > temp)
+ 288          //                                              {
+ 289          //                                                      HIFU_SET_X_NUMBER = temp;
+ 290          //                                              }
+ 291          //                                              MAX_HIFU_SET_X_NUMBER_GEAR = temp;
+ 292          //                                              
+ 293          //                                              dis_3dhifu_set_x_number();
+ 294          //                                              dis_work_picture();
+ 295          //                                              delay_ms(80);
+ 296          //                                      }else{KEY_YES = 0;}
+ 297          //                                      break;
+ 298          //                              case 10:        //ÇåÁã
+ 299          //                                      if(ONE_CURRENT_TIMES > 0)
+ 300          //                                      {
+ 301          //                                              ONE_CURRENT_TIMES = 0;
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 6   
+
+ 302          //                                              dis_work_current_times();
+ 303          //                                              XIANG1();
+ 304          //                                      }else{KEY_YES = 0;}
+ 305          //                                      break;
+ 306          //                              case 11: //´òµã
+ 307          //                                      if(POINT_LINE_FLAG == 0 && X3D_STOP_FLAG == 1)
+ 308          //                                      {
+ 309          //                                              XIANG1();
+ 310          //                                              POINT_LINE_FLAG = 1;
+ 311          //                                              cut_x3d_work_point_line_flag();
+ 312          //                                              set_x3d_motor_pwm_value();
+ 313          //                                              
+ 314          //                                              Y_SPACING = 8;//Ä¿µÄÎªÁËÏÔÊ¾Í¼Æ¬
+ 315          //                                              count_hifu_work_change_power_xy();
+ 316          //                                              count_max_hifu_set_x_number_gear();
+ 317          //                                      }
+ 318          //                                      KEY_YES = 0;
+ 319          //                                      break;
+ 320          //                              case 12:        //µ¥µã×Ô¶¯
+ 321          //                                      if(X3D_STOP_FLAG == 1)
+ 322          //                                      {
+ 323          //                                              if(SINGLE_AUTO_FLAG != 1)
+ 324          //                                              {
+ 325          //                                                      SINGLE_AUTO_FLAG = 1;//µ¥µã
+ 326          //                                              }
+ 327          //                                              else
+ 328          //                                              {
+ 329          //                                                      SINGLE_AUTO_FLAG = 0;//×Ô¶¯
+ 330          //                                              }
+ 331          //                                              XIANG1();
+ 332          //                                              cut_work_single_auto_flag();
+ 333          //                                      }
+ 334          //                                      KEY_YES = 0;
+ 335          //                                      break;
+ 336          //                              case 13: //´òÏß
+ 337          //                                      if(POINT_LINE_FLAG == 1 && X3D_STOP_FLAG == 1 && X3D_LINE_FUNCTION_FLAG == 0)
+ 338          //                                      {
+ 339          //                                              XIANG1();
+ 340          //                                              POINT_LINE_FLAG = 0;
+ 341          //                                              cut_x3d_work_point_line_flag();
+ 342          //                                              set_x3d_motor_pwm_value();
+ 343          //                                              HF_POWER_GEAR = 1;
+ 344          //                                              dis_x3d_work_hf_power_gear();
+ 345          //                                              
+ 346          //                                              Y_SPACING = 8;//Ä¿µÄÎªÁËÏÔÊ¾Í¼Æ¬
+ 347          //                                              count_hifu_work_change_power_xy();
+ 348          //                                              count_max_hifu_set_x_number_gear();
+ 349          //                                      }
+ 350          //                                      KEY_YES = 0;
+ 351          //                                      break;
+ 352          //                              case 14:  //Í³¼Æ
+ 353          //                                      if(START_STOP_FLAG == 1)
+ 354          //                                      {
+ 355          //                                              XIANG1();
+ 356          //                                              INTERFACE = PAGE_RECORD_PROBE_TIMES;
+ 357          //                                              goto over_main_xs_x3d_work;
+ 358          //                                      }else{KEY_YES = 0;}
+ 359          //                                      break;
+ 360          //                              case 15:
+ 361          //                                      if(HF_POWER_GEAR > 1 && X3D_STOP_FLAG == 1)
+ 362          //                                      {
+ 363          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,296,1460,390,1566,296,1460);
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 7   
+
+ 364          //                                              last_down = 15;
+ 365          //                                              XIANG1();
+ 366          //                                              HF_POWER_GEAR--;
+ 367          //                                              dis_x3d_work_hf_power_gear();
+ 368          //                                              count_hifu_work_change_power_xy();
+ 369          //                                              count_max_hifu_set_x_number_gear();
+ 370          //                                              delay_ms(50);
+ 371          //                                      }else{KEY_YES = 0;}
+ 372          //                                      break;
+ 373          //                              case 16:
+ 374          //                                      if(HF_POWER_GEAR < 20 && X3D_STOP_FLAG == 1)
+ 375          //                                      {
+ 376          //                                              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,690,1460,788,1566,690,1460);
+ 377          //                                              last_down = 16;
+ 378          //                                              XIANG1();
+ 379          //                                              HF_POWER_GEAR++;
+ 380          //                                              dis_x3d_work_hf_power_gear();
+ 381          //                                              count_hifu_work_change_power_xy();
+ 382          //                                              count_max_hifu_set_x_number_gear();
+ 383          //                                              delay_ms(50);
+ 384          //                                      }else{KEY_YES = 0;}
+ 385          //                                      break;
+ 386          //                              case 17:  //·µ»Ø
+ 387          //                                      if(START_STOP_FLAG == 1)
+ 388          //                                      {
+ 389          //                                              XIANG1();
+ 390          //                                              INTERFACE = PAGE_FUN_CHOOSE;
+ 391          //                                              goto over_main_xs_x3d_work;
+ 392          //                                      }else{KEY_YES = 0;}
+ 393          //                                      break;  
+ 394          //                              case 18:  //Í£Ö¹
+ 395          //                                      if(START_STOP_FLAG == 0)
+ 396          //                                      {
+ 397          //                                              READY_KED_DOWN_FLAG = 0;
+ 398          //                                      }else{KEY_YES = 0;}
+ 399          //                                      break;
+ 400          //                              case 19:  //¿ªÊ¼
+ 401          //                                      if(START_STOP_FLAG == 1 && RX_PROBE_MODE > 0x00 && RX_PROBE_MODE < 0x09)//Ã»ÓÐ°´ÏÂ  ²¢ÇÒÌ½Í·ºÏ¸ñ
+ 402          //                                      {
+ 403          //                                              if(MACHINE_ID == RX_PROBE_ID || MACHINE_ID == 200 || RX_PROBE_ID == 200)
+ 404          //                                              {
+ 405          //                                                      if(RX_PROBE_REMAIN == 0)//Ì½Í·µÈÓÚ0Ê± ±¨¾¯ÌáÊ¾
+ 406          //                                                      {
+ 407          //                                                              XIANG1();
+ 408          //                                                              cut_times_is_zero_error();
+ 409          //                                                      }
+ 410          //                                                      else//×¼±¸Íê³É
+ 411          //                                                      {
+ 412          //                                                              READY_KED_DOWN_FLAG = 0;
+ 413          //                                                      }
+ 414          //                                              }
+ 415          //                                              else
+ 416          //                                              {
+ 417          //                                                      XIANG1();
+ 418          //                                                      cut_probe_id_error();
+ 419          //                                              }
+ 420          //                                      }
+ 421          //                                      else if(RX_PROBE_MODE == 0)//Ã»ÓÐÌ½Í·
+ 422          //                                      {
+ 423          //                                              XIANG1();
+ 424          //                                              cut_x3d_work_probe_pic();
+ 425          //                                              cut_x3d_work_probe_mode();
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 8   
+
+ 426          //                                      }
+ 427          //                                      KEY_YES = 0;
+ 428          //                                      break;
+ 429          //                      }
+ 430          //              }
+ 431          //              else
+ 432          //              {
+ 433          //                      switch(last_down)
+ 434          //                      {
+ 435          //                              case 2:
+ 436          //                                      DIS_DEL_DIS(Pic_X3D_WORK,576,158,665,238,576,158);
+ 437          //                                      last_down = 0;
+ 438          //                                      break;
+ 439          //                              case 3:
+ 440          //                                      DIS_DEL_DIS(Pic_X3D_WORK,936,158,1041,238,936,158);
+ 441          //                                      last_down = 0;
+ 442          //                                      break;
+ 443          //                              case 4:
+ 444          //                                      DIS_DEL_DIS(Pic_X3D_WORK,560,325,647,412,560,325);
+ 445          //                                      last_down = 0;
+ 446          //                                      break;
+ 447          //                              case 5:
+ 448          //                                      DIS_DEL_DIS(Pic_X3D_WORK,560,584,647,673,560,584);
+ 449          //                                      last_down = 0;
+ 450          //                                      break;
+ 451          //                              case 6:
+ 452          //                                      DIS_DEL_DIS(Pic_X3D_WORK,951,325,1041,412,951,325);
+ 453          //                                      last_down = 0;
+ 454          //                                      break;
+ 455          //                              case 7:
+ 456          //                                      DIS_DEL_DIS(Pic_X3D_WORK,951,584,1041,673,951,584);
+ 457          //                                      last_down = 0;
+ 458          //                                      break;
+ 459          //                              case 8:
+ 460          //                                      DIS_DEL_DIS(Pic_X3D_WORK,576,760,665,841,576,760);
+ 461          //                                      last_down = 0;
+ 462          //                                      break;
+ 463          //                              case 9:
+ 464          //                                      DIS_DEL_DIS(Pic_X3D_WORK,936,760,1041,841,936,760);
+ 465          //                                      last_down = 0;
+ 466          //                                      break;
+ 467          //                              case 15:
+ 468          //                                      DIS_DEL_DIS(Pic_X3D_WORK,296,1460,390,1566,296,1460);
+ 469          //                                      last_down = 0;
+ 470          //                                      break;
+ 471          //                              case 16:
+ 472          //                                      DIS_DEL_DIS(Pic_X3D_WORK,690,1460,788,1566,690,1460);
+ 473          //                                      last_down = 0;
+ 474          //                                      break;
+ 475          //                      }
+ 476          //              }
+ 477          //              
+ 478          //              //--------------------¼ì²âÌ½Í·±ä»¯--------------------//
+ 479          //              if(probe_buff != RX_PROBE_MODE)
+ 480          //              {
+ 481          //                      XIANG1();
+ 482          //                      probe_buff = RX_PROBE_MODE;
+ 483          //                      if(probe_buff > 0x08)//Ì½Í·´íÎó
+ 484          //                      {
+ 485          //                              cut_probe_error();
+ 486          //                              RX_PROBE_REMAIN = 0;
+ 487          //                              RX_PROBE_TOTAL = 0;
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 9   
+
+ 488          //                      }
+ 489          //                      else if(probe_buff == 0)//Ã»ÓÐÌ½Í·
+ 490          //                      {
+ 491          //                              RX_PROBE_REMAIN = 0;
+ 492          //                              RX_PROBE_TOTAL = 0;
+ 493          //                              cut_cover_error();
+ 494          //                              
+ 495          //                              if(set_no_probe_motor_self() == 0)//ÓÐ·µ»ØÊý¾Ý
+ 496          //                              {
+ 497          //                                      if(HANDLE_ERROR_FLAG == 0)
+ 498          //                                      {
+ 499          //                                              //ÊÖ±úÕý³£
+ 500          //                                              cut_cover_error();
+ 501          //                                      }
+ 502          //                                      else
+ 503          //                                      {
+ 504          //                                              if(HANDLE_ERROR_FLAG == 1)//Ðý×ªµç»ú¹ÊÕÏ
+ 505          //                                              {
+ 506          //                                                      cut_rotating_motor_error();
+ 507          //                                              }
+ 508          //                                              else if(HANDLE_ERROR_FLAG == 2)//ÍÆ½øµç»ú¹ÊÕÏ
+ 509          //                                              {
+ 510          //                                                      cut_propulsion_motor_error();
+ 511          //                                              }
+ 512          //                                              HANDLE_ERROR_FLAG = 0;
+ 513          //                                      }
+ 514          //                              }
+ 515          //                              else//Ã»Êý¾Ý·µ»Ø  ÏÔÊ¾ÊÖ±úÁ¬½Ó¹ÊÕÏ
+ 516          //                              {
+ 517          //                                      XIANG1();
+ 518          //                                      cut_communication_error();
+ 519          //                              }
+ 520          //                      }
+ 521          //                      else//ÓÐÌ½Í·
+ 522          //                      {
+ 523          //                              cut_cover_error();
+ 524          //                              if(RX_PROBE_MODE == DS060 || RX_PROBE_MODE == DS160)
+ 525          //                              {
+ 526          //                                      if(HIFU_SET_X_NUMBER > 10)
+ 527          //                                      {
+ 528          //                                              HIFU_SET_X_NUMBER = 10;
+ 529          //                                              dis_3dhifu_set_x_number();
+ 530          //                                              dis_work_picture();
+ 531          //                                      }
+ 532          //                              }
+ 533          //                              HF_POWER_GEAR = 1;
+ 534          //                              dis_x3d_work_hf_power_gear();
+ 535          //                              count_hifu_work_change_power_xy();
+ 536          //                              count_max_hifu_set_x_number_gear();
+ 537          //                              
+ 538          //                              count_records_probe_mode(RX_PROBE_MODE);
+ 539          //                      }
+ 540          //                      dis_work_probe_remain();        //ÏÔÊ¾Ê£Óà´ÎÊý
+ 541          //                      dis_work_probe_total(); //ÏÔÊ¾×ÜÊý
+ 542          //                      cut_x3d_work_probe_pic();
+ 543          //                      cut_x3d_work_probe_mode();
+ 544          //                      START_STOP_FLAG = 1;
+ 545          //                      cut_work_start_stop_flag();
+ 546          //                      x3d_work_ready_led_off();
+ 547          //                      
+ 548          //                      if(CURRENT_SITE > 0)
+ 549          //                      {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 10  
+
+ 550          //                              CURRENT_SITE = 0;
+ 551          //                              dis_work_picture();
+ 552          //                      }
+ 553          //                      
+ 554          //                      X3D_STOP_FLAG = 1;
+ 555          //                      key_flag = 1;
+ 556          //                      close_hf_pwm();
+ 557          //                      START_KED_DOWN_FLAG = 1;
+ 558          //                      KED_EVER_DOWN_FLAG = 1;
+ 559          //                      READY_KED_DOWN_FLAG = 1;
+ 560          //              }
+ 561          //              
+ 562          //              if(READY_KED_DOWN_FLAG == 0)//ÓÐ×¼±¸°´¼ü°´ÏÂ
+ 563          //              {
+ 564          //                      if(START_STOP_FLAG == 1 && RX_PROBE_MODE > 0x00 && RX_PROBE_MODE < 0x09)//Ã»ÓÐ°´ÏÂ  ²¢ÇÒÌ½Í·ºÏ¸ñ
+ 565          //                      {
+ 566          //                              if(MACHINE_ID == RX_PROBE_ID || MACHINE_ID == 200 || RX_PROBE_ID == 200)
+ 567          //                              {
+ 568          //                                      if(RX_PROBE_REMAIN == 0)//Ì½Í·µÈÓÚ0Ê± ±¨¾¯ÌáÊ¾
+ 569          //                                      {
+ 570          //                                              XIANG1();
+ 571          //                                              cut_times_is_zero_error();
+ 572          //                                              goto over_goto_that;
+ 573          //                                      }
+ 574          //                                      //else//×¼±¸Íê³É
+ 575          //                                      //{
+ 576          //                                              //READY_KED_DOWN_FLAG = 0;
+ 577          //                                      //}
+ 578          //                              }
+ 579          //                              else
+ 580          //                              {
+ 581          //                                      XIANG1();
+ 582          //                                      cut_probe_id_error();
+ 583          //                                      goto over_goto_that;
+ 584          //                              }
+ 585          //                      }
+ 586          //                      else if(RX_PROBE_MODE == 0)//Ã»ÓÐÌ½Í·
+ 587          //                      {
+ 588          //                              XIANG1();
+ 589          //                              cut_x3d_work_probe_pic();
+ 590          //                              cut_x3d_work_probe_mode();
+ 591          //                              goto over_goto_that;
+ 592          //                      }
+ 593          //                      
+ 594          //                      XIANG1();
+ 595          //                      if(START_STOP_FLAG == 0)
+ 596          //                      {
+ 597          //                              x3d_work_ready_led_off();
+ 598          //                              START_STOP_FLAG = 1;
+ 599          //                              cut_x3d_work_probe_pic();
+ 600          //                      }
+ 601          //                      else
+ 602          //                      {
+ 603          //                              x3d_work_ready_led_on();
+ 604          //                              START_STOP_FLAG = 0;
+ 605          //                      }
+ 606          //                      cut_work_start_stop_flag();
+ 607          //                      
+ 608          //                      if(START_STOP_FLAG == 0)
+ 609          //                      {
+ 610          //                              if(set_have_probe_motor_self() == 0)//×Ô¼ìÓÐ»Ø¸´
+ 611          //                              {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 11  
+
+ 612          //                                      if(HANDLE_ERROR_FLAG == 0)
+ 613          //                                      {
+ 614          //                                              //ÊÖ±úÕý³£
+ 615          //                                              cut_cover_error();
+ 616          //                                              cut_x3d_working_pic();
+ 617          //                                      }
+ 618          //                                      else if(HANDLE_ERROR_FLAG == 1)//Ðý×ªµç»ú¹ÊÕÏ
+ 619          //                                      {
+ 620          //                                              XIANG1();
+ 621          //                                              cut_rotating_motor_error();
+ 622          //                                              START_STOP_FLAG = 1;
+ 623          //                                              cut_work_start_stop_flag();
+ 624          //                                              x3d_work_ready_led_off();
+ 625          //                                      }
+ 626          //                                      else if(HANDLE_ERROR_FLAG == 2)//ÍÆ½øµç»ú¹ÊÕÏ
+ 627          //                                      {
+ 628          //                                              XIANG1();
+ 629          //                                              cut_propulsion_motor_error();
+ 630          //                                              START_STOP_FLAG = 1;
+ 631          //                                              cut_work_start_stop_flag();
+ 632          //                                              x3d_work_ready_led_off();
+ 633          //                                      }
+ 634          //                                      HANDLE_ERROR_FLAG = 0;
+ 635          //                              }
+ 636          //                              else//×Ô¼ìÃ»ÓÐ»Ø¸´
+ 637          //                              {
+ 638          //                                      XIANG1();
+ 639          //                                      cut_communication_error();
+ 640          //                                      START_STOP_FLAG = 1;
+ 641          //                                      cut_work_start_stop_flag();
+ 642          //                                      x3d_work_ready_led_off();
+ 643          //                              }
+ 644          //                      }
+ 645          //                      
+ 646          //                      if(CURRENT_SITE > 0)
+ 647          //                      {
+ 648          //                              CURRENT_SITE = 0;
+ 649          //                              dis_work_picture();
+ 650          //                      }
+ 651          //
+ 652          //                      over_goto_that:
+ 653          //                      _nop_();
+ 654          //
+ 655          //                      X3D_STOP_FLAG = 1;
+ 656          //                      key_flag = 1;
+ 657          //                      close_hf_pwm();
+ 658          //                      START_KED_DOWN_FLAG = 1;
+ 659          //                      KED_EVER_DOWN_FLAG = 1;
+ 660          //                      READY_KED_DOWN_FLAG = 1;
+ 661          //
+ 662          //                      
+ 663          //              }
+ 664          //              
+ 665          //              //--------------------¿ªÊ¼¹¤×÷--------------------//
+ 666          //              if(START_STOP_FLAG == 0)
+ 667          //              {
+ 668          //                      if(X3D_LONG_PRESS_AUTO_FLAG == 0)//³¤°´Ò»Ö±¹¤×÷
+ 669          //                      {
+ 670          //                              key_flag = START_KED_DOWN_FLAG;
+ 671          //                      }
+ 672          //                      else//°´Ò»ÏÂ¾Í¿ªÊ¼¹¤×÷  °´Ò»ÏÂÍ£Ö¹
+ 673          //                      {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 12  
+
+ 674          //                              if(KED_EVER_DOWN_FLAG == 0)
+ 675          //                              {
+ 676          //                                      if(key_flag == 0)key_flag = 1;
+ 677          //                                      else{key_flag = 0;}
+ 678          //                                      KED_EVER_DOWN_FLAG = 1;
+ 679          //                              }
+ 680          //                      }
+ 681          //                      
+ 682          //                      if(key_flag == 0)
+ 683          //                      {
+ 684          //                              work_start_this:
+ 685          //                              _nop_();
+ 686          //                              //----------¼ì²â·Ç·¨Ì½Í·----------//
+ 687          //                              if(RX_PROBE_MODE == 0 || RX_PROBE_MODE > 0x08)
+ 688          //                              {
+ 689          //                                      error_flag = 1;
+ 690          //                                      cut_probe_error();
+ 691          //                                      goto end_early;
+ 692          //                              }
+ 693          //                              //----------Ì½Í·µÈÓÚ0----------//
+ 694          //                              if(RX_PROBE_REMAIN == 0)
+ 695          //                              {
+ 696          //                                      error_flag = 1;
+ 697          //                                      cut_times_is_zero_error();
+ 698          //                                      goto end_early;
+ 699          //                              }
+ 700          //                              
+ 701          //                              count_hifu_work_set_data();//¼ÆËãx£¬yÆð²½µã£¬x£¬yÃ¿²½µÄ²½Êý
+ 702          //                              set_value = count_3d_hifu_work_set_value();
+ 703          //                              if(POINT_LINE_FLAG == 1)open_hf_pwm(set_value);//´òµãÊ±£¬ÒªÏÈ´ò¿ªµçÔ´
+ 704          //                              else{open_hf_pwm(1500);}
+ 705          //                              
+ 706          //                              if(X3D_STOP_FLAG == 0)goto stop_work_flag;//ÔÝÍ£ºó ÖØÐÂ½øÈëµÄÌø×ª
+ 707          //                              //DIS_FONT_WEI_NUMBER_CM(Pic_X3D_WORK,1,0xff,0xff,0x02,X3D_SPIN_STEPS,4,0,0);
+ 708          //                              //----------Ðý×ªµç»úÍùÖÐ¼ä×ß----------//
+ 709          //                              temp = x3d_work_spin_motor_down(SPIN_DOWN,3000 + HIFU_SET_X_INITIAL_STEPS + X3D_SPIN_STEPS);//0Õý³£ 
+             - 1Á´½Ó¹ÊÕÏ  2Ðý×ªµç»ú¹ÊÕÏ
+ 710          //                              if(temp == 1)
+ 711          //                              {
+ 712          //                                      error_flag = 1;
+ 713          //                                      cut_communication_error();
+ 714          //                                      goto end_early;
+ 715          //                              }
+ 716          //                              else if(temp == 2)
+ 717          //                              {
+ 718          //                                      error_flag = 1;
+ 719          //                                      cut_rotating_motor_error();
+ 720          //                                      goto end_early;
+ 721          //                              }
+ 722          //                              //----------Ðý×ªµç»úÍùÉÏ×ß£¬Ä¿µÄÊÇÏû³ýÐý×ªÎó²î----------//
+ 723          //                              temp = x3d_work_spin_motor_down(SPIN_UP,400);//0Õý³£  1Á´½Ó¹ÊÕÏ  2Ðý×ªµç»ú¹ÊÕÏ
+ 724          //                              if(temp == 1)
+ 725          //                              {
+ 726          //                                      error_flag = 1;
+ 727          //                                      cut_communication_error();
+ 728          //                                      goto end_early;
+ 729          //                              }
+ 730          //                              else if(temp == 2)
+ 731          //                              {
+ 732          //                                      error_flag = 1;
+ 733          //                                      cut_rotating_motor_error();
+ 734          //                                      goto end_early;
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 13  
+
+ 735          //                              }
+ 736          //                              //----------Ðý×ªµç»úÍùÉÏ×ß£¬Ä¿µÄÊÇÏû³ýÐý×ªÎó²î----------//
+ 737          //                              temp = x3d_work_spin_motor_down(SPIN_UP,1300);//0Õý³£  1Á´½Ó¹ÊÕÏ  2Ðý×ªµç»ú¹ÊÕÏ
+ 738          //                              if(temp == 1)
+ 739          //                              {
+ 740          //                                      error_flag = 1;
+ 741          //                                      cut_communication_error();
+ 742          //                                      goto end_early;
+ 743          //                              }
+ 744          //                              else if(temp == 2)
+ 745          //                              {
+ 746          //                                      error_flag = 1;
+ 747          //                                      cut_rotating_motor_error();
+ 748          //                                      goto end_early;
+ 749          //                              }
+ 750          //                              /*//----------Ðý×ªµç»úÍùÉÏ×ß£¬Ä¿µÄÊÇÏû³ýÐý×ªÎó²î----------//
+ 751          //                              temp = x3d_work_spin_motor_down(SPIN_UP,400);//0Õý³£  1Á´½Ó¹ÊÕÏ  2Ðý×ªµç»ú¹ÊÕÏ
+ 752          //                              if(temp == 1)
+ 753          //                              {
+ 754          //                                      error_flag = 1;
+ 755          //                                      cut_communication_error();
+ 756          //                                      goto end_early;
+ 757          //                              }
+ 758          //                              else if(temp == 2)
+ 759          //                              {
+ 760          //                                      error_flag = 1;
+ 761          //                                      cut_rotating_motor_error();
+ 762          //                                      goto end_early;
+ 763          //                              }
+ 764          //                              */
+ 765          //                              START_KED_DOWN_FLAG = 1;//·ÀÖ¹Îó´¥°´¼ü µ¼ÖÂ´òÍêÒ»´ÎÂíÉÏÔÝÍ£
+ 766          //                              KED_EVER_DOWN_FLAG = 1;
+ 767          //                              
+ 768          //                              //----------½øÈëÁÐÑ­»·´ò----------//
+ 769          //                              for(i=0;i<HIFU_SET_X_NUMBER;i++)
+ 770          //                              {
+ 771          //                                      //----------¼ì²â·Ç·¨Ì½Í·----------//
+ 772          //                                      if(RX_PROBE_MODE == 0 || RX_PROBE_MODE > 0x08)
+ 773          //                                      {
+ 774          //                                              error_flag = 1;
+ 775          //                                              cut_probe_error();
+ 776          //                                              goto end_early;
+ 777          //                                      }
+ 778          //                                      //----------Ì½Í·ÊýÁ¿µÈÓÚ0----------//
+ 779          //                                      if(RX_PROBE_REMAIN == 0)
+ 780          //                                      {
+ 781          //                                              error_flag = 1;
+ 782          //                                              cut_times_is_zero_error();
+ 783          //                                              goto end_early;
+ 784          //                                      }
+ 785          //                                      
+ 786          //                                      remain_buff = RX_PROBE_REMAIN;
+ 787          //                                      set_handle_minus(X3D_DEVICE_TYPE,1);//¼õÒ»
+ 788          //                                      if(wait_handle_answer(2000) == 0)       //¿Û·ÑÓÐ·µ»Ø
+ 789          //                                      {
+ 790          //                                              if(MINUS_FLAG == 1)//¿Û·Ñ³É¹¦
+ 791          //                                              {
+ 792          //                                                      remain_buff = remain_buff - 1;
+ 793          //                                                      if(remain_buff != RX_PROBE_REMAIN)//¼õ¼õºóÊý¾Ý²»¶Ô
+ 794          //                                                      {
+ 795          //                                                              error_flag = 1;
+ 796          //                                                              cut_probe_error();
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 14  
+
+ 797          //                                                              goto end_early;
+ 798          //                                                      }
+ 799          //                                                      else//¿Û·ÑÊÇÕýÈ·µÄ£¬¾ÍÆô¶¯Êä³ö
+ 800          //                                                      {
+ 801          //                                                              dis_work_probe_remain();        //ÏÔÊ¾Ê£Óà´ÎÊý
+ 802          //                                                              ONE_CURRENT_TIMES++;
+ 803          //                                                              
+ 804          //                                                              temp = RX_PROBE_MODE - 1;
+ 805          //                                                              if(temp < 8)X3D_PROBE_TIMES[(u8)temp]++;
+ 806          //                                                              
+ 807          //                                                              dis_work_current_times();
+ 808          //                                                      }
+ 809          //                                              }
+ 810          //                                              else//¿Û·ÑÊ§°Ü
+ 811          //                                              {
+ 812          //                                                      error_flag = 1;
+ 813          //                                                      cut_probe_error();
+ 814          //                                                      goto end_early;
+ 815          //                                              }
+ 816          //                                      }
+ 817          //                                      else
+ 818          //                                      {
+ 819          //                                              error_flag = 1;
+ 820          //                                              cut_communication_error();
+ 821          //                                              goto end_early;
+ 822          //                                      }
+ 823          //                                      
+ 824          //                                      
+ 825          //                                      
+ 826          //                                      temp = x3d_work_push_motor_down(CLEAR,PUSH_FORWARD,18);//ÍùÇ°ÍÆÒ»µã£¬Ïû³ý·­×ªÎó²î  0Õý³£  1Á´½Ó¹ÊÕÏ
+             -   2ÍÆ½øµç»ú¹ÊÕÏ
+ 827          //                                      if(temp == 1)
+ 828          //                                      {
+ 829          //                                              error_flag = 1;
+ 830          //                                              cut_communication_error();
+ 831          //                                              goto end_early;
+ 832          //                                      }
+ 833          //                                      else if(temp == 2)
+ 834          //                                      {
+ 835          //                                              error_flag = 1;
+ 836          //                                              cut_propulsion_motor_error();
+ 837          //                                              goto end_early;
+ 838          //                                      }
+ 839          //                                      
+ 840          //                                      x3d_work_start_led_on();
+ 841          //                                      
+ 842          //                                      for(j=0;j<HIFU_SET_Y_NUMBER;j++)
+ 843          //                                      {
+ 844          //                                              cut_x3d_working_point(j);
+ 845          //                                              
+ 846          //                                              dis_3dhifu_work_set_picture();
+ 847          //                                              if(POINT_LINE_FLAG == 1)//´òµã
+ 848          //                                              {
+ 849          //                                                      CURRENT_SITE++;
+ 850          //                                                      if(HIFU_OPT_FLAG == 1)
+ 851          //                                                      {
+ 852          //                                                              UL_SET_ON;
+ 853          //                                                              delay_ms(X3D_HF_SET_TIME);
+ 854          //                                                              UL_SET_OFF;
+ 855          //                                                              
+ 856          //                                                              if(j != HIFU_SET_Y_NUMBER - 1)
+ 857          //                                                              {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 15  
+
+ 858          //                                                                      tt_repeat = 0;
+ 859          //                                                                      
+ 860          //                                                                      continuse_repeat_this:
+ 861          //                                                                      temp = x3d_work_working_push_motor_down(NOCLEAR,PUSH_FORWARD,HIFU_SET_Y_SPACING_STEPS);//ÍùÇ°ÍÆ
+             -Ò»µã£¬Ïû³ý·­×ªÎó²î  0Õý³£  1Á´½Ó¹ÊÕÏ   2ÍÆ½øµç»ú¹ÊÕÏ
+ 862          //                                                                      if(temp > 0)
+ 863          //                                                                      {
+ 864          //                                                                              tt_repeat++;
+ 865          //                                                                              if(tt_repeat < 2)goto continuse_repeat_this;
+ 866          //                                                                      }
+ 867          //                                                                      
+ 868          //                                                                      if(temp == 1)
+ 869          //                                                                      {
+ 870          //                                                                              error_flag = 1;
+ 871          //                                                                              cut_communication_error();
+ 872          //                                                                              goto end_early;
+ 873          //                                                                      }
+ 874          //                                                                      else if(temp == 2)
+ 875          //                                                                      {
+ 876          //                                                                              error_flag = 1;
+ 877          //                                                                              cut_propulsion_motor_error();
+ 878          //                                                                              goto end_early;
+ 879          //                                                                      }
+ 880          //                                                              }
+ 881          //                                                      }
+ 882          //                                              }
+ 883          //                                              else//´òÖ±Ïß
+ 884          //                                              {
+ 885          //                                                      CURRENT_SITE = CURRENT_SITE + HIFU_SET_Y_NUMBER;
+ 886          //                                                      temp = HIFU_SET_Y_NUMBER*HIFU_SET_Y_SPACING_STEPS;
+ 887          //                                                      if(j != HIFU_SET_Y_NUMBER - 1)
+ 888          //                                                      {
+ 889          //                                                              temp = x3d_work_push_motor_working_move(temp,set_value);//ÍùÇ°ÍÆÒ»µã£¬Ïû³ý·­×ªÎó²î  0Õý³£  1Á´½Ó
+             -¹ÊÕÏ   2ÍÆ½øµç»ú¹ÊÕÏ
+ 890          //                                                              if(temp == 1)
+ 891          //                                                              {
+ 892          //                                                                      error_flag = 1;
+ 893          //                                                                      cut_communication_error();
+ 894          //                                                                      goto end_early;
+ 895          //                                                              }
+ 896          //                                                              else if(temp == 2)
+ 897          //                                                              {
+ 898          //                                                                      error_flag = 1;
+ 899          //                                                                      cut_propulsion_motor_error();
+ 900          //                                                                      goto end_early;
+ 901          //                                                              }
+ 902          //                                                      }
+ 903          //                                                      open_hf_pwm(1500);
+ 904          //                                                      goto over_line_this;
+ 905          //                                              }
+ 906          //                                      }
+ 907          //                                      
+ 908          //                                      over_line_this:
+ 909          //                                      _nop_();
+ 910          //                                      
+ 911          //                                      cut_x3d_working_pic();
+ 912          //                                      
+ 913          //                                      x3d_work_start_led_off();
+ 914          //                                      
+ 915          //                                      temp = x3d_work_push_motor_backoff_opt();
+ 916          //                                      if(temp == 1)
+ 917          //                                      {
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 16  
+
+ 918          //                                              error_flag = 1;
+ 919          //                                              cut_communication_error();
+ 920          //                                              goto end_early;
+ 921          //                                      }
+ 922          //                                      else if(temp == 2)
+ 923          //                                      {
+ 924          //                                              error_flag = 1;
+ 925          //                                              cut_propulsion_motor_error();
+ 926          //                                              goto end_early;
+ 927          //                                      }
+ 928          //                                      delay_ms(100);
+ 929          //                                      if(i != HIFU_SET_X_NUMBER - 1)
+ 930          //                                      {
+ 931          //                                              //----------Ðý×ªµç»úÍùÉÏ×ß,´òµÚ¶þÁÐ----------//
+ 932          //                                              temp = x3d_work_spin_motor_down(SPIN_UP,HIFU_SET_X_SPACING_STEPS);//0Õý³£  1Á´½Ó¹ÊÕÏ  2Ðý×ªµç»ú¹ÊÕ
+             -Ï
+ 933          //                                              if(temp == 1)
+ 934          //                                              {
+ 935          //                                                      error_flag = 1;
+ 936          //                                                      cut_communication_error();
+ 937          //                                                      goto end_early;
+ 938          //                                              }
+ 939          //                                              else if(temp == 2)
+ 940          //                                              {
+ 941          //                                                      error_flag = 1;
+ 942          //                                                      cut_rotating_motor_error();
+ 943          //                                                      goto end_early;
+ 944          //                                              }
+ 945          //                                              delay_ms(50);
+ 946          //                                      }
+ 947          //                                      //----------¼ì²âÊÇ·ñÒªÔÝÍ£----------//
+ 948          //                                      if(X3D_LONG_PRESS_AUTO_FLAG == 0)//³¤°´Ò»Ö±¹¤×÷
+ 949          //                                      {
+ 950          //                                              key_flag = START_KED_DOWN_FLAG;
+ 951          //                                      }
+ 952          //                                      else//°´Ò»ÏÂ¾Í¿ªÊ¼¹¤×÷  °´Ò»ÏÂÍ£Ö¹
+ 953          //                                      {
+ 954          //                                              if(KED_EVER_DOWN_FLAG == 0)
+ 955          //                                              {
+ 956          //                                                      if(key_flag == 0)key_flag = 1;
+ 957          //                                                      else{key_flag = 0;}
+ 958          //                                                      KED_EVER_DOWN_FLAG = 1;
+ 959          //                                              }
+ 960          //                                      }
+ 961          //                                      if(key_flag == 1 && i != (HIFU_SET_X_NUMBER - 1))//ÔÝÍ£
+ 962          //                                      {
+ 963          //                                              X3D_STOP_FLAG = 0;
+ 964          //                                              goto end_early;
+ 965          //                                      }
+ 966          //                                      stop_work_flag:
+ 967          //                                      _nop_();
+ 968          //                                      X3D_STOP_FLAG = 1;
+ 969          //                              }
+ 970          //                              
+ 971          //                              //--------------------µç»ú¸´Î»--------------------//
+ 972          //                              temp = x3d_work_spin_motor_goto_opt();//Ðý×ªµç»ú×ßµ½¹âñî´¦
+ 973          //                              if(temp == 1)
+ 974          //                              {
+ 975          //                                      error_flag = 1;
+ 976          //                                      cut_communication_error();
+ 977          //                                      goto end_early;
+ 978          //                              }
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 17  
+
+ 979          //                              else if(temp == 2)
+ 980          //                              {
+ 981          //                                      error_flag = 1;
+ 982          //                                      cut_rotating_motor_error();
+ 983          //                                      goto end_early;
+ 984          //                              }
+ 985          //                              
+ 986          //                              temp = x3d_work_spin_motor_leave_opt();//Ðý×ªµç»úÀë¿ª¹âñî
+ 987          //                              if(temp == 1)
+ 988          //                              {
+ 989          //                                      error_flag = 1;
+ 990          //                                      cut_communication_error();
+ 991          //                                      goto end_early;
+ 992          //                              }
+ 993          //                              else if(temp == 2)
+ 994          //                              {
+ 995          //                                      error_flag = 1;
+ 996          //                                      cut_rotating_motor_error();
+ 997          //                                      goto end_early;
+ 998          //                              }
+ 999          //                              CURRENT_SITE = 0;
+1000          //                              dis_work_picture();
+1001          //                              
+1002          //                              //----------¼ì²âÊÇ·ñÒªÔÝÍ£----------//
+1003          //                              if(X3D_LONG_PRESS_AUTO_FLAG == 0)//³¤°´Ò»Ö±¹¤×÷
+1004          //                              {
+1005          //                                      key_flag = START_KED_DOWN_FLAG;
+1006          //                              }
+1007          //                              else//°´Ò»ÏÂ¾Í¿ªÊ¼¹¤×÷  °´Ò»ÏÂÍ£Ö¹
+1008          //                              {
+1009          //                                      if(KED_EVER_DOWN_FLAG == 0)
+1010          //                                      {
+1011          //                                              if(key_flag == 0)key_flag = 1;
+1012          //                                              else{key_flag = 0;}
+1013          //                                              KED_EVER_DOWN_FLAG = 1;
+1014          //                                      }
+1015          //                              }
+1016          //                              
+1017          //                              if(SINGLE_AUTO_FLAG == 1)//µ¥·¢
+1018          //                              {
+1019          //                                      key_flag = 1;
+1020          //                                      goto end_early;
+1021          //                              }
+1022          //                              else//×Ô¶¯Ä£Ê½
+1023          //                              {
+1024          //                                      if(key_flag == 0)goto work_start_this;
+1025          //                              }
+1026          //                              
+1027          //                              end_early:
+1028          //                              _nop_();
+1029          //                              if(error_flag == 1)
+1030          //                              {
+1031          //                                      READY_KED_DOWN_FLAG = 1;//×¼±¸°´¼ü
+1032          //                                      START_KED_DOWN_FLAG = 1;//°´¼üËÉ¿ª
+1033          //                                      KED_EVER_DOWN_FLAG = 1;
+1034          //                                      START_STOP_FLAG = 1;
+1035          //                                      CURRENT_SITE = 0;
+1036          //                                      X3D_STOP_FLAG = 1;
+1037          //                                      key_flag = 1;
+1038          //                                      close_hf_pwm();
+1039          //                                      x3d_work_ready_led_off();
+1040          //          x3d_work_start_led_off();
+C51 COMPILER V9.00   XS_X3D_WORK                                                           09/02/2024 14:01:20 PAGE 18  
+
+1041          //                                      cut_work_start_stop_flag();
+1042          //                                      dis_work_picture();
+1043          //                                      cut_x3d_work_probe_pic();
+1044          //                                      error_flag = 0;
+1045          //                              }
+1046          //                              else
+1047          //                              {
+1048          //                                      READY_KED_DOWN_FLAG = 1;//×¼±¸°´¼ü
+1049          //                                      START_KED_DOWN_FLAG = 1;//°´¼üËÉ¿ª
+1050          //                                      KED_EVER_DOWN_FLAG = 1;
+1051          //                                      key_flag = 1;
+1052          //                                      close_hf_pwm();
+1053          //                              }
+1054          //                              if(RX_PROBE_MODE > 0)write_x3d_probe_times(RX_PROBE_MODE);
+1055          //                      }
+1056          //              }
+1057          //      }while(1);
+1058          //      over_main_xs_x3d_work:
+1059          //      _nop_();
+1060          //      FS2_OFF;
+1061          //      close_hf_pwm();
+1062          //}
+1063          //
+1064          //
+1065          // 
+1066          // 
+1067          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

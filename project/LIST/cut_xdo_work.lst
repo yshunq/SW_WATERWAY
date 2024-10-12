@@ -1,0 +1,252 @@
+C51 COMPILER V9.00   CUT_XDO_WORK                                                          09/02/2024 14:04:54 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE CUT_XDO_WORK
+OBJECT MODULE PLACED IN ..\hex\cut_xdo_work.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\cut\cut_xdo_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\dis
+                    -play) DEBUG OBJECTEXTEND PRINT(.\LIST\cut_xdo_work.lst) OBJECT(..\hex\cut_xdo_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void cut_xdo_work_point_line_flag(void)
+   4          //{
+   5          //  if(POINT_LINE_FLAG == 1)//打点
+   6          //      {
+   7          //        DIS_DEL_DIS(Pic_XDO_WORK,80,1347,236,1595,80,1347);
+   8          //      }
+   9          //      else//直线
+  10          //      {
+  11          //              DIS_DEL_DIS(Pic_XDO_WORK_DOWN,80,1347,236,1595,80,1347);
+  12          //      }
+  13          //}
+  14          //
+  15          //void cut_xdo_work_probe_pic(void)
+  16          //{
+  17          //  switch(RX_PROBE_MODE)
+  18          //      {
+  19          //              case 0x00:
+  20          //                      DIS_DEL_DIS(Pic_XDO_CUT2,502,610,1001,1217,33,229);
+  21          //                      break;
+  22          //              case 0x01:
+  23          //                      DIS_DEL_DIS(Pic_XDO_CUT1,1,1,500,608,33,229);
+  24          //                      break;
+  25          //              case 0x02:
+  26          //                      DIS_DEL_DIS(Pic_XDO_CUT1,502,1,1001,608,33,229);
+  27          //                      break;
+  28          //              case 0x03:
+  29          //                      DIS_DEL_DIS(Pic_XDO_CUT1,1,610,500,1217,33,229);
+  30          //                      break;
+  31          //      }
+  32          //}
+  33          //
+  34          //void cut_xdo_start_pic(void)
+  35          //{
+  36          //      switch(RX_PROBE_MODE)
+  37          //      {
+  38          //              case 0x01:
+  39          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,1,500,608,33,229);
+  40          //                      break;
+  41          //              case 0x02:
+  42          //                      DIS_DEL_DIS(Pic_XDO_CUT2,502,1,1001,608,33,229);
+  43          //                      break;
+  44          //              case 0x03:
+  45          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,610,500,1217,33,229);
+  46          //                      break;
+  47          //      }
+  48          //}
+  49          //
+  50          //void cut_xdo_work_probe_mode(void)
+  51          //{
+  52          //  switch(RX_PROBE_MODE)
+  53          //      {
+  54          //              case 0x00:
+C51 COMPILER V9.00   CUT_XDO_WORK                                                          09/02/2024 14:04:54 PAGE 2   
+
+  55          //                      DIS_DEL_DIS(Pic_XDO_WORK,161,960,398,1007,161,960);
+  56          //                      break;
+  57          //              case 0x01:
+  58          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,1869,237,1918,161,960);
+  59          //                      break;
+  60          //              case 0x02:
+  61          //                      DIS_DEL_DIS(Pic_XDO_CUT2,239,1869,475,1918,161,960);
+  62          //                      break;
+  63          //              case 0x03:
+  64          //                      DIS_DEL_DIS(Pic_XDO_CUT2,477,1869,713,1918,161,960);
+  65          //                      break;
+  66          //      }
+  67          //} 
+  68          //
+  69          //void cut_xdo_working_point_pic(u8 time,u8 val)//显示打点
+  70          //{
+  71          //      u8 temp;
+  72          //      temp = 20*(val + 1)/time;
+  73          //      switch(temp)
+  74          //      {
+  75          //              case 1:
+  76          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,1219,150,1368,203,533);
+  77          //                      break;
+  78          //              case 2:
+  79          //                      DIS_DEL_DIS(Pic_XDO_CUT2,152,1219,301,1368,203,533);
+  80          //                      break;
+  81          //              case 3:
+  82          //                      DIS_DEL_DIS(Pic_XDO_CUT2,303,1219,452,1368,203,533);
+  83          //                      break;
+  84          //              case 4:
+  85          //                      DIS_DEL_DIS(Pic_XDO_CUT2,454,1219,603,1368,203,533);
+  86          //                      break;
+  87          //              case 5:
+  88          //                      DIS_DEL_DIS(Pic_XDO_CUT2,605,1219,754,1368,203,533);
+  89          //                      break;
+  90          //              case 6:
+  91          //                      DIS_DEL_DIS(Pic_XDO_CUT2,756,1219,905,1368,203,533);
+  92          //                      break;
+  93          //              case 7:
+  94          //                      DIS_DEL_DIS(Pic_XDO_CUT2,907,1219,1056,1368,203,533);
+  95          //                      break;
+  96          //              case 8:
+  97          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,1370,150,1519,203,533);
+  98          //                      break;
+  99          //              case 9:
+ 100          //                      DIS_DEL_DIS(Pic_XDO_CUT2,152,1370,301,1519,203,533);
+ 101          //                      break;
+ 102          //              case 10:
+ 103          //                      DIS_DEL_DIS(Pic_XDO_CUT2,303,1370,452,1519,203,533);
+ 104          //                      break;
+ 105          //              case 11:
+ 106          //                      DIS_DEL_DIS(Pic_XDO_CUT2,454,1370,603,1519,203,533);
+ 107          //                      break;
+ 108          //              case 12:
+ 109          //                      DIS_DEL_DIS(Pic_XDO_CUT2,605,1370,754,1519,203,533);
+ 110          //                      break;
+ 111          //              case 13:
+ 112          //                      DIS_DEL_DIS(Pic_XDO_CUT2,756,1370,905,1519,203,533);
+ 113          //                      break;
+ 114          //              case 14:
+ 115          //                      DIS_DEL_DIS(Pic_XDO_CUT2,907,1370,1056,1519,203,533);
+ 116          //                      break;
+C51 COMPILER V9.00   CUT_XDO_WORK                                                          09/02/2024 14:04:54 PAGE 3   
+
+ 117          //              case 15:
+ 118          //                      DIS_DEL_DIS(Pic_XDO_CUT2,1,1521,150,1670,203,533);
+ 119          //                      break;
+ 120          //              case 16:
+ 121          //                      DIS_DEL_DIS(Pic_XDO_CUT2,152,1521,301,1670,203,533);
+ 122          //                      break;
+ 123          //              case 17:
+ 124          //                      DIS_DEL_DIS(Pic_XDO_CUT2,303,1521,452,1670,203,533);
+ 125          //                      break;
+ 126          //              case 18:
+ 127          //                      DIS_DEL_DIS(Pic_XDO_CUT2,454,1521,603,1670,203,533);
+ 128          //                      break;
+ 129          //              case 19:
+ 130          //                      DIS_DEL_DIS(Pic_XDO_CUT2,605,1521,754,1670,203,533);
+ 131          //                      break;
+ 132          //              case 20:
+ 133          //                      DIS_DEL_DIS(Pic_XDO_CUT2,756,1521,905,1670,203,533);
+ 134          //                      break;
+ 135          //      }
+ 136          //}
+ 137          //
+ 138          //void cut_xdo_cover_working_point_pic(void)
+ 139          //{
+ 140          //      DIS_DEL_DIS(Pic_XDO_CUT2,907,1521,1056,1670,203,533);
+ 141          //}
+ 142          //
+ 143          //void cut_xdo_working_line_pic(void)
+ 144          //{
+ 145          //      DIS_DEL_DIS(Pic_XDO_CUT2,1,1672,150,1821,203,533);
+ 146          //}
+ 147          //
+ 148          //
+ 149          //
+ 150          //
+ 151          //
+ 152          //
+ 153          //
+ 154          //
+ 155          //
+ 156          ///*
+ 157          //void cut_rotating_motor_error(void)
+ 158          //{
+ 159          //  DIS_DEL_DIS(Pic_CUT1,457,461,911,561,51,129);
+ 160          //}
+ 161          //
+ 162          //void cut_propulsion_motor_error(void)
+ 163          //{
+ 164          //  DIS_DEL_DIS(Pic_CUT1,457,563,911,663,51,129);
+ 165          //}
+ 166          //
+ 167          //void cut_work_single_auto_flag(void)
+ 168          //{
+ 169          //  if(SINGLE_AUTO_FLAG == 1)//单点
+ 170          //      {
+ 171          //        DIS_DEL_DIS(Pic_X3D_WORK,844,1351,1011,1451,844,1351);
+ 172          //      }
+ 173          //      else//自动
+ 174          //      {
+ 175          //              DIS_DEL_DIS(Pic_X3D_WORK_DOWN,844,1351,1011,1451,844,1351);
+ 176          //      }
+ 177          //}
+ 178          //
+C51 COMPILER V9.00   CUT_XDO_WORK                                                          09/02/2024 14:04:54 PAGE 4   
+
+ 179          //
+ 180          //
+ 181          //void cut_x3d_working_point(u8 temp)
+ 182          //{
+ 183          //      u16 y_number,x,y,k;
+ 184          //      u16 x1,x2,y1,y2;
+ 185          //      if(POINT_LINE_FLAG == 1)//打点
+ 186          //      {
+ 187          //              y_number = Y_VALUE*10/Y_SPACING + 1;//打的点数
+ 188          //              k = (410 - 135)*Y_VALUE/25;//总长的像素
+ 189          //              
+ 190          //              x = ((410 - 135) - k)/2 + 135 + k*temp/y_number;
+ 191          //              
+ 192          //              y = 547;
+ 193          //              DIS_DEL_DIS(Pic_X3D_CUT2,1003,599,1012,608,x,y);
+ 194          //      }
+ 195          //      else//直线
+ 196          //      {
+ 197          //              x = ((419 - 135) - ((419 - 135)*Y_VALUE/25))/2 + 135;
+ 198          //              y = 547;
+ 199          //              x1 = ((786 - 502) - ((786 - 502)*Y_VALUE/25))/2 + 502;
+ 200          //              y1 = 610;
+ 201          //              x2 = 786 - ((786 - 502) - ((786 - 502)*Y_VALUE/25))/2;
+ 202          //              y2 = 618;
+ 203          //              DIS_DEL_DIS(Pic_X3D_CUT2,x1,y1,x2,y2,x,y);
+ 204          //      }
+ 205          //}
+ 206          //
+ 207          //*/
+ 208          //
+ 209          //
+ 210          //
+ 211          //
+ 212          //
+ 213          //
+ 214          //
+ 215          //
+ 216          // 
+ 217          // 
+ 218          // 
+ 219          // 
+ 220          // 
+ 221          // 
+ 222          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

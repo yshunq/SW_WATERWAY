@@ -1,0 +1,187 @@
+C51 COMPILER V9.00   XS_FUN_CHOOSE                                                         09/02/2024 14:01:19 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_FUN_CHOOSE
+OBJECT MODULE PLACED IN ..\hex\XS_fun_choose.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\main\XS_fun_choose.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\d
+                    -isplay) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_fun_choose.lst) OBJECT(..\hex\XS_fun_choose.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void cut_fun_choose_first_function(u8 down);
+   4          //void cut_fun_choose_second_function(u8 down);
+   5          //
+   6          //const u8  MAIN_KEY_FUN_CHOOSE = 4;
+   7          //const u16 MAIN_FUN_CHOOSE[]=
+   8          //{
+   9          //      912,1036,   0, 108, //1 …Ë÷√
+  10          //      162,973,228,967,
+  11          //      162,973,980,1705,
+  12          //};
+  13          //
+  14          //void main_xs_fun_choose(void)
+  15          //{
+  16          //      u8 key;
+  17          //      DIS_PICNUM(Pic_FUN_CHOOSE);
+  18          //      
+  19          //      cut_fun_choose_first_function(0);
+  20          //      cut_fun_choose_second_function(0);
+  21          //      
+  22          //      ADV_SPIN_STEP_FLAG = 1;
+  23          //      do{
+  24          //              delay_ms(1);
+  25          //              if(KEY_YES!=0x00)
+  26          //              {
+  27          //                      ADS7843_KEY(); //…®√Ë∞¥º¸
+  28          //                      key=KEY_FANHUI(MAIN_KEY_FUN_CHOOSE,MAIN_FUN_CHOOSE); 
+  29          //                      switch(key)
+  30          //                      {
+  31          //                              case 1:  //…Ë÷√
+  32          //                                      XIANG1();
+  33          //                                      INTERFACE = PAGE_ADVANCED_SETTINGS;
+  34          //                                      goto over_main_xs_fun_choose;
+  35          //                                      break;
+  36          //                              case 2:
+  37          //                                cut_fun_choose_first_function(1);
+  38          //                                      XIANG1();
+  39          //                                      goto over_main_xs_fun_choose;
+  40          //                                      break;
+  41          //                              case 3:
+  42          //                                      cut_fun_choose_second_function(1);
+  43          //                                XIANG1();
+  44          //                                      goto over_main_xs_fun_choose;
+  45          //                                      break;
+  46          //                      }
+  47          //                      KEY_YES = 0;
+  48          //              }
+  49          //      }while(1);
+  50          //      over_main_xs_fun_choose:
+  51          //      _nop_();
+  52          //}
+  53          //
+  54          //void cut_fun_choose_first_function(u8 down)
+C51 COMPILER V9.00   XS_FUN_CHOOSE                                                         09/02/2024 14:01:19 PAGE 2   
+
+  55          //{
+  56          //      switch(FIRST_FUNCTION)
+  57          //      {
+  58          //        case 0://NULL
+  59          //          DIS_DEL_DIS(Pic_FUN_CHOOSE,162,228,973,967,162,228);
+  60          //                break;
+  61          //              case 1://XDO
+  62          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION2,162,980,973,1705,162,228);
+  63          //                      else
+  64          //                      {
+  65          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION2_DOWN,162,980,973,1705,162,228);
+  66          //                              INTERFACE = PAGE_XDO_WORK;
+  67          //                              FUN_FLAG = XDO_DEVICE_TYPE;
+  68          //                      }
+  69          //                break;
+  70          //              case 2://XDRF
+  71          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION1,162,980,973,1705,162,228);
+  72          //                      else
+  73          //                      {
+  74          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION1_DOWN,162,980,973,1705,162,228);
+  75          //                              INTERFACE = PAGE_XDRF_WORK;
+  76          //                              FUN_FLAG = XDRF_DEVICE_TYPE;
+  77          //                      }
+  78          //                break;
+  79          //              case 3://X3D
+  80          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION1,162,228,973,967,162,228);
+  81          //                      else
+  82          //                      {
+  83          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION1_DOWN,162,228,973,967,162,228);
+  84          //                              INTERFACE = PAGE_X3D_WORK;
+  85          //                              FUN_FLAG = X3D_DEVICE_TYPE;
+  86          //                      }
+  87          //                break;
+  88          //              case 4://X7D
+  89          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION2,162,228,973,967,162,228);
+  90          //                      else
+  91          //                      {
+  92          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION2_DOWN,162,228,973,967,162,228);
+  93          //                              //INTERFACE = PAGE_X7D_WORK;
+  94          //                              //FUN_FLAG = X7D_DEVICE_TYPE;
+  95          //                      }
+  96          //                break;
+  97          //      }
+  98          //}
+  99          //
+ 100          //void cut_fun_choose_second_function(u8 down)
+ 101          //{
+ 102          //      switch(SECOND_FUNCTION)
+ 103          //      {
+ 104          //        case 0://NULL
+ 105          //          DIS_DEL_DIS(Pic_FUN_CHOOSE,162,980,973,1705,162,980);
+ 106          //                break;
+ 107          //              case 1://XDO
+ 108          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION2,162,980,973,1705,162,980);
+ 109          //                      else
+ 110          //                      {
+ 111          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION2_DOWN,162,980,973,1705,162,980);
+ 112          //                              INTERFACE = PAGE_XDO_WORK;
+ 113          //                              FUN_FLAG = XDO_DEVICE_TYPE;
+ 114          //                      }
+ 115          //                break;
+ 116          //              case 2://XDRF
+C51 COMPILER V9.00   XS_FUN_CHOOSE                                                         09/02/2024 14:01:19 PAGE 3   
+
+ 117          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION1,162,980,973,1705,162,980);
+ 118          //                      else
+ 119          //                      {
+ 120          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION1_DOWN,162,980,973,1705,162,980);
+ 121          //                              INTERFACE = PAGE_XDRF_WORK;
+ 122          //                              FUN_FLAG = XDRF_DEVICE_TYPE;
+ 123          //                      }
+ 124          //                break;
+ 125          //              case 3://X3D
+ 126          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION1,162,228,973,967,162,980);
+ 127          //                      else
+ 128          //                      {
+ 129          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION1_DOWN,162,228,973,967,162,980);
+ 130          //                              INTERFACE = PAGE_X3D_WORK;
+ 131          //                              FUN_FLAG = X3D_DEVICE_TYPE;
+ 132          //                      }
+ 133          //                break;
+ 134          //              case 4://X7D
+ 135          //          if(down == 0)DIS_DEL_DIS(Pic_CUT_FUNCTION2,162,228,973,967,162,980);
+ 136          //                      else
+ 137          //                      {
+ 138          //                              DIS_DEL_DIS(Pic_CUT_FUNCTION2_DOWN,162,228,973,967,162,980);
+ 139          //                              //INTERFACE = PAGE_X7D_WORK;
+ 140          //                              //FUN_FLAG = X7D_DEVICE_TYPE;
+ 141          //                      }
+ 142          //                break;
+ 143          //      }
+ 144          //}
+ 145          //
+ 146          //
+ 147          //
+ 148          //
+ 149          //
+ 150          //
+ 151          //
+ 152          //
+ 153          //
+ 154          //
+ 155          //
+ 156          //
+ 157          //
+ 158          //
+ 159          //
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

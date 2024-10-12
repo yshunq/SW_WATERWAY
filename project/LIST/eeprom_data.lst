@@ -1,0 +1,350 @@
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE EEPROM_DATA
+OBJECT MODULE PLACED IN ..\hex\eeprom_data.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\common\eeprom_data.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;
+                    -..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\eeprom_data.lst) OBJECT(..\hex\eeprom_data.obj)
+
+line level    source
+
+   1          #include "eeprom_data.h"
+   2          
+   3          void read_logo_flag(void)
+   4          {
+   5   1              LOGO_FLAG = AT24CXX_ReadOneByte(AD_LOGO_FLAG);
+   6   1      }
+   7          
+   8          //void write_logo_flag(void)
+   9          //{
+  10          //      AT24CXX_WriteOneByte(AD_LOGO_FLAG,LOGO_FLAG);
+  11          //}
+  12          //----------------------------------------------------------//
+  13          void read_sw_power(u8 parts)
+  14          {
+  15   1              u8 ad;
+  16   1              ad = 5*parts + AD_PARAMETER;
+  17   1              SW.POWER = AT24CXX_ReadOneByte(ad);
+  18   1              if(parts == PARTS_ED){
+  19   2                      if(SW.POWER == 0 || SW.POWER > 6){
+  20   3                              SW.POWER = 1;
+  21   3                              write_sw_power(parts);
+  22   3                      }
+  23   2              }else{
+  24   2                      if(SW.POWER == 0 || SW.POWER > 10){
+  25   3                              SW.POWER = 1;
+  26   3                              write_sw_power(parts);
+  27   3                      }       
+  28   2              }
+  29   1      }
+  30          
+  31          void write_sw_power(u8 parts)
+  32          {
+  33   1              u8 ad;
+  34   1              ad = 5*parts + AD_PARAMETER;
+  35   1              AT24CXX_WriteOneByte(ad,SW.POWER);      
+  36   1      }
+  37          //----------------------------------------------------------//
+  38          void read_sw_frequency(u8 parts)
+  39          {
+  40   1              u8 ad;
+  41   1              ad = 5*parts + AD_PARAMETER + 1;
+  42   1              SW.FREQUENCY = AT24CXX_ReadOneByte(ad);
+  43   1              if(SW.FREQUENCY == 0 || SW.FREQUENCY > 18){
+  44   2                      SW.FREQUENCY = 3;
+  45   2                      write_sw_frequency(parts);
+  46   2              }
+  47   1      }
+  48          
+  49          void write_sw_frequency(u8 parts)
+  50          {
+  51   1              u8 ad;
+  52   1              ad = 5*parts + AD_PARAMETER + 1;
+  53   1              AT24CXX_WriteOneByte(ad,SW.FREQUENCY);  
+  54   1      }
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 2   
+
+  55          //----------------------------------------------------------//
+  56          void read_sw_preload_time(u8 parts)
+  57          {
+  58   1              u8 ad;
+  59   1              ad = 5*parts + AD_PARAMETER + 2;
+  60   1              SW.PRELOAD_TIME = AT24CXX_ReadOneByte(ad);
+  61   1              SW.PRELOAD_TIME <<= 8;
+  62   1              SW.PRELOAD_TIME |= AT24CXX_ReadOneByte(ad+1);
+  63   1              if(SW.PRELOAD_TIME == 0 || SW.PRELOAD_TIME > 10000 || SW.PRELOAD_TIME%100 != 0){
+  64   2                      SW.PRELOAD_TIME = 2500;
+  65   2                      write_sw_preload_time(parts);   
+  66   2              }
+  67   1      }
+  68          
+  69          void write_sw_preload_time(u8 parts)
+  70          {
+  71   1              u8 ad;
+  72   1              ad = 5*parts + AD_PARAMETER + 2;
+  73   1              AT24CXX_WriteOneByte(ad,SW.PRELOAD_TIME/256);
+  74   1              AT24CXX_WriteOneByte(ad+1,SW.PRELOAD_TIME%256); 
+  75   1      }
+  76          //----------------------------------------------------------//
+  77          void read_sw_probe_mode(u8 parts)
+  78          {
+  79   1              u8 ad;
+  80   1              ad = 5*parts + AD_PARAMETER + 4;
+  81   1              SW.PROBE_MODE = AT24CXX_ReadOneByte(ad);
+  82   1              if(SW.PROBE_MODE > 4){
+  83   2                      SW.PROBE_MODE = 1;
+  84   2                      write_sw_probe_mode(parts);
+  85   2              }
+  86   1      }
+  87          
+  88          void write_sw_probe_mode(u8 parts)
+  89          {
+  90   1              u8 ad;
+  91   1              ad = 5*parts + AD_PARAMETER + 4;
+  92   1              AT24CXX_WriteOneByte(ad,SW.PROBE_MODE); 
+  93   1      }
+  94          //----------------------------------------------------------//
+  95          void read_all_parameter(u8 parts)
+  96          {
+  97   1              read_sw_power(parts);
+  98   1              read_sw_frequency(parts);
+  99   1              read_sw_preload_time(parts);
+ 100   1              read_sw_probe_mode(parts);
+ 101   1      }
+ 102          //----------------------------------------------------------//
+ 103          void read_power_set_body_value(u8 num)
+ 104          {
+ 105   1              u8 ad;
+ 106   1              ad = AD_POWER_SET_BODY_VALUE_START + num;
+ 107   1              SW.POWER_SET_BODY_VALUE[num] = AT24CXX_ReadOneByte(ad);
+ 108   1      }
+ 109          
+ 110          void write_power_set_body_value(u8 num)
+ 111          {
+ 112   1              u8 ad;
+ 113   1              ad = AD_POWER_SET_BODY_VALUE_START + num;
+ 114   1              AT24CXX_WriteOneByte(ad,SW.POWER_SET_BODY_VALUE[num]);  
+ 115   1      }
+ 116          //----------------------------------------------------------//
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 3   
+
+ 117          void read_all_set_body_value(void)
+ 118          {
+ 119   1              u8 i,flag;
+ 120   1              flag = 0;
+ 121   1              for(i=0;i<10;i++){
+ 122   2                      read_power_set_body_value(i);
+ 123   2                      if(i==0){
+ 124   3                              if(SW.POWER_SET_BODY_VALUE[i] == 0){
+ 125   4                                      flag = 1;
+ 126   4                                      break;
+ 127   4                              }       
+ 128   3                      }else if(i < 9){
+ 129   3                              if(SW.POWER_SET_BODY_VALUE[i-1] > SW.POWER_SET_BODY_VALUE[i]){
+ 130   4                                      flag = 1;
+ 131   4                                      break;
+ 132   4                              }       
+ 133   3                      }else if(i==9){
+ 134   3                              if(SW.POWER_SET_BODY_VALUE[i] > 25){
+ 135   4                                      flag = 1;
+ 136   4                                      break;
+ 137   4                              }
+ 138   3                      }
+ 139   2              }
+ 140   1              if(flag == 1){
+ 141   2                      SW.POWER_SET_BODY_VALUE[0] = 3;
+ 142   2                      SW.POWER_SET_BODY_VALUE[1] = 4;
+ 143   2                      SW.POWER_SET_BODY_VALUE[2] = 5;
+ 144   2                      SW.POWER_SET_BODY_VALUE[3] = 6;
+ 145   2                      SW.POWER_SET_BODY_VALUE[4] = 7;
+ 146   2                      SW.POWER_SET_BODY_VALUE[5] = 8;
+ 147   2                      SW.POWER_SET_BODY_VALUE[6] = 9;
+ 148   2                      SW.POWER_SET_BODY_VALUE[7] = 10;
+ 149   2                      SW.POWER_SET_BODY_VALUE[8] = 11;
+ 150   2                      SW.POWER_SET_BODY_VALUE[9] = 12;
+ 151   2                      for(i=0;i<10;i++)write_power_set_body_value(i); 
+ 152   2              }
+ 153   1      }
+ 154          //----------------------------------------------------------//
+ 155          void read_power_set_ed_value(u8 num)
+ 156          {
+ 157   1              u8 ad;
+ 158   1              ad = AD_POWER_SET_ED_VALUE_START + num;
+ 159   1              SW.POWER_SET_ED_VALUE[num] = AT24CXX_ReadOneByte(ad);
+ 160   1      }
+ 161          
+ 162          void write_power_set_ed_value(u8 num)
+ 163          {
+ 164   1              u8 ad;
+ 165   1              ad = AD_POWER_SET_ED_VALUE_START + num;
+ 166   1              AT24CXX_WriteOneByte(ad,SW.POWER_SET_ED_VALUE[num]);    
+ 167   1      }
+ 168          //----------------------------------------------------------//
+ 169          void read_all_set_ed_value(void)
+ 170          {
+ 171   1              u8 i,flag;
+ 172   1              flag = 0;
+ 173   1              for(i=0;i<6;i++){
+ 174   2                      read_power_set_ed_value(i);
+ 175   2                      if(i==0){
+ 176   3                              if(SW.POWER_SET_ED_VALUE[i] == 0){
+ 177   4                                      flag = 1;
+ 178   4                                      break;
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 4   
+
+ 179   4                              }       
+ 180   3                      }else if(i < 5){
+ 181   3                              if(SW.POWER_SET_ED_VALUE[i-1] > SW.POWER_SET_ED_VALUE[i]){
+ 182   4                                      flag = 1;
+ 183   4                                      break;
+ 184   4                              }       
+ 185   3                      }else if(i==5){
+ 186   3                              if(SW.POWER_SET_ED_VALUE[i] > 25){
+ 187   4                                      flag = 1;
+ 188   4                                      break;
+ 189   4                              }
+ 190   3                      }
+ 191   2              }
+ 192   1              if(flag == 1){
+ 193   2                      SW.POWER_SET_ED_VALUE[0] = 3;
+ 194   2                      SW.POWER_SET_ED_VALUE[1] = 4;
+ 195   2                      SW.POWER_SET_ED_VALUE[2] = 5;
+ 196   2                      SW.POWER_SET_ED_VALUE[3] = 6;
+ 197   2                      SW.POWER_SET_ED_VALUE[4] = 7;
+ 198   2                      SW.POWER_SET_ED_VALUE[5] = 8;
+ 199   2                      for(i=0;i<6;i++)write_power_set_ed_value(i);    
+ 200   2              }
+ 201   1      }
+ 202          //----------------------------------------------------------//
+ 203          void read_ll_constant(void)
+ 204          {
+ 205   1              LL.CONSTANT = AT24CXX_ReadOneByte(ADH_LL_CONSTANT);
+ 206   1              LL.CONSTANT <<= 8;
+ 207   1              LL.CONSTANT |= AT24CXX_ReadOneByte(ADL_LL_CONSTANT);
+ 208   1              if(LL.CONSTANT == 0 || LL.CONSTANT > 9900){
+ 209   2                      LL.CONSTANT = 1390;
+ 210   2                      write_ll_constant();
+ 211   2              }
+ 212   1      }
+ 213          
+ 214          void write_ll_constant(void)
+ 215          {
+ 216   1              AT24CXX_WriteOneByte(ADH_LL_CONSTANT,LL.CONSTANT/256);
+ 217   1              AT24CXX_WriteOneByte(ADL_LL_CONSTANT,LL.CONSTANT%256);  
+ 218   1      }
+ 219          //----------------------------------------------------------//
+ 220          void read_ll_warning_flag(void)
+ 221          {
+ 222   1              LL.WARNING_FLAG = AT24CXX_ReadOneByte(AD_LL_WARNING_FLAG);
+ 223   1              if(LL.WARNING_FLAG > 1){
+ 224   2                      LL.WARNING_FLAG = 0;
+ 225   2                      write_ll_warning_flag();
+ 226   2              }
+ 227   1      }
+ 228          
+ 229          void write_ll_warning_flag(void)
+ 230          {
+ 231   1              AT24CXX_WriteOneByte(AD_LL_WARNING_FLAG,LL.WARNING_FLAG);       
+ 232   1      }
+ 233          //----------------------------------------------------------//
+ 234          void read_ll_warning_value(void)
+ 235          {
+ 236   1              LL.WARNING_VALUE = AT24CXX_ReadOneByte(ADH_LL_WARNING_VALUE);
+ 237   1              LL.WARNING_VALUE <<= 8;
+ 238   1              LL.WARNING_VALUE |= AT24CXX_ReadOneByte(ADL_LL_WARNING_VALUE);
+ 239   1              if(LL.WARNING_VALUE == 0 || LL.WARNING_VALUE >= 100){
+ 240   2                      LL.WARNING_VALUE = 30;
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 5   
+
+ 241   2                      write_ll_warning_value();
+ 242   2              }
+ 243   1      }
+ 244          
+ 245          void write_ll_warning_value(void)
+ 246          {
+ 247   1              AT24CXX_WriteOneByte(ADH_LL_WARNING_VALUE,LL.WARNING_VALUE/256);
+ 248   1              AT24CXX_WriteOneByte(ADL_LL_WARNING_VALUE,LL.WARNING_VALUE%256);        
+ 249   1      }
+ 250          //----------------------------------------------------------//
+ 251          void read_handle_warning_flag(void)
+ 252          {
+ 253   1              HANDLE_TMEP.WARNING_FLAG = AT24CXX_ReadOneByte(AD_HANDLE_WARNING_FLAG);
+ 254   1              if(HANDLE_TMEP.WARNING_FLAG > 1){
+ 255   2                      HANDLE_TMEP.WARNING_FLAG = 0;
+ 256   2                      write_handle_warning_flag();
+ 257   2              }       
+ 258   1      }
+ 259          void write_handle_warning_flag(void)
+ 260          {
+ 261   1              AT24CXX_WriteOneByte(AD_HANDLE_WARNING_FLAG,HANDLE_TMEP.WARNING_FLAG);
+ 262   1      }
+ 263          //----------------------------------------------------------//
+ 264          void read_handle_warning_value(void)
+ 265          {
+ 266   1              HANDLE_TMEP.WARNING_VALUE = AT24CXX_ReadOneByte(ADH_HANDLE_WARNING_VALUE);
+ 267   1              HANDLE_TMEP.WARNING_VALUE <<= 8;
+ 268   1              HANDLE_TMEP.WARNING_VALUE |= AT24CXX_ReadOneByte(ADL_HANDLE_WARNING_VALUE);
+ 269   1              if(HANDLE_TMEP.WARNING_VALUE == 0 || HANDLE_TMEP.WARNING_VALUE >= 950){
+ 270   2                      HANDLE_TMEP.WARNING_VALUE = 800;
+ 271   2                      write_handle_warning_value();
+ 272   2              }
+ 273   1      }
+ 274          
+ 275          void write_handle_warning_value(void)
+ 276          {
+ 277   1              AT24CXX_WriteOneByte(ADH_HANDLE_WARNING_VALUE,HANDLE_TMEP.WARNING_VALUE/256);
+ 278   1              AT24CXX_WriteOneByte(ADL_HANDLE_WARNING_VALUE,HANDLE_TMEP.WARNING_VALUE%256);   
+ 279   1      }
+ 280          //----------------------------------------------------------//
+ 281          void read_handle_insert_warning_flag(void)
+ 282          {
+ 283   1              HANDLE_INSERT.WARNING_FLAG = AT24CXX_ReadOneByte(AD_HANDLE_INSERT_WARNING_FLAG);
+ 284   1              if(HANDLE_INSERT.WARNING_FLAG > 1){
+ 285   2                      HANDLE_INSERT.WARNING_FLAG = 0;
+ 286   2                      write_handle_insert_warning_flag();
+ 287   2              }       
+ 288   1      }
+ 289          void write_handle_insert_warning_flag(void)
+ 290          {
+ 291   1              AT24CXX_WriteOneByte(AD_HANDLE_INSERT_WARNING_FLAG,HANDLE_INSERT.WARNING_FLAG);
+ 292   1      }
+ 293          //----------------------------------------------------------//
+ 294          void read_eeprom_total_time(void)
+ 295          {
+ 296   1              SW.EEPROM_TOTAL_TIME = AT24CXX_ReadOneByte(ADH_EEPROM_TOTAL_TIME);
+ 297   1          SW.EEPROM_TOTAL_TIME <<= 8;
+ 298   1              SW.EEPROM_TOTAL_TIME |= AT24CXX_ReadOneByte(ADM_EEPROM_TOTAL_TIME);
+ 299   1              SW.EEPROM_TOTAL_TIME <<= 8;
+ 300   1              SW.EEPROM_TOTAL_TIME |= AT24CXX_ReadOneByte(ADL_EEPROM_TOTAL_TIME);
+ 301   1      
+ 302   1              if(SW.EEPROM_TOTAL_TIME > 2000000){
+C51 COMPILER V9.00   EEPROM_DATA                                                           10/11/2024 17:50:15 PAGE 6   
+
+ 303   2                      SW.EEPROM_TOTAL_TIME = 2000000;
+ 304   2                      write_eeprom_total_time();
+ 305   2              }       
+ 306   1      }
+ 307          void write_eeprom_total_time(void)
+ 308          {
+ 309   1              AT24CXX_WriteOneByte(ADH_EEPROM_TOTAL_TIME,SW.EEPROM_TOTAL_TIME/65536);
+ 310   1              AT24CXX_WriteOneByte(ADM_EEPROM_TOTAL_TIME,SW.EEPROM_TOTAL_TIME%65536/256);
+ 311   1              AT24CXX_WriteOneByte(ADL_EEPROM_TOTAL_TIME,SW.EEPROM_TOTAL_TIME%256);
+ 312   1      }
+ 313          //----------------------------------------------------------//
+ 314          
+ 315           
+ 316          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1457    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      13
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

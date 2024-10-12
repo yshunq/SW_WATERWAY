@@ -1,0 +1,235 @@
+C51 COMPILER V9.00   DIS_XDRF_WORK                                                         09/28/2024 10:57:45 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DIS_XDRF_WORK
+OBJECT MODULE PLACED IN ..\hex\dis_xdrf_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\display\dis_xdrf_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\us
+                    -er;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\dis_xdrf_work.lst) OBJECT(..\hex\dis_xdrf_work.
+                    -obj)
+
+line level    source
+
+   1          //#include "dis_xdrf_work.h"
+   2          //
+   3          //void dis_xdrf_work_rf_on_time(u8 flag)
+   4          //{
+   5          //      static u16 temp;
+   6          //      u16 x,y,buff;
+   7          //      x = 574;y = 288;
+   8          //      buff = RF_ON_TIMES;
+   9          //      if(flag == 0 || buff/100 != temp/100)dis_one_37x37_white(buff/100,x,y);
+  10          //      if(flag == 0 || buff%100/10 != temp%100/10)dis_one_37x37_white(buff%100/10,x+44,y);
+  11          //      if(flag == 0 || buff%10 != temp%10)dis_one_37x37_white(buff%10,x+87,y);
+  12          //      temp = buff;
+  13          //}
+  14          //
+  15          //void dis_xdrf_work_rf_off_time(u8 flag)
+  16          //{
+  17          //      static u16 temp;
+  18          //      u16 x,y,buff;
+  19          //      x = 574;y = 383;
+  20          //      buff = RF_OFF_TIMES;
+  21          //      if(flag == 0 || buff/100 != temp/100)dis_one_37x37_white(buff/100,x,y);
+  22          //      if(flag == 0 || buff%100/10 != temp%100/10)dis_one_37x37_white(buff%100/10,x+44,y);
+  23          //      if(flag == 0 || buff%10 != temp%10)dis_one_37x37_white(buff%10,x+87,y);
+  24          //      temp = buff;
+  25          //}
+  26          //
+  27          //void dis_xdrf_work_hf_fre(u8 flag)
+  28          //{
+  29          //      static u16 temp;
+  30          //      u16 x,y,buff;
+  31          //      x = 298;y = 288;
+  32          //      buff = HF_FRE;
+  33          //      if(flag == 0 || buff/100 != temp/100)dis_one_37x37_white(buff/100,x,y);
+  34          //      if(flag == 0 || buff%100/10 != temp%100/10)dis_one_37x37_white(buff%100/10,x+44,y);
+  35          //      if(flag == 0 || buff%10 != temp%10)dis_one_37x37_white(buff%10,x+87,y);
+  36          //      temp = buff;
+  37          //}
+  38          //
+  39          //void dis_work_current_times(u8 flag)
+  40          //{
+  41          //      static u32 temp,buff;
+  42          //      u16 x,y;
+  43          //      x = 85;y = 398;
+  44          //      buff = ONE_CURRENT_TIMES;
+  45          //      if(flag == 0 || buff/10000 != temp/10000)dis_one_14x17_white(buff/10000,x,y);
+  46          //      if(flag == 0 || buff%10000/1000 != temp%10000/1000)dis_one_14x17_white(buff%10000/1000,x+15,y);
+  47          //      if(flag == 0 || buff%1000/100 != temp%1000/100)dis_one_14x17_white(buff%1000/100,x+30,y);
+  48          //      if(flag == 0 || buff%100/10 != temp%100/10)dis_one_14x17_white(buff%100/10,x+45,y);
+  49          //      if(flag == 0 || buff%10 != temp%10)dis_one_14x17_white(buff%10,x+60,y); 
+  50          //      temp = buff;
+  51          //}
+  52          //
+  53          //void dis_xdrf_work_rf_power_gear(u8 flag)        
+C51 COMPILER V9.00   DIS_XDRF_WORK                                                         09/28/2024 10:57:45 PAGE 2   
+
+  54          //{
+  55          //      static u16 temp;
+  56          //      u16 x,y,buff;
+  57          //      x = 574;y = 194;
+  58          //    buff = RF_POWER_GEAR;
+  59          //      if(flag == 0)dis_one_37x37_white(0,x,y);
+  60          //      if(flag == 0 || buff/10 != temp/10)dis_one_37x37_white(buff/10,x+44,y);
+  61          //      if(flag == 0 || buff%10 != temp%10)dis_one_37x37_white(buff%10,x+87,y); 
+  62          //      temp = buff;
+  63          //}
+  64          //
+  65          //void dis_xdrf_work_hf_power_gear(u8 flag)
+  66          //{
+  67          //      static u16 temp;
+  68          //      u16 x,y,buff;
+  69          //      x = 298;y = 194;
+  70          //      buff = HF_POWER_GEAR;
+  71          //      if(flag == 0)dis_one_37x37_white(0,x,y);
+  72          //      if(flag == 0 || buff/10 != temp/10)dis_one_37x37_white(buff/10,x+44,y);
+  73          //      if(flag == 0 || buff%10 != temp%10)dis_one_37x37_white(buff%10,x+87,y);
+  74          //      temp = buff;
+  75          //}
+  76          //
+  77          //void dis_work_probe_remain(u8 flag)   
+  78          //{
+  79          //      static u32 temp,buff;
+  80          //      u16 x,y;
+  81          //      x = 85;y = 456;
+  82          //      buff = RX_PROBE_REMAIN;
+  83          //      if(flag == 0 || buff/10000 != temp/10000)dis_one_14x17_white(buff/10000,x,y);
+  84          //      if(flag == 0 || buff%10000/1000 != temp%10000/1000)dis_one_14x17_white(buff%10000/1000,x+15,y);
+  85          //      if(flag == 0 || buff%1000/100 != temp%1000/100)dis_one_14x17_white(buff%1000/100,x+30,y);
+  86          //      if(flag == 0 || buff%100/10 != temp%100/10)dis_one_14x17_white(buff%100/10,x+45,y);
+  87          //      if(flag == 0 || buff%10 != temp%10)dis_one_14x17_white(buff%10,x+60,y);
+  88          //      temp = buff;
+  89          //}
+  90          //
+  91          //
+  92          //
+  93          //
+  94          //
+  95          //
+  96          //
+  97          //
+  98          //
+  99          //
+ 100          //
+ 101          //
+ 102          //
+ 103          //
+ 104          //
+ 105          //
+ 106          //
+ 107          //
+ 108          //
+ 109          //
+ 110          //
+ 111          //
+ 112          //
+ 113          //
+ 114          ////-------------------------------------------------//
+ 115          //
+C51 COMPILER V9.00   DIS_XDRF_WORK                                                         09/28/2024 10:57:45 PAGE 3   
+
+ 116          //void dis_one_14x17_white(u8 dat,u16 x,u16 y)
+ 117          //{
+ 118          //      switch(dat)
+ 119          //      {
+ 120          //              case 0:DIS_DEL_DIS(Pic_CUT2,  1,44, 15,61,x,y);break;//0
+ 121          //              case 1:DIS_DEL_DIS(Pic_CUT2, 17,44, 31,61,x,y);break;//1
+ 122          //              case 2:DIS_DEL_DIS(Pic_CUT2, 33,44,47,61,x,y);break;//2
+ 123          //              case 3:DIS_DEL_DIS(Pic_CUT2,49,44,63,61,x,y);break;//3
+ 124          //              case 4:DIS_DEL_DIS(Pic_CUT2,65,44,79,61,x,y);break;//4
+ 125          //              case 5:DIS_DEL_DIS(Pic_CUT2,81,44,95,61,x,y);break;//5
+ 126          //              case 6:DIS_DEL_DIS(Pic_CUT2,97,44,111,61,x,y);break;//6
+ 127          //              case 7:DIS_DEL_DIS(Pic_CUT2,113,44,127,61,x,y);break;//7
+ 128          //              case 8:DIS_DEL_DIS(Pic_CUT2,129,44,143,61,x,y);break;//8
+ 129          //              case 9:DIS_DEL_DIS(Pic_CUT2,145,44,159,61,x,y);break;//9
+ 130          //              case '.':DIS_DEL_DIS(Pic_CUT2,161,44,175,61,x,y);break;//.
+ 131          //              case 'k':DIS_DEL_DIS(Pic_CUT2,177,1,191,42,x,y);break;//¿Õ°×
+ 132          //      }
+ 133          //}
+ 134          //
+ 135          //
+ 136          //
+ 137          //
+ 138          //
+ 139          //
+ 140          //
+ 141          //
+ 142          //
+ 143          //
+ 144          //
+ 145          //
+ 146          //
+ 147          //
+ 148          //
+ 149          //
+ 150          //void dis_one_37x37_white(u8 dat,u16 x,u16 y)
+ 151          //{
+ 152          //      switch(dat)
+ 153          //      {
+ 154          //              case 0:DIS_DEL_DIS(Pic_CUT2,  1,1, 36,42,x,y);break;//0
+ 155          //              case 1:DIS_DEL_DIS(Pic_CUT2, 38,1, 73,42,x,y);break;//1
+ 156          //              case 2:DIS_DEL_DIS(Pic_CUT2, 75,1,110,42,x,y);break;//2
+ 157          //              case 3:DIS_DEL_DIS(Pic_CUT2,112,1,147,42,x,y);break;//3
+ 158          //              case 4:DIS_DEL_DIS(Pic_CUT2,149,1,184,42,x,y);break;//4
+ 159          //              case 5:DIS_DEL_DIS(Pic_CUT2,186,1,221,42,x,y);break;//5
+ 160          //              case 6:DIS_DEL_DIS(Pic_CUT2,223,1,258,42,x,y);break;//6
+ 161          //              case 7:DIS_DEL_DIS(Pic_CUT2,260,1,295,42,x,y);break;//7
+ 162          //              case 8:DIS_DEL_DIS(Pic_CUT2,297,1,332,42,x,y);break;//8
+ 163          //              case 9:DIS_DEL_DIS(Pic_CUT2,334,1,366,42,x,y);break;//9
+ 164          //              case '.':DIS_DEL_DIS(Pic_CUT2,371,1,403,42,x,y);break;//.
+ 165          //              case 'k':DIS_DEL_DIS(Pic_CUT2,408,1,440,42,x,y);break;//¿Õ°×
+ 166          //
+ 167          //      }
+ 168          //}
+ 169          //
+ 170          //
+ 171          //
+ 172          // 
+ 173          // 
+ 174          // 
+ 175          // 
+ 176          // 
+ 177          // 
+C51 COMPILER V9.00   DIS_XDRF_WORK                                                         09/28/2024 10:57:45 PAGE 4   
+
+ 178          // 
+ 179          // 
+ 180          // 
+ 181          // 
+ 182          // 
+ 183          // 
+ 184          // 
+ 185          // 
+ 186          // 
+ 187          // 
+ 188          // 
+ 189          // 
+ 190          // 
+ 191          // 
+ 192          // 
+ 193          // 
+ 194          // 
+ 195          // 
+ 196          // 
+ 197          // 
+ 198          // 
+ 199          // 
+ 200          // 
+ 201          // 
+ 202          // 
+ 203          // 
+ 204          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

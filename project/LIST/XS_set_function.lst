@@ -1,0 +1,123 @@
+C51 COMPILER V9.00   XS_SET_FUNCTION                                                       09/02/2024 14:01:21 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_SET_FUNCTION
+OBJECT MODULE PLACED IN ..\hex\XS_set_function.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\main\XS_set_function.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..
+                    -\display) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_set_function.lst) OBJECT(..\hex\XS_set_function.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void dis_set_function(u8 fun,u16 x,u16 y);
+   4          //
+   5          //const u8  MAIN_KEY_SET_FUNCTION = 3;
+   6          //const u16 MAIN_SET_FUNCTION[]=
+   7          //{
+   8          //      912,1036, 0,108, //1 ÉèÖÃ
+   9          //      260,456,395,459,
+  10          //      622,820,395,459,
+  11          //};
+  12          //
+  13          //void main_xs_set_function(void)
+  14          //{
+  15          //      u8 key;
+  16          //      DIS_PICNUM(Pic_SET_FUNCTION);
+  17          //      
+  18          //      dis_set_function(FIRST_FUNCTION,332,411);
+  19          //      dis_set_function(SECOND_FUNCTION,692,411);
+  20          //      
+  21          //      do{
+  22          //              delay_ms(1);
+  23          //              if(KEY_YES!=0x00)
+  24          //              {
+  25          //                      ADS7843_KEY(); //É¨Ãè°´¼ü
+  26          //                      key=KEY_FANHUI(MAIN_KEY_SET_FUNCTION,MAIN_SET_FUNCTION); 
+  27          //                      switch(key)
+  28          //                      {
+  29          //                              case 1:  //·µ»Ø
+  30          //                                      XIANG1();
+  31          //                                      INTERFACE = PAGE_ADVANCED_SETTINGS;
+  32          //                                      goto over_main_xs_set_function;
+  33          //                                      break;
+  34          //                              case 2:
+  35          //                                XIANG1();
+  36          //                                FIRST_FUNCTION++;
+  37          //                                      if(FIRST_FUNCTION > 4)FIRST_FUNCTION = 0;
+  38          //                                      dis_set_function(FIRST_FUNCTION,332,411);
+  39          //                                      write_first_function();
+  40          //                                      break;
+  41          //                              case 3:
+  42          //                                XIANG1();
+  43          //                                      SECOND_FUNCTION++;
+  44          //                                      if(SECOND_FUNCTION > 4)SECOND_FUNCTION = 0;
+  45          //                                      dis_set_function(SECOND_FUNCTION,692,411);
+  46          //                                      write_second_function();
+  47          //                                      break;
+  48          //                      }
+  49          //                      KEY_YES = 0;
+  50          //              }
+  51          //      }while(1);
+  52          //      over_main_xs_set_function:
+  53          //      _nop_();
+  54          //}
+C51 COMPILER V9.00   XS_SET_FUNCTION                                                       09/02/2024 14:01:21 PAGE 2   
+
+  55          //
+  56          //void dis_set_function(u8 fun,u16 x,u16 y)
+  57          //{
+  58          //      u8 add;
+  59          //      add = 16;
+  60          //      DIS_DEL_DIS(Pic_SET_FUNCTION,x,y,x+(4*add),y+(2*add),x,y);
+  61          //      switch(fun)
+  62          //      {
+  63          //        case 0:
+  64          //          DIS_FONT_C(0x07,0xfe,4,0x03,x,y,"NULL");
+  65          //                break;
+  66          //              case 1:
+  67          //          DIS_FONT_C(0x07,0xfe,4,0x03,x+(add/2),y,"XDO");
+  68          //                break;
+  69          //              case 2:
+  70          //          DIS_FONT_C(0x07,0xfe,4,0x03,x,y,"XDRF");
+  71          //                break;
+  72          //              case 3:
+  73          //          DIS_FONT_C(0x07,0xfe,4,0x03,x+(add/2),y,"X3D");
+  74          //                break;
+  75          //              case 4:
+  76          //          DIS_FONT_C(0x07,0xfe,4,0x03,x+(add/2),y,"X7D");
+  77          //                break;
+  78          //      }
+  79          //}
+  80          //
+  81          //
+  82          //
+  83          //
+  84          //
+  85          // 
+  86          // 
+  87          // 
+  88          // 
+  89          // 
+  90          // 
+  91          // 
+  92          // 
+  93          // 
+  94          // 
+  95          // 
+  96          // 
+  97          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

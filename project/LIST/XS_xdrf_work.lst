@@ -1,0 +1,781 @@
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XS_XDRF_WORK
+OBJECT MODULE PLACED IN ..\hex\XS_xdrf_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\main\XS_xdrf_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;.
+                    -.\display;..\common;..\cut) DEBUG OBJECTEXTEND PRINT(.\LIST\XS_xdrf_work.lst) OBJECT(..\hex\XS_xdrf_work.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //const u8  MAIN_KEY_XDRF_WORK = 16;
+   4          //const u16 MAIN_XDRF_WORK[]=
+   5          //{              
+   6          //       513, 562, 191, 238, //1 RF档位减
+   7          //       708, 757, 191, 238, //2 RF档位加
+   8          //       513, 562, 285, 331, //3 开时间减
+   9          //       708, 757, 285, 331, //4 开时间加
+  10          //       513, 562, 380, 426, //5 关时间减
+  11          //       708, 757, 380, 426, //6 关时间加
+  12          //
+  13          //
+  14          //       
+  15          //       237, 286,191,238, //7 HF档位减
+  16          //       432, 481,191,238, //8 HF档位加
+  17          //       237, 286, 285, 331, //9 频率减
+  18          //       432, 481, 285, 331, //10 频率加
+  19          //
+  20          //       76, 166,329,359, //11 清零
+  21          //       287, 352,388,434, //12 单点模式
+  22          //       388, 453,388,434, //13 连续模式
+  23          //       38, 204,511,584, //14 统计
+  24          //
+  25          //
+  26          //       
+  27          //       269, 459,511,583, //15 停止
+  28          //       536,727,511,583, //16 启动
+  29          //};
+  30          //
+  31          //void main_xs_xdrf_work(void)
+  32          //{
+  33          //      static u8 last_down;
+  34          //      u8 key,error_flag,probe_buff,key_flag,work_pic,pulse_cc,work_flag;
+  35          //      u16 touch_count,buff_minus;
+  36          //      u32 remain_buff,wait_time,remain_cc;
+  37          //      RX_HANDLE_PICK_UP_FLAG = 0;
+  38          //      RX_PROBE_ID = 0;
+  39          //      RX_PROBE_MODE = 0;
+  40          //      RX_PROBE_TOTAL = 0;
+  41          //      RX_PROBE_REMAIN = 0;
+  42          //      error_flag = 0;
+  43          //      choose_handle_uatr(HANDLE_UART_XDRF);
+  44          //      delay_ms(5);
+  45          //      xdrf_work_power_led(CLOSE);
+  46          //      xdrf_work_ask_handle_parameter();
+  47          //      if(wait_handle_answer(1000) == 1)error_flag = 1;//等待1秒
+  48          //      
+  49          //      START_STOP_FLAG = 1;
+  50          //      RF_ON_TIMES = 100;
+  51          //      RF_OFF_TIMES = 200;
+  52          //      HF_FRE = 5;
+  53          //      ONE_CURRENT_TIMES = 0;
+  54          //      SINGLE_AUTO_FLAG = 0;
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 2   
+
+  55          //      HF_POWER_GEAR = 1;
+  56          //      RF_POWER_GEAR = 1;
+  57          //      
+  58          //      DIS_PICNUM(Pic_XDRF_WORK);
+  59          //      dis_xdrf_work_rf_on_time(DIS_ALL);
+  60          //      dis_xdrf_work_rf_off_time(DIS_ALL);
+  61          //      dis_xdrf_work_hf_fre(DIS_ALL);
+  62          //      dis_work_current_times(DIS_ALL);        //显示治疗次数
+  63          //      dis_xdrf_work_rf_power_gear(DIS_ALL);                   //显示档位
+  64          //      dis_xdrf_work_hf_power_gear(DIS_ALL);
+  65          //      cut_xdrf_work_single_auto_flag();
+  66          //      cut_work_start_stop_flag();
+  67          //
+  68          //      if(error_flag == 1){//超时没有回复  就是没有手柄
+  69          //              RX_PROBE_TOTAL = 0;
+  70          //              RX_PROBE_REMAIN = 0;
+  71          //              cut_communication_error();
+  72          //              XIANG1();
+  73          //              while(KEY_YES == 0);
+  74          //              XIANG1();
+  75          //              INTERFACE = PAGE_LOADING;
+  76          //              goto over_main_xs_xdrf_work;
+  77          //      }else{//有回复  有手柄
+  78          //              if(RX_PROBE_MODE > 0x06){//探头错误
+  79          //                      cut_probe_error();
+  80          //              }else{
+  81          //                      if(RX_PROBE_MODE > 0){
+  82          //                              //xdrf_work_power_led(OPEN);
+  83          //                              count_records_probe_mode(RX_PROBE_MODE);
+  84          //                      }
+  85          //              }
+  86          //      }
+  87          //
+  88          //      BUFF_PROBE_REMAIN = RX_PROBE_REMAIN;
+  89          ////    dis_work_probe_total();
+  90          //      dis_work_probe_remain(DIS_ALL);
+  91          ////    cut_xdrf_work_probe_mode();             //没有  
+  92          //      cut_xdrf_work_probe_pic();
+  93          //      error_flag = 0;
+  94          //      probe_buff = RX_PROBE_MODE;
+  95          //      
+  96          //      START_KED_DOWN_FLAG = 1;//按键松开
+  97          //      key_flag = START_KED_DOWN_FLAG;
+  98          //      KED_EVER_DOWN_FLAG = 1;
+  99          //      RF_WORKINT_FLAG = 1;
+ 100          //      HF_WORKINT_FLAG = 1;
+ 101          //      
+ 102          //      rf_pwm_init();
+ 103          //      hf_pwm_init();
+ 104          //      //count_xdrf_rf_power_gear();
+ 105          //      //count_xdrf_hr_power_gear();
+ 106          //      
+ 107          //      RF_POWER_ON;
+ 108          //      FS1_ON;
+ 109          //      FS2_ON;
+ 110          //      
+ 111          //      work_pic = 0;
+ 112          //      
+ 113          //      JDQ1_ON;
+ 114          //      JDQ2_ON;
+ 115          //      JDQ3_ON;
+ 116          //      
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 3   
+
+ 117          //      pulse_cc = 0;
+ 118          //      touch_count = 0;
+ 119          //      work_flag = 0;
+ 120          //      
+ 121          //      if(XIAN_TRUE_PAR_FLAG == 0)
+ 122          //      {
+ 123          //              DIS_FONT_C(0xff,0xff,10,0x01,0,0,"HF TIME:  ");
+ 124          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,XDRF_HF_SET_TIME,3,80,0);
+ 125          //              
+ 126          //              DIS_FONT_C(0xff,0xff,10,0x01,0,18,"HF MIN:   ");
+ 127          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,XDRF_HF_MIN_GEAR_VALUE,4,80,18);
+ 128          //              
+ 129          //              DIS_FONT_C(0xff,0xff,10,0x01,0,36,"HF MAX:   ");
+ 130          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,XDRF_HF_MAX_GEAR_VALUE,4,80,36);
+ 131          //              
+ 132          //              DIS_FONT_C(0xff,0xff,10,0x01,0,54,"RF MIN:   ");
+ 133          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,XDRF_RF_MIN_GEAR_VALUE,4,80,54);
+ 134          //              
+ 135          //              DIS_FONT_C(0xff,0xff,10,0x01,0,72,"RF MAX:   ");
+ 136          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,XDRF_RF_MAX_GEAR_VALUE,4,80,72);
+ 137          //              
+ 138          //              DIS_FONT_C(0xff,0xff,10,0x01,150,0,"PROBE ID: ");
+ 139          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,RX_PROBE_ID,4,230,0);
+ 140          //              
+ 141          //              DIS_FONT_C(0xff,0xff,10,0x01,150,18,"MAC ID:   ");
+ 142          //              DIS_FONT_WEI_NUMBER_CM(Pic_XDRF_WORK,0,0xff,0xff,0x01,MACHINE_ID,4,230,18);
+ 143          //
+ 144          //              DIS_FONT_C(0xff,0xff,10,0x01,150,36,"HF OUT:   ");
+ 145          //              DIS_FONT_C(0xff,0xff,10,0x01,150,54,"RF OUT:   ");
+ 146          //      }
+ 147          //      
+ 148          //      do{
+ 149          //              //delay_ms(1);
+ 150          //              if(KEY_YES!=0x00 && touch_count == 0){
+ 151          //                      ADS7843_KEY(); //扫描按键
+ 152          //                      key=KEY_FANHUI(MAIN_KEY_XDRF_WORK,MAIN_XDRF_WORK); 
+ 153          //                      switch(key){
+ 154          //                              case 1: //RF能量减减
+ 155          //                                      if(RF_POWER_GEAR > 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 156          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,533,191,562,238,533,191);
+ 157          //                                              last_down = 1;
+ 158          //                                              XIANG1();
+ 159          //                                              RF_POWER_GEAR--;
+ 160          //                                              dis_xdrf_work_rf_power_gear(DIS_PART);
+ 161          //                                              touch_count = 120;
+ 162          //                                      }else{KEY_YES = 0;}
+ 163          //                                      break;
+ 164          //                              case 2: //RF能量加加
+ 165          //                                      if(RF_POWER_GEAR < 20 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 166          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,708,191,737,238,708,191);
+ 167          //                                              last_down = 2;
+ 168          //                                              XIANG1();
+ 169          //                                              RF_POWER_GEAR++;
+ 170          //                                              dis_xdrf_work_rf_power_gear(DIS_PART);
+ 171          //                                              touch_count = 120;
+ 172          //                                      }else{KEY_YES = 0;}
+ 173          //                                      break;
+ 174          //                              case 3: //开时间减减
+ 175          //                                      if(RF_ON_TIMES > 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 176          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,533,285,562,331,533,285);
+ 177          //                                              pulse_cc++;
+ 178          //                                              last_down = 3;
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 4   
+
+ 179          //                                              XIANG1();
+ 180          //                                              if(pulse_cc <= 10)RF_ON_TIMES--;
+ 181          //                                              else{
+ 182          //                                                      if(RF_ON_TIMES > 10)RF_ON_TIMES = RF_ON_TIMES - 10;
+ 183          //                                                      else{RF_ON_TIMES = 0;}
+ 184          //                                              }
+ 185          //                                              dis_xdrf_work_rf_on_time(DIS_PART);
+ 186          //                                              touch_count = 120;
+ 187          //                                      }else{KEY_YES = 0;}
+ 188          //                                      break;
+ 189          //                              case 4: //开时间加加
+ 190          //                                      if(RF_ON_TIMES < 1000 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 191          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,708,285,737,331,708,285);
+ 192          //                                              pulse_cc++;
+ 193          //                                              last_down = 4;
+ 194          //                                              XIANG1();
+ 195          //                                              if(pulse_cc <= 10)RF_ON_TIMES++;
+ 196          //                                              else{
+ 197          //                                                      if(RF_ON_TIMES < 990)RF_ON_TIMES = RF_ON_TIMES + 10;
+ 198          //                                                      else{RF_ON_TIMES = 1000;}
+ 199          //                                              }
+ 200          //                                              dis_xdrf_work_rf_on_time(DIS_PART);
+ 201          //                                              touch_count = 120;
+ 202          //                                      }else{KEY_YES = 0;}
+ 203          //                                      break;
+ 204          //                              case 5: //关时间减减
+ 205          //                                      if(RF_OFF_TIMES > 10 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 206          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,533,380,562,426,533,380);
+ 207          //                                              pulse_cc++;
+ 208          //                                              last_down = 5;
+ 209          //                                              XIANG1();
+ 210          //                                              if(pulse_cc <= 10)RF_OFF_TIMES--;
+ 211          //                                              else{
+ 212          //                                                      if(RF_OFF_TIMES > 20)RF_OFF_TIMES = RF_OFF_TIMES - 10;
+ 213          //                                                      else{RF_OFF_TIMES = 10;}
+ 214          //                                              }
+ 215          //                                              dis_xdrf_work_rf_off_time(DIS_PART);
+ 216          //                                              touch_count = 120;
+ 217          //                                      }else{KEY_YES = 0;}
+ 218          //                                      break;
+ 219          //                              case 6: //关时间加加
+ 220          //                                      if(RF_OFF_TIMES < 1000 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 221          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,708,380,737,426,708,380);
+ 222          //                                              pulse_cc++;
+ 223          //                                              last_down = 6;
+ 224          //                                              XIANG1();
+ 225          //                                              if(pulse_cc <= 10)RF_OFF_TIMES++;
+ 226          //                                              else{
+ 227          //                                                      if(RF_OFF_TIMES < 990)RF_OFF_TIMES = RF_OFF_TIMES + 10;
+ 228          //                                                      else{RF_OFF_TIMES = 1000;}
+ 229          //                                              }
+ 230          //                                              dis_xdrf_work_rf_off_time(DIS_PART);
+ 231          //                                              touch_count = 120;
+ 232          //                                      }else{KEY_YES = 0;}
+ 233          //                                      break;
+ 234          //                              case 7: //HF能量减减
+ 235          //                                      if(HF_POWER_GEAR > 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 236          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,257,191,286,238,257,191);
+ 237          //                                              last_down = 7;
+ 238          //                                              XIANG1();
+ 239          //                                              HF_POWER_GEAR--;
+ 240          //                                              dis_xdrf_work_hf_power_gear(DIS_PART);
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 5   
+
+ 241          //                                              touch_count = 120;
+ 242          //                                      }else{KEY_YES = 0;}
+ 243          //                                      break;
+ 244          //                              case 8: //HF能量加加
+ 245          //                                      if(HF_POWER_GEAR < 20 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){ 
+ 246          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,432,191,461,238,432,191);        
+ 247          //                                              last_down = 8;
+ 248          //                                              XIANG1();
+ 249          //                                              HF_POWER_GEAR++;
+ 250          //                                              dis_xdrf_work_hf_power_gear(DIS_PART);
+ 251          //                                              touch_count = 120;
+ 252          //                                      }else{KEY_YES = 0;}
+ 253          //                                      break;
+ 254          //                              case 9: //频率减减
+ 255          //                                      if(HF_FRE > 1 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 256          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,257,285,286,331,257,285);
+ 257          //                                              last_down = 9;
+ 258          //                                              XIANG1();
+ 259          //                                              HF_FRE--;
+ 260          //                                              dis_xdrf_work_hf_fre(DIS_PART);
+ 261          //                                              touch_count = 120;
+ 262          //                                      }else{KEY_YES = 0;}
+ 263          //                                      break;
+ 264          //                              case 10:        //频率加加
+ 265          //                                      if(HF_FRE < 20 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 266          //                                              DIS_DEL_DIS(Pic_XDRF_WORK_DOWN,432,285,461,331,432,285);
+ 267          //                                              last_down = 10;
+ 268          //                                              XIANG1();
+ 269          //                                              HF_FRE++;
+ 270          //                                              dis_xdrf_work_hf_fre(DIS_PART);
+ 271          //                                              touch_count = 120;
+ 272          //                                      }else{KEY_YES = 0;}
+ 273          //                                      break;
+ 274          //                              case 11:        //清零
+ 275          //                                      if(ONE_CURRENT_TIMES > 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 276          //                                              ONE_CURRENT_TIMES = 0;
+ 277          //                                              dis_work_current_times(DIS_PART);
+ 278          //                                              XIANG1();
+ 279          //                                      }else{KEY_YES = 0;}
+ 280          //                                      break;  
+ 281          //                              case 12:        //单点
+ 282          //                                      if(SINGLE_AUTO_FLAG != 1 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 283          //                                              SINGLE_AUTO_FLAG = 1;//单点
+ 284          //                                              cut_xdrf_work_single_auto_flag();
+ 285          //                                      }
+ 286          //                                      XIANG1();
+ 287          //                                      KEY_YES = 0;
+ 288          //                                      break;
+ 289          //                              case 13:  //自动
+ 290          //                                      if(SINGLE_AUTO_FLAG != 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 291          //                                              SINGLE_AUTO_FLAG = 0;//单点     
+ 292          //                                              cut_xdrf_work_single_auto_flag();
+ 293          //                                      }
+ 294          //                                      XIANG1();
+ 295          //                                      KEY_YES = 0;
+ 296          //                                      break;                                                  
+ 297          //                              case 14:  //统计
+ 298          //                                      if(START_STOP_FLAG == 1){
+ 299          //                                              XIANG1();
+ 300          //                                              INTERFACE = PAGE_RECORD_PROBE_TIMES;
+ 301          //                                              goto over_main_xs_xdrf_work;
+ 302          //                                      }else{KEY_YES = 0;}
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 6   
+
+ 303          //                                      break;  
+ 304          //                              case 15:  //停止
+ 305          //                                      if(START_STOP_FLAG == 0 && RF_WORKINT_FLAG == 1 && HF_WORKINT_FLAG == 1){
+ 306          //                                              XIANG1();
+ 307          //                                              START_STOP_FLAG = 1;
+ 308          //                                              cut_work_start_stop_flag();
+ 309          //                                              close_rf_pwm();
+ 310          //                                              close_hf_pwm();
+ 311          //                                              xdrf_work_power_led(CLOSE);
+ 312          //                                      }else{KEY_YES = 0;}
+ 313          //                                      break;
+ 314          //                              case 16:  //开始
+ 315          //                                      if(START_STOP_FLAG == 1 && RX_PROBE_MODE > 0x00 && RX_PROBE_MODE < 0x07){//没有按下  并且探头合格
+ 316          //                                              XIANG1();
+ 317          //                                              if(MACHINE_ID == RX_PROBE_ID || MACHINE_ID == 200 || RX_PROBE_ID == 200){
+ 318          //                                                      if(RX_PROBE_REMAIN == 0){//探头等于0时 报警提示
+ 319          //                                                              cut_times_is_zero_error();
+ 320          //                                                      }else{
+ 321          //                                                              START_STOP_FLAG = 0;
+ 322          //                                                              cut_work_start_stop_flag();
+ 323          //                                                              work_pic = 0;
+ 324          //                                                              cut_xdrf_work_ready_probe_pic();
+ 325          //                                                              xdrf_close_initialize();
+ 326          //                                                              xdrf_work_power_led(OPEN);
+ 327          //                                                              //count_xdrf_rf_power_gear();
+ 328          //                                                              //count_xdrf_hr_power_gear();
+ 329          //                                                      }
+ 330          //                                              }else{
+ 331          //                                                      cut_probe_id_error();
+ 332          //                                                      while(KEY_YES == 0);
+ 333          //                                                      XIANG1();
+ 334          //                                                      INTERFACE = PAGE_LOADING;
+ 335          //                                                      goto over_main_xs_xdrf_work;
+ 336          //                                              }
+ 337          //                                      }else if(RX_PROBE_MODE == 0){//没有探头
+ 338          //                                      //  XIANG1();
+ 339          //                                      //      cut_xdrf_work_probe_pic();
+ 340          //                                      //      cut_xdrf_work_probe_mode();
+ 341          //                                      }
+ 342          //                                      KEY_YES = 0;
+ 343          //                                      break;
+ 344          //                      }
+ 345          //              }else if(KEY_YES == 0 && touch_count == 0){
+ 346          //                      switch(last_down){
+ 347          //                              case 1:
+ 348          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,533,191,562,238,533,191);
+ 349          //                                      break;
+ 350          //                              case 2:
+ 351          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,708,191,737,238,708,191);
+ 352          //                                      break;
+ 353          //                              case 3:
+ 354          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,533,285,562,331,533,285);
+ 355          //                                      break;
+ 356          //                              case 4:
+ 357          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,708,285,737,331,708,285);
+ 358          //                                      break;
+ 359          //                              case 5:
+ 360          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,533,380,562,426,533,380);
+ 361          //                                      break;
+ 362          //                              case 6:
+ 363          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,708,380,737,426,708,380);
+ 364          //                                      break;
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 7   
+
+ 365          //                              case 7:
+ 366          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,257,191,286,238,257,191);
+ 367          //                                      break;
+ 368          //                              case 8:
+ 369          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,432,191,461,238,432,191);
+ 370          //                                      break;
+ 371          //                              case 9:
+ 372          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,257,285,286,331,257,285);
+ 373          //                                      break;
+ 374          //                              case 10:
+ 375          //                                      DIS_DEL_DIS(Pic_XDRF_WORK,432,285,461,331,432,285);
+ 376          //                                      break;
+ 377          //                      }
+ 378          //                      pulse_cc = 0;
+ 379          //                      last_down = 0;
+ 380          //              }
+ 381          //
+ 382          //              if(count_time(1) == 0)if(touch_count > 0)touch_count--;
+ 383          //              
+ 384          //              //--------------------检测探头变化--------------------//
+ 385          //              if(probe_buff != RX_PROBE_MODE){
+ 386          //                      probe_buff = RX_PROBE_MODE;
+ 387          //                      if(probe_buff > 0x06){//探头错误
+ 388          //                              cut_probe_error();
+ 389          //                              RX_PROBE_TOTAL = 0;
+ 390          //                              RX_PROBE_REMAIN = 0;
+ 391          //                      }else if(probe_buff == 0){//没有探头
+ 392          //                              cut_probe_error();
+ 393          //                              RX_PROBE_TOTAL = 0;
+ 394          //                              RX_PROBE_REMAIN = 0;
+ 395          //                      }else{//有探头
+ 396          //                              count_records_probe_mode(RX_PROBE_MODE);
+ 397          //                      }
+ 398          //                      BUFF_PROBE_REMAIN = RX_PROBE_REMAIN;
+ 399          //                      dis_work_probe_remain(DIS_PART);        //显示剩余次数
+ 400          //                      //dis_work_probe_total();       //显示总数
+ 401          //                      cut_xdrf_work_probe_pic();
+ 402          //                      //cut_xdrf_work_probe_mode();
+ 403          //                      START_STOP_FLAG = 1;
+ 404          //                      cut_work_start_stop_flag();
+ 405          //                      xdrf_close_initialize();
+ 406          //                      close_rf_pwm();
+ 407          //                      close_hf_pwm();
+ 408          //                      xdrf_work_power_led(CLOSE);
+ 409          //                      work_flag = 0;
+ 410          //              }
+ 411          //              
+ 412          //              //--------------------检测按键是否按下--------------------//
+ 413          //              if(START_STOP_FLAG == 0){
+ 414          //                      if(XDRF_LONG_PRESS_AUTO_FLAG == 0){//长按一直工作
+ 415          //                              key_flag = START_KED_DOWN_FLAG;
+ 416          //                      }else{//按一下就开始工作  按一下停止
+ 417          //                              work_pic = 0;//
+ 418          //                              if(KED_EVER_DOWN_FLAG == 0){
+ 419          //                                      if(key_flag == 0)key_flag = 1;
+ 420          //                                      else{key_flag = 0;}
+ 421          //                                      KED_EVER_DOWN_FLAG = 1;
+ 422          //                              }
+ 423          //                      }       
+ 424          //              }
+ 425          //
+ 426          //              //--------------------按下按键后首次进入工作--------------------//
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 8   
+
+ 427          //              if(START_STOP_FLAG == 0 && work_flag == 0 && key_flag == 0){
+ 428          //                      count_xdrf_rf_power_gear();
+ 429          //                      count_xdrf_hr_power_gear();
+ 430          //                      XIANG1();
+ 431          //                      remain_cc = 0;
+ 432          //                      HF_TIME_CYC = 1000/HF_FRE;
+ 433          //                      if(HF_TIME_CYC < 50)HF_TIME_CYC = 50;
+ 434          //
+ 435          //                      if(RX_PROBE_REMAIN == 0){//探头等于0时 报警提示
+ 436          //                              START_STOP_FLAG = 1;
+ 437          //                              key_flag = 1;
+ 438          //                              xdrf_close_initialize();
+ 439          //                              close_rf_pwm();
+ 440          //                              close_hf_pwm();
+ 441          //                              cut_work_start_stop_flag();
+ 442          //                              xdrf_work_power_led(CLOSE);
+ 443          //                              work_flag = 0;
+ 444          //                              XIANG1();
+ 445          //                              cut_times_is_zero_error();
+ 446          //                              while(KEY_YES == 0);
+ 447          //                              XIANG1();
+ 448          //                              INTERFACE = PAGE_LOADING;
+ 449          //                              goto over_main_xs_xdrf_work;
+ 450          //                      }
+ 451          //                      
+ 452          //                      if(HF_POWER_GEAR > 0){//档位大于0的时候才计数
+ 453          //                              remain_buff = RX_PROBE_REMAIN;
+ 454          //                              set_handle_minus(XDRF_DEVICE_TYPE,1);//减一
+ 455          //                              if(wait_handle_answer(2000) == 0){      //扣费有返回
+ 456          //                                      if(MINUS_FLAG == 1){//扣费成功
+ 457          //                                              remain_buff = remain_buff - 1;
+ 458          //                                              if(remain_buff != RX_PROBE_REMAIN){//减减后数据不对
+ 459          //                                                      START_STOP_FLAG = 1;
+ 460          //                                                      key_flag = 1;
+ 461          //                                                      xdrf_close_initialize();
+ 462          //                                                      close_rf_pwm();
+ 463          //                                                      close_hf_pwm();
+ 464          //                                                      cut_work_start_stop_flag();
+ 465          //                                                      xdrf_work_power_led(CLOSE);
+ 466          //                                                      work_flag = 0;
+ 467          //                                                      XIANG1();
+ 468          //                                                      cut_probe_write_failed();
+ 469          //                                                      while(KEY_YES == 0);
+ 470          //                                                      XIANG1();
+ 471          //                                                      INTERFACE = PAGE_LOADING;
+ 472          //                                                      goto over_main_xs_xdrf_work;
+ 473          //                                              }else{//扣费是正确的，就启动输出
+ 474          //                                                      BUFF_PROBE_REMAIN = RX_PROBE_REMAIN;
+ 475          //                                                      dis_work_probe_remain(DIS_PART);        //显示剩余次数
+ 476          //                                                      RF_TIME_COUNT = 0;
+ 477          //                                                      RF_WORKINT_FLAG = 0;
+ 478          //                                              
+ 479          //                                                      HF_OUT_TIME = XDRF_HF_SET_TIME;
+ 480          //                                                      HF_TIME_COUNT = 0;
+ 481          //                                                      HF_WORKINT_FLAG = 0;
+ 482          //
+ 483          //                                                      ONE_CURRENT_TIMES++;
+ 484          //                                                      dis_work_current_times(DIS_PART);
+ 485          //                                                      XDRF_PROBE_TIMES[RX_PROBE_MODE-1]++;
+ 486          //                                                      work_flag = 1;
+ 487          //                                                      
+ 488          //                                                      MINUS_TIMES = 0;
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 9   
+
+ 489          //                                              }
+ 490          //                                      }else{//扣费失败
+ 491          //                                              START_STOP_FLAG = 1;
+ 492          //                                              key_flag = 1;
+ 493          //                                              xdrf_close_initialize();
+ 494          //                                              close_rf_pwm();
+ 495          //                                              close_hf_pwm();
+ 496          //                                              cut_work_start_stop_flag();
+ 497          //                                              xdrf_work_power_led(CLOSE);
+ 498          //                                              work_flag = 0;
+ 499          //                                              XIANG1();
+ 500          //                                              cut_probe_write_failed();
+ 501          //                                              while(KEY_YES == 0);
+ 502          //                                              XIANG1();
+ 503          //                                              INTERFACE = PAGE_LOADING;
+ 504          //                                              goto over_main_xs_xdrf_work;
+ 505          //                                      }
+ 506          //                              }else{//没有回复
+ 507          //                                      START_STOP_FLAG = 1;
+ 508          //                                      key_flag = 1;
+ 509          //                                      xdrf_close_initialize();
+ 510          //                                      close_rf_pwm();
+ 511          //                                      close_hf_pwm();
+ 512          //                                      cut_work_start_stop_flag();
+ 513          //                                      xdrf_work_power_led(CLOSE);
+ 514          //                                      work_flag = 0;
+ 515          //                                      XIANG1();
+ 516          //                                      cut_probe_connection_failure();
+ 517          //                                      while(KEY_YES == 0);
+ 518          //                                      XIANG1();
+ 519          //                                      INTERFACE = PAGE_LOADING;
+ 520          //                                      goto over_main_xs_xdrf_work;
+ 521          //                              }
+ 522          //                      }else{
+ 523          //                              RF_TIME_COUNT = 0;
+ 524          //                              RF_WORKINT_FLAG = 0;
+ 525          //                          
+ 526          //                              HF_OUT_TIME = XDRF_HF_SET_TIME;
+ 527          //                              HF_TIME_COUNT = 0;
+ 528          //                              HF_WORKINT_FLAG = 0;
+ 529          //
+ 530          //                              work_flag = 1;
+ 531          //                              //MINUS_TIMES = 0;
+ 532          //                      }               
+ 533          //              }
+ 534          //
+ 535          //              if(work_flag == 1){//启动后，循环进入
+ 536          //                      if(MINUS_TIMES >= 50){
+ 537          //                              buff_minus = MINUS_TIMES;
+ 538          //                                      
+ 539          //                      }       
+ 540          //              }
+ 541          //
+ 542          //
+ 543          //
+ 544          //
+ 545          //
+ 546          //              
+ 547          //              //--------------------开始工作--------------------//
+ 548          //              if(START_STOP_FLAG == 0){
+ 549          //                      
+ 550          //                      if(key_flag == 0){
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 10  
+
+ 551          //
+ 552          //                              start_work:
+ 553          //                              _nop_();
+ 554          //                              
+ 555          //                              if(RX_PROBE_REMAIN == 0){//探头等于0时 报警提示
+ 556          //                                      xdrf_close_initialize();
+ 557          //                                      START_STOP_FLAG = 1;
+ 558          //                                      key_flag = 1;
+ 559          //                                      XIANG1();
+ 560          //                                      cut_work_start_stop_flag();
+ 561          //                                      cut_times_is_zero_error();
+ 562          //                                      xdrf_work_power_led(CLOSE);
+ 563          //                                      
+ 564          //                                      if(remain_cc > 0){
+ 565          //                                              remain_buff = RX_PROBE_REMAIN;
+ 566          //                                              set_handle_minus(XDRF_DEVICE_TYPE,remain_cc);//减一
+ 567          //                                              if(wait_handle_answer(2000) == 0){      //扣费有返回
+ 568          //                                                      if(MINUS_FLAG == 1){//扣费成功
+ 569          //                                                              //remain_buff = remain_buff - 1;
+ 570          //                                                              if(remain_buff != RX_PROBE_REMAIN){//减减后数据不对
+ 571          //                                                                      xdrf_close_initialize();
+ 572          //                                                                      START_STOP_FLAG = 1;
+ 573          //                                                                      key_flag = 1;
+ 574          //                                                                      XIANG1();
+ 575          //                                                                      cut_work_start_stop_flag();
+ 576          //                                                                      cut_probe_error();
+ 577          //                                                                      xdrf_work_power_led(CLOSE);
+ 578          //                                                              }else{//扣费是正确的，就启动输出
+ 579          //                                                                      dis_work_probe_remain(DIS_PART);        //显示剩余次数
+ 580          //                                                              }
+ 581          //                                                      }else{//扣费失败
+ 582          //                                                              xdrf_close_initialize();
+ 583          //                                                              START_STOP_FLAG = 1;
+ 584          //                                                              key_flag = 1;
+ 585          //                                                              XIANG1();
+ 586          //                                                              cut_work_start_stop_flag();
+ 587          //                                                              cut_probe_error();
+ 588          //                                                              xdrf_work_power_led(CLOSE);
+ 589          //                                                      }
+ 590          //                                              }else{//没有回复
+ 591          //                                                      xdrf_close_initialize();
+ 592          //                                                      START_STOP_FLAG = 1;
+ 593          //                                                      key_flag = 1;
+ 594          //                                                      XIANG1();
+ 595          //                                                      cut_work_start_stop_flag();
+ 596          //                                                      cut_communication_error();
+ 597          //                                                      xdrf_work_power_led(CLOSE);
+ 598          //                                                      while(KEY_YES == 0);
+ 599          //                                                      XIANG1();
+ 600          //                                                      INTERFACE = PAGE_LOADING;
+ 601          //                                                      goto over_main_xs_xdrf_work;
+ 602          //                                              }
+ 603          //                                      }
+ 604          //                                      if(RX_PROBE_MODE > 0)write_xdrf_probe_times(RX_PROBE_MODE);
+ 605          //                                      
+ 606          //                                      while(KEY_YES == 0);
+ 607          //                                      XIANG1();
+ 608          //                                      INTERFACE = PAGE_LOADING;
+ 609          //                                      goto over_main_xs_xdrf_work;
+ 610          //                              }
+ 611          //                              
+ 612          //                              if(SINGLE_AUTO_FLAG == 1){//单次
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 11  
+
+ 613          //                                      cut_xdrf_working_pic(work_pic);
+ 614          //                              }
+ 615          //                              
+ 616          //                              xdrf_work_work_led(OPEN);
+ 617          //                              if(HF_POWER_GEAR > 0)UL_SET_ON;
+ 618          //                              delay_ms(XDRF_HF_SET_TIME);
+ 619          //                              UL_SET_OFF;
+ 620          //                              xdrf_work_work_led(CLOSE);
+ 621          //                              delay_ms(wait_time);
+ 622          //                              
+ 623          //                              if(SINGLE_AUTO_FLAG == 1){//单次
+ 624          //                                      work_pic = 0;
+ 625          //                                      cut_xdrf_work_ready_probe_pic();
+ 626          //                                      goto end_early;
+ 627          //                              }else{//连打
+ 628          //                                      if(XDRF_LONG_PRESS_AUTO_FLAG == 0){//长按一直工作
+ 629          //                                              key_flag = START_KED_DOWN_FLAG;
+ 630          //                                      }else{//按一下连续工作  按一下停止
+ 631          //                                              if(KED_EVER_DOWN_FLAG == 0){
+ 632          //                                                      if(key_flag == 0){
+ 633          //                                                              XIANG1();
+ 634          //                                                              key_flag = 1;
+ 635          //                                                      }
+ 636          //                                                      else{key_flag = 0;}
+ 637          //                                                      KED_EVER_DOWN_FLAG = 1;
+ 638          //                                              }
+ 639          //                                      }
+ 640          //                                      
+ 641          //                                      if(HF_POWER_GEAR > 0){//档位大于0的时候才计数
+ 642          //                                              remain_cc++;
+ 643          //                                              RX_PROBE_REMAIN--;
+ 644          //                                              XDRF_PROBE_TIMES[RX_PROBE_MODE-1]++;
+ 645          //                                              dis_work_probe_remain(DIS_PART);        //显示剩余次数
+ 646          //                                              ONE_CURRENT_TIMES++;
+ 647          //                                              dis_work_current_times(DIS_PART);
+ 648          //                                      }
+ 649          //                                      if(work_pic >= 15)work_pic = 0;
+ 650          //                                      else{work_pic++;}
+ 651          //                                      cut_xdrf_working_pic(work_pic);
+ 652          //                                      if(key_flag == 0)goto start_work;
+ 653          //                              }
+ 654          //                              
+ 655          //                              work_pic = 4;
+ 656          //                              cut_xdrf_work_ready_probe_pic();
+ 657          //                              
+ 658          //                              end_early:
+ 659          //                              _nop_();
+ 660          //                              xdrf_close_initialize();
+ 661          //                              key_flag = 1;
+ 662          //                              
+ 663          //                              close_rf_pwm();
+ 664          //                              close_hf_pwm();
+ 665          //                              
+ 666          //                              if(remain_cc > 0){
+ 667          //                                      remain_buff = RX_PROBE_REMAIN;
+ 668          //                                      set_handle_minus(XDRF_DEVICE_TYPE,remain_cc);//减一
+ 669          //                                      if(wait_handle_answer(2000) == 0){      //扣费有返回
+ 670          //                                              if(MINUS_FLAG == 1){//扣费成功
+ 671          //                                                      //remain_buff = remain_buff - 1;
+ 672          //                                                      if(remain_buff != RX_PROBE_REMAIN){//减减后数据不对
+ 673          //                                                              xdrf_close_initialize();
+ 674          //                                                              START_STOP_FLAG = 1;
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 12  
+
+ 675          //                                                              key_flag = 1;
+ 676          //                                                              XIANG1();
+ 677          //                                                              cut_work_start_stop_flag();
+ 678          //                                                              cut_probe_error();
+ 679          //                                                              xdrf_work_power_led(CLOSE);
+ 680          //                                                      }else{//扣费是正确的，就启动输出
+ 681          //                                                              dis_work_probe_remain(DIS_PART);        //显示剩余次数
+ 682          //                                                      }
+ 683          //                                              }else{//扣费失败
+ 684          //                                                      xdrf_close_initialize();
+ 685          //                                                      START_STOP_FLAG = 1;
+ 686          //                                                      key_flag = 1;
+ 687          //                                                      XIANG1();
+ 688          //                                                      cut_work_start_stop_flag();
+ 689          //                                                      cut_probe_error();
+ 690          //                                                      xdrf_work_power_led(CLOSE);
+ 691          //                                              }
+ 692          //                                      }else{//没有回复
+ 693          //                                              xdrf_close_initialize();
+ 694          //                                              START_STOP_FLAG = 1;
+ 695          //                                              key_flag = 1;
+ 696          //                                              XIANG1();
+ 697          //                                              cut_work_start_stop_flag();
+ 698          //                                              cut_communication_error();
+ 699          //                                              xdrf_work_power_led(CLOSE);
+ 700          //                                              while(KEY_YES == 0);
+ 701          //                                              XIANG1();
+ 702          //                                              INTERFACE = PAGE_LOADING;
+ 703          //                                              goto over_main_xs_xdrf_work;
+ 704          //                                      }
+ 705          //                              }
+ 706          //                              if(RX_PROBE_MODE > 0)write_xdrf_probe_times(RX_PROBE_MODE);
+ 707          //                      }
+ 708          //              }
+ 709          //      }while(1);
+ 710          //      over_main_xs_xdrf_work:
+ 711          //      _nop_();
+ 712          //      xdrf_close_initialize();
+ 713          //      FS1_OFF;
+ 714          //      FS2_OFF;
+ 715          //      close_rf_pwm();
+ 716          //      close_hf_pwm();
+ 717          //      xdrf_work_power_led(CLOSE);
+ 718          //}
+ 719          //
+ 720          //void xdrf_close_initialize(void)
+ 721          //{
+ 722          //      RF_WORKINT_FLAG = 1;
+ 723          //      HF_WORKINT_FLAG = 1;
+ 724          //      START_KED_DOWN_FLAG = 1;//按键松开
+ 725          //      KED_EVER_DOWN_FLAG = 1;
+ 726          //      RF_SET_OFF;
+ 727          //      UL_SET_OFF;
+ 728          //}
+ 729          //
+ 730          //
+ 731          // 
+ 732          // 
+ 733          // 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.00   XS_XDRF_WORK                                                          09/27/2024 13:58:56 PAGE 13  
+
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

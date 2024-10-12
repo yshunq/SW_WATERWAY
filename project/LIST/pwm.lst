@@ -1,0 +1,100 @@
+C51 COMPILER V9.00   PWM                                                                   10/11/2024 17:50:11 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE PWM
+OBJECT MODULE PLACED IN ..\hex\pwm.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\user\pwm.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\display
+                    -;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\pwm.lst) OBJECT(..\hex\pwm.obj)
+
+line level    source
+
+   1          //#include "pwm.h"
+   2          //
+   3          ////ÖÜÆÚ¼ÆËã·½·¨£¬ 1/¾§ÌåÆµÂÊ*¼ÆÊýÖÜÆÚ = 1/33177600*0xff = 
+   4          //
+   5          //void hf_pwm_init(void)
+   6          //{
+   7          //      PWMSET |= 0x08;         //Ê¹ÄÜPWM3Ä£¿é
+   8          //      P_SW2 = 0x80;   
+   9          //      PWM3CKS = 0x00;         //PWM3Ê±ÖÓÎªÏµÍ³Ê±ÖÓ
+  10          //      PWM3CH = 0x10;          //ÉèÖÃPWM1ÖÜÆÚÎª7FFFH¸öPWMÊ±ÖÓ
+  11          //      PWM3CL = 0x00;          //15Î»
+  12          //      PWM32T1H = 0x00;        //ÊýÖµÔÚPWM32T1Ê±ÎªµÍµçÆ½
+  13          //      PWM32T1L = 0x10;
+  14          //      PWM32T2H = 0x01;        //ÊýÖµÔÚPWM32T2Ê±Îª¸ßµçÆ½
+  15          //      PWM32T2L = 0x00;
+  16          //      PWM32CR= 0x80;          //Ê¹ÄÜPWM32Êä³ö
+  17          //      P_SW2 = 0x00;
+  18          //      PWMCFG23 = 0x00;
+  19          //      P32 = 1;
+  20          //}
+  21          //
+  22          //void open_hf_pwm(u16 temp)//1500Ê±Êä³ö12V  ×î´óÊÇ0x1000 ¼´ 4096   1700Ê±Êä³ö16V    1950Ê±Êä³ö20V               2200Ê
+             -±Îª25V     2450Ê±Îª30V                2700Ê±Îª35V
+  23          //{
+  24          //      if(temp > 0x1000)temp = 0x1000;
+  25          //      
+  26          //      P_SW2 = 0x80;
+  27          //      PWM32T2H = temp/256;
+  28          //      PWM32T2L = temp%256;
+  29          //      P_SW2 = 0x00;
+  30          //      PWMCFG23 = 0x10;                //Ê¹ÄÜPWM1Ä£¿é
+  31          //}
+  32          //
+  33          //void close_hf_pwm(void)
+  34          //{
+  35          //      PWMCFG23 = 0x00;
+  36          //      P32 = 1;
+  37          //}
+  38          ////--------------------------------------------------------------------------------------------//
+  39          //void rf_pwm_init(void)
+  40          //{
+  41          //      PWMSET |= 0x01;         //Ê¹ÄÜPWM2Ä£¿é
+  42          //      P_SW2 = 0x80;   
+  43          //      PWM0CKS = 0x00;         //PWM2Ê±ÖÓÎªÏµÍ³Ê±ÖÓ
+  44          //      PWM0CH = 0x10;          //ÉèÖÃPWM2ÖÜÆÚÎª7FFFH¸öPWMÊ±ÖÓ
+  45          //      PWM0CL = 0x00;          //15Î»
+  46          //      PWM00T1H = 0x00;        //ÊýÖµÔÚPWM32T1Ê±ÎªµÍµçÆ½
+  47          //      PWM00T1L = 0x10;
+  48          //      PWM00T2H = 0x00;        //ÊýÖµÔÚPWM32T2Ê±Îª¸ßµçÆ½
+  49          //      PWM00T2L = 0x01;
+  50          //      PWM00CR= 0x80;          //Ê¹ÄÜPWM32Êä³ö
+  51          //      P_SW2 = 0x00;
+  52          //      PWMCFG01 = 0x00;
+  53          //      P00 = 0;
+C51 COMPILER V9.00   PWM                                                                   10/11/2024 17:50:11 PAGE 2   
+
+  54          //}
+  55          //
+  56          //void open_rf_pwm(u16 temp)//600Ê±4V  1200Ê±11V
+  57          //{
+  58          //      if(temp > 0x1000)temp = 0x1000;
+  59          //      P_SW2 = 0x80;
+  60          //      PWM00T1H = temp/256;
+  61          //      PWM00T1L = temp%256;
+  62          //      P_SW2 = 0x00;
+  63          //      PWMCFG01 = 0x01;                //Ê¹ÄÜPWM1Ä£¿é
+  64          //}
+  65          //
+  66          //void close_rf_pwm(void)
+  67          //{
+  68          //      PWMCFG01 = 0x00;
+  69          //      P00 = 0;
+  70          //}
+  71          //
+  72          //
+  73          //
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

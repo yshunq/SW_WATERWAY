@@ -1,0 +1,118 @@
+C51 COMPILER V9.00   MAIN                                                                  10/11/2024 17:50:11 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\hex\MAIN.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\user\MAIN.C LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\displa
+                    -y;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\MAIN.lst) OBJECT(..\hex\MAIN.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          #include "all_main_ram.h"
+   3          
+   4          //PnM1.x    PnM0.x    Pn.x口工作模式
+   5          //  0         0       准双向口
+   6          //  0         1       推挽输出
+   7          //  1         0       高阻输入
+   8          //  1         1       开漏输出
+   9          
+  10          void main(void)
+  11          {
+  12   1              P7 = 0XFF;
+  13   1              P0M0 = 0x04;
+  14   1              P0M1 = 0x00;
+  15   1              P1M0 = 0x08;
+  16   1              P1M1 = 0x05;
+  17   1              P2M0 = 0xE1;
+  18   1              P2M1 = 0x04;
+  19   1              P3M0 = 0x80;
+  20   1              P3M1 = 0x40;
+  21   1              P4M0 = 0x00;
+  22   1              P4M1 = 0x10;
+  23   1              P5M0 = 0x10;
+  24   1              P5M1 = 0x00;
+  25   1              
+  26   1              //-----设置外部晶振-----//
+  27   1              //P_SW2 |= 0x80;
+  28   1              //XOSCCR = 0xC0;
+  29   1              //while (!(XOSCCR & 1));
+  30   1              //CLKDIV = 0x00;
+  31   1              //CKSEL = 0x01;
+  32   1              //P_SW2 &= ~0x80;
+  33   1      
+  34   1              P_SW2 = 0x00;
+  35   1              Timer1_Init();  //1ms
+  36   1              Uart3Init();
+  37   1              ADC_Init();
+  38   1              INTCLKO = EX2;  //使能INT2中断
+  39   1              EA = 1;                 //总中断
+  40   1      
+  41   1              SW.BODY_PARTS = 0;
+  42   1              SW.TOTAL_TIME = 0;
+  43   1              SW.CLOCK_COUNT = 0;
+  44   1              SW.RECORD_FLAG = 1;
+  45   1              SW.TIME_WORK_FLAG = 1;
+  46   1      
+  47   1              COOL_FS_OFF;
+  48   1              MAIN_COIL_OFF;
+  49   1              DEPUTY_COIL_OFF;
+  50   1              DD_OFF;
+  51   1              FAST_CHARGING_OFF;
+  52   1              JDQ_SET_POWER_OFF;
+  53   1      
+  54   1              XIAN_FLAG = 0;
+C51 COMPILER V9.00   MAIN                                                                  10/11/2024 17:50:11 PAGE 2   
+
+  55   1              
+  56   1              read_logo_flag();
+  57   1              read_all_set_body_value();
+  58   1              read_all_set_ed_value();
+  59   1      
+  60   1              read_ll_warning_flag();
+  61   1              read_ll_constant();
+  62   1              read_ll_warning_value();
+  63   1      
+  64   1              read_handle_warning_flag();
+  65   1              read_handle_warning_value();
+  66   1      
+  67   1              read_handle_insert_warning_flag();
+  68   1      
+  69   1              read_eeprom_total_time();
+  70   1              
+  71   1              delay_ms(3000);
+  72   1      
+  73   1              BENG_ON;
+  74   1      
+  75   1              while(1){
+  76   2                      INTERFACE = PAGE_WAITING;
+  77   2                      jump_interface();
+  78   2              }
+  79   1      }
+  80          
+  81          void INT2_Isr() interrupt 10
+  82          {
+  83   1              LL.COUNT++;
+  84   1      }
+  85          
+  86          
+  87          
+  88          
+  89          
+  90          
+  91          
+  92          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    224    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      3    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

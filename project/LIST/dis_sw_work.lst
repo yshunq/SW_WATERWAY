@@ -1,0 +1,144 @@
+C51 COMPILER V9.00   DIS_SW_WORK                                                           10/11/2024 17:50:15 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE DIS_SW_WORK
+OBJECT MODULE PLACED IN ..\hex\dis_sw_work.obj
+COMPILER INVOKED BY: C:\Keil _C51\C51\BIN\C51.EXE ..\display\dis_sw_work.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user
+                    -;..\display;..\common;..\cut;..\count) DEBUG OBJECTEXTEND PRINT(.\LIST\dis_sw_work.lst) OBJECT(..\hex\dis_sw_work.obj)
+
+line level    source
+
+   1          #include "dis_sw_work.h"
+   2          
+   3          
+   4          
+   5          void dis_sw_work_body_parts(void)
+   6          {
+   7   1              DIS_DEL_DIS(Pic_SW_WORK_START + SW.BODY_PARTS,468,0,1279,722,468,0);
+   8   1              cut_sw_work_probe_mode();
+   9   1              dis_sw_work_power(DIS_PART);
+  10   1              dis_sw_work_frequency(DIS_PART);
+  11   1              dis_sw_work_preload_time(DIS_PART);
+  12   1              dis_sw_work_total_time(DIS_PART);       
+  13   1      }
+  14          
+  15          void dis_sw_work_power(u8 dis)
+  16          {       
+  17   1              static u8 buff = 0;
+  18   1              u8 temp,pic;
+  19   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  20   1              if(SW.BODY_PARTS == PARTS_ED){
+  21   2                      switch(SW.POWER){
+  22   3                              case 1:temp = 5;break;
+  23   3                              case 2:temp = 10;break;
+  24   3                              case 3:temp = 15;break;
+  25   3                              case 4:temp = 20;break;
+  26   3                              case 5:temp = 25;break;
+  27   3                              case 6:temp = 30;break;
+  28   3                      }
+  29   2              }else{
+  30   2                      switch(SW.POWER){
+  31   3                              case 1:temp = 50;break;
+  32   3                              case 2:temp = 60;break;
+  33   3                              case 3:temp = 70;break;
+  34   3                              case 4:temp = 80;break;
+  35   3                              case 5:temp = 90;break;
+  36   3                              case 6:temp = 100;break;
+  37   3                              case 7:temp = 130;break;
+  38   3                              case 8:temp = 150;break;
+  39   3                              case 9:temp = 180;break;
+  40   3                              case 10:temp = 200;break;
+  41   3                      }
+  42   2              }
+  43   1              DIS_FONT_WEI_VALUE(pic,1,0x00,0x00,0x06,3,dis,temp,buff,225,123);
+  44   1              buff = temp;
+  45   1      }
+  46          
+  47          void dis_sw_work_frequency(u8 dis)
+  48          {       
+  49   1              static u8 buff;
+  50   1              u8 pic;
+  51   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  52   1              DIS_FONT_WEI_VALUE(pic,1,0x00,0x00,0x06,3,dis,SW.FREQUENCY,buff,225,243);
+  53   1              buff = SW.FREQUENCY;
+  54   1      }
+C51 COMPILER V9.00   DIS_SW_WORK                                                           10/11/2024 17:50:15 PAGE 2   
+
+  55          
+  56          void dis_sw_work_preload_time(u8 dis)
+  57          {
+  58   1              static u32 buff;
+  59   1              u8 pic;
+  60   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  61   1              DIS_FONT_WEI_VALUE(pic,1,0x00,0x00,0x06,5,dis,SW.PRELOAD_TIME,buff,197,361);
+  62   1              buff = SW.PRELOAD_TIME;
+  63   1      }
+  64          
+  65          void dis_sw_work_total_time(u8 dis)
+  66          {
+  67   1              static u32 buff;
+  68   1              u8 pic;
+  69   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  70   1              DIS_FONT_WEI_VALUE(pic,1,0x00,0x00,0x06,5,dis,SW.TOTAL_TIME,buff,197,483);
+  71   1              buff = SW.TOTAL_TIME;
+  72   1      }
+  73          
+  74          void dis_sw_work_ll_value(u8 dis)
+  75          {       
+  76   1              static u16 buff;
+  77   1              u8 pic;
+  78   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  79   1              DIS_FONT_ONE_POINT_VALUE(pic,1,0xf8,0x00,0x01,3,dis,LL.VALUE,buff,5*8 + 10,10);
+  80   1              //DIS_FONT_WEI_VALUE(pic,1,0xf8,0x00,0x01,4,dis,LL.VALUE,buff,5*8 + 10,10);
+  81   1              buff = LL.VALUE;
+  82   1      }
+  83          
+  84          void dis_sw_work_time(u8 dis)
+  85          {
+  86   1              static u8 buff_shi,buff_fen,buff_miao;
+  87   1              u8 pic,shi,fen,miao;
+  88   1              u32 temp;
+  89   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+  90   1              temp = SW.CLOCK_COUNT;
+  91   1              shi = temp/1000/3600;
+  92   1              fen = temp/1000%3600/60;
+  93   1              miao = temp/1000%60;
+  94   1              DIS_FONT_WEI_CLOCK(pic,0xff,0xff,0x03,dis,shi,fen,miao,buff_shi,buff_fen,buff_miao,270,748);
+  95   1              buff_shi = shi;
+  96   1              buff_fen = fen;
+  97   1              buff_miao = miao;
+  98   1      }
+  99          
+ 100          void dis_sw_work_handle_temp(u8 dis,u16 temp)
+ 101          {
+ 102   1              static u16 buff;
+ 103   1              u8 pic;
+ 104   1              pic = Pic_SW_WORK_START + SW.BODY_PARTS;
+ 105   1              DIS_FONT_WEI_TEMP(pic,0xf8,0x00,0x01,dis,temp,buff,5*8+150,10);
+ 106   1              buff = temp;
+ 107   1      }
+ 108          
+ 109          
+ 110          
+ 111          
+ 112          
+ 113          
+ 114          
+ 115          
+ 116          
+C51 COMPILER V9.00   DIS_SW_WORK                                                           10/11/2024 17:50:15 PAGE 3   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    972    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     17      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,75 @@
+C51 COMPILER V9.00   XDO_UART                                                              09/02/2024 14:09:34 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE XDO_UART
+OBJECT MODULE PLACED IN ..\hex\xdo_uart.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE ..\common\xdo_uart.c LARGE OPTIMIZE(9,SPEED) BROWSE INCDIR(..\user;..\disp
+                    -lay) DEBUG OBJECTEXTEND PRINT(.\LIST\xdo_uart.lst) OBJECT(..\hex\xdo_uart.obj)
+
+line level    source
+
+   1          //#include "config.h"
+   2          //
+   3          //void xdo_work_ask_handle_parameter(void)
+   4          //{
+   5          //      tx2_out_3(0x50,XDO_DEVICE_TYPE,0x00);
+   6          //}
+   7          //
+   8          //void xdo_work_move_motor_steps(u16 num)//走固定步数
+   9          //{
+  10          //      tx2_out_4(0x72,XDO_DEVICE_TYPE,num/256,num%256);
+  11          //}
+  12          //
+  13          //void set_xdo_motor_pwm_value(void)
+  14          //{
+  15          //  //tx2_out_4(0x7B,XDO_DEVICE_TYPE,XDO_MOTOR_POINT_PWM_VALUE%256,XDO_MOTOR_LINE_PWM_VALUE%256);
+  16          //      if(POINT_LINE_FLAG == 1)//打点
+  17          //      {
+  18          //              tx2_out_4(0x7B,XDO_DEVICE_TYPE,XDO_MOTOR_POINT_PWM_VALUE/256,XDO_MOTOR_POINT_PWM_VALUE%256);
+  19          //      }
+  20          //      else
+  21          //      {
+  22          //              tx2_out_4(0x7B,XDO_DEVICE_TYPE,XDO_MOTOR_LINE_PWM_VALUE/256,XDO_MOTOR_LINE_PWM_VALUE%256);
+  23          //      }
+  24          //}
+  25          //
+  26          //void xdo_work_power_led(u8 temp)
+  27          //{
+  28          //      tx2_out_3(0xA0,XDO_DEVICE_TYPE,temp);
+  29          //}
+  30          // 
+  31          //void xdo_work_work_led(u8 temp)
+  32          //{
+  33          //      tx2_out_3(0xA1,XDO_DEVICE_TYPE,temp);
+  34          //}
+  35          //
+  36          //
+  37          //
+  38          //
+  39          //
+  40          //
+  41          //
+  42          //
+  43          //
+  44          //
+  45          //
+  46          //
+  47          //
+  48          //
+  49          //
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.00   XDO_UART                                                              09/02/2024 14:09:34 PAGE 2   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
